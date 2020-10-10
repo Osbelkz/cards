@@ -1,0 +1,32 @@
+.input {
+    position: relative;
+    display: inline-block;
+    font-family: "Open Sans", sans-serif;
+}
+
+.input__elem {
+    font-size: inherit;
+    width: fit-content;
+    padding: 10px 25px;
+    transition: border 0.3s ease;
+    border: #BBC1E1 solid 2px;
+    border-radius: 999px;
+    outline: none;
+}
+.input__elem::placeholder {
+    font-family: "Open Sans", sans-serif;
+  color: #BBC1E1;
+}
+
+.input__elem:focus {
+    border-color: cornflowerblue;
+}
+
+.input__elem.error {
+    border-color: #ff4d4d;
+}
+
+.input__elem:disabled {
+    cursor: not-allowed;
+    border-color: #b3b3b3;
+}
