@@ -1,11 +1,11 @@
 import React from 'react';
-import Routes from "../Routes/Routes";
 import classes from "./Header.module.css";
+import Nav from "./Nav/Nav";
 
 const Header = () => {
     return (
         <div className={classes.header}>
-            <Routes/>
+            <Nav/>
         </div>
     );
 };
