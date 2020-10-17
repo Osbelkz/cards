@@ -1,0 +1,31 @@
+.register {
+    min-height: calc(100vh - 61px);
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.register__container {
+    
+    width: 400px;
+    border: solid 1px;
+    display: flex;
+    justify-content: center;
+    height: min-content;
+}
+
+.register__form {
+    border: solid 1px;
+}
+
+.register__form > button {
+    margin-top: 15px;
+}
+
+.register__inputs {
+    display: flex;
+    flex-direction: column;
+}
+.register__inputs > div {
+    margin-top: 10px;
+}
