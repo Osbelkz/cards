@@ -43,13 +43,9 @@ const Profile = () => {
                 <br/>
                 <div>
                     <h3>Input</h3>
-                    <Input onChange={() => alert("was changed")}
-                           value={"sadf"}
-                           placeHolder={"input"}/>
-                    <Input onChange={() => alert("was changed")}
-                           value={""}
-                           placeHolder={"input"}
-                           disabled={true}/>
+                    <Input error={false} label={"email"}/>
+                    <Input error={true} label={"password"}/>
+                    <Input error={true} label={"email"}/>
                 </div>
             </div>
         </div>
