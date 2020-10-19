@@ -7,7 +7,7 @@ interface PropsType extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const Input = React.memo(
-    ({error, label, name, ...rest }: PropsType) => {
+    ({error, label, ...rest }: PropsType) => {
 
     return (
             <div className={classes.input}>
