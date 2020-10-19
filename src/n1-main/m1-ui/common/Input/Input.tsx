@@ -1,42 +1,19 @@
-import React, {useCallback} from "react";
+import React, {InputHTMLAttributes} from "react";
 import classes from "./Input.module.css";
-import {KeyboardEvent} from "react";
 
-type PropsType = {
-    onChange: (text: string) => void
-    disabled?: boolean
-    value: string
-    addData?: () => void
+interface PropsType extends InputHTMLAttributes<HTMLInputElement> {
+    label?: string
     error?: boolean
-    placeHolder?: string
-    autoFocus?: boolean
-    onBlur?: ()=>void
 }
 
-export const Input = React.memo( (props: PropsType) => {
-
-    const onPressEnter = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === "Enter") {
-            props.addData && props.addData()
-        }
-    }, [props.addData])
+export const Input = React.memo(
+    ({error, label, ...rest }: PropsType) => {
 
     return (
-        <>
             <div className={classes.input}>
-                <input type="text"
-                       onBlur={props.onBlur}
-                       autoFocus={props.autoFocus}
-                       placeholder={props.placeHolder}
-                       className={props.error ? `${classes.input__elem} ${classes.error}` : classes.input__elem}
-                       onChange={e => props.onChange(e.currentTarget.value)}
-                       onKeyPress={onPressEnter}
-                       value={props.value}
-                       disabled={props.disabled}/>
-                {/*<div className={props.error ? classes.input__error : ""}>{props.error}</div>*/}
+                <p className={classes.input__label}>{label}</p>
+                <input className={`${classes.input__elem} ${error ? classes.input__error : ""}`}
+                       {...rest}/>
             </div>
-
-
-        </>
     )
 })

@@ -1,29 +1,40 @@
 .input {
-    position: relative;
-    display: inline-block;
     font-family: "Open Sans", sans-serif;
+    position: relative;
+}
+
+.input__label {
+    margin: 0 20px;
+    padding: 0;
 }
 
 .input__elem {
     font-size: inherit;
-    width: fit-content;
-    padding: 10px 25px;
+    box-sizing: border-box;
+    min-width: 100%;
+    margin: 10px 0;
+    padding: 10px 20px;
     transition: border 0.3s ease;
     border: #BBC1E1 solid 2px;
     border-radius: 999px;
     outline: none;
-}
-.input__elem::placeholder {
-    font-family: "Open Sans", sans-serif;
-  color: #BBC1E1;
 }
 
 .input__elem:focus {
     border-color: cornflowerblue;
 }
 
-.input__elem.error {
+.input__elem::placeholder {
+    font-family: "Open Sans", sans-serif;
+    color: #BBC1E1;
+}
+
+.input__error:focus {
     border-color: #ff4d4d;
+}
+
+.input__error {
+    border-color: #ff9999;
 }
 
 .input__elem:disabled {

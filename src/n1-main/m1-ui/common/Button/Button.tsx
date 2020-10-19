@@ -1,21 +1,17 @@
-import React from "react";
+import React, { ButtonHTMLAttributes } from "react";
 import classes from "./Button.module.css";
 
-type PropsType = {
-    onClick: () => void
+interface PropsType extends ButtonHTMLAttributes<HTMLButtonElement> {
     btnName: string
-    disabled?: boolean
     btnType?: "green" | "red"
 }
 
-export const Button = React.memo(({onClick, btnType, btnName, disabled}: PropsType) => {
+export const Button = React.memo(({btnType, btnName, ...rest}: PropsType) => {
 
     let buttonClasses = `${classes.button} ${classes[btnType as "green" | "red"]}`
 
     return (
-            <button className={buttonClasses}
-                    disabled={disabled}
-                    onClick={onClick}>
+            <button className={buttonClasses} {...rest}>
                 {btnName}
             </button>
     )
