@@ -6,20 +6,20 @@
 }
 
 .register__container {
-    
-    width: 400px;
-    border: solid 1px;
+    background-color: #f5f8f8;
+    padding: 15px;
+    width: 1000px;
     display: flex;
     justify-content: center;
-    height: min-content;
+    height: inherit;
 }
 
 .register__form {
-    border: solid 1px;
+    min-width: 50%;
 }
 
 .register__form > button {
-    margin-top: 15px;
+    margin-top: 10px;
 }
 
 .register__inputs {
@@ -27,5 +27,14 @@
     flex-direction: column;
 }
 .register__inputs > div {
+    position: relative;
     margin-top: 10px;
+}
+.register__inputs_error {
+    position: absolute;
+    bottom: -5px;
+    right: 15px;
+    font-weight: 600;
+    font-size: 12px;
+    color: #ff4d4d;
 }

@@ -7,7 +7,7 @@ const RegisterContainer = () => {
     const dispatch = useDispatch();
 
     return (
-        <Register />
+        <Register onSubmit={(values => alert(JSON.stringify(values)))} />
     );
 };
 
