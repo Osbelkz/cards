@@ -6,7 +6,7 @@
 }
 
 .register__container {
-    background-color: #f5f8f8;
+    background-color: #FAFBFC;
     padding: 15px;
     width: 1000px;
     display: flex;
@@ -36,5 +36,9 @@
     right: 15px;
     font-weight: 600;
     font-size: 12px;
+    color: #ff4d4d;
+}
+.register__error {
+    text-align: center;
     color: #ff4d4d;
 }

@@ -3,10 +3,13 @@ import {Input} from '../../../n1-main/m1-ui/common/Input/Input';
 import classes from "./Register.module.css";
 import {Button} from "../../../n1-main/m1-ui/common/Button/Button";
 import {useFormik} from "formik";
-
+import {RegisterDataType} from "../../../n1-main/m3-dal/register-api";
+import {StatusType} from "../../../n1-main/m2-bll/reducers/register-reducer";
 
 type PropsType = {
-    onSubmit: (values: {email: string, password: string,}) => void
+    onSubmit: (data: RegisterDataType) => void
+    error: string
+    status: StatusType
 }
 
 type FormikErrorType = {
@@ -33,8 +36,11 @@ const Register: React.FC<PropsType> = (props) => {
             if (!values.email) {
                 errors.email = 'Required';
             } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-                errors.email = 'Invalid email address';
+                errors.email = "Invalid email address";
             }
+            // if (props.error.includes("email")) {
+            //     errors.email = "Email already exists"
+            // }
             if (!values.password || values.password.length < 7) {
                 errors.password = "Must be 6 or more characters"
             }
@@ -46,7 +52,6 @@ const Register: React.FC<PropsType> = (props) => {
 
         onSubmit: (values, {resetForm}) => {
             props.onSubmit({email: values.email, password: values.password})
-            // resetForm()
         },
     });
 
@@ -83,6 +88,7 @@ const Register: React.FC<PropsType> = (props) => {
                                 className={classes.register__inputs_error}>{formik.errors.password2}</div> : null}
                         </div>
                     </div>
+                    {props.error && <div className={classes.register__error}>{props.error}</div>}
                     <Button btnName={"Join"} btnType={"green"} type={"submit"} disabled={!formik.isValid}/>
                     <Button btnName={"Reset"} onClick={() => formik.resetForm()}/>
                 </form>
