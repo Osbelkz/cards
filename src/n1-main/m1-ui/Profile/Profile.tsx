@@ -43,9 +43,11 @@ const Profile = () => {
                 <br/>
                 <div>
                     <h3>Input</h3>
-                    <Input error={false} label={"email"}/>
-                    <Input error={true} label={"password"}/>
-                    <Input error={true} label={"email"}/>
+                    <Input errorCondition={false} label={"email"}/>
+                    <Input errorCondition={true} label={"password"}/>
+                    <Input errorCondition={true} label={"email"}/>
+                    <Input errorCondition={true} errorText={"1234"}  label={"email"}/>
+
                 </div>
             </div>
         </div>

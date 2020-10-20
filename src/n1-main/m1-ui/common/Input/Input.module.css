@@ -41,3 +41,11 @@
     cursor: not-allowed;
     border-color: #b3b3b3;
 }
+.inputs__error_text {
+    position: absolute;
+    bottom: -5px;
+    right: 15px;
+    font-weight: 600;
+    font-size: 12px;
+    color: #ff4d4d;
+}
