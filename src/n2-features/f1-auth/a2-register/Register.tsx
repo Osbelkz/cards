@@ -26,11 +26,6 @@ const Register: React.FC<PropsType> = (props) => {
             password: '',
             password2: '',
         },
-        initialTouched: {
-            email: false,
-            password: false,
-            password2: false
-        },
         validate: (values) => {
             const errors: FormikErrorType = {};
             if (!values.email) {
@@ -38,11 +33,8 @@ const Register: React.FC<PropsType> = (props) => {
             } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
                 errors.email = "Invalid email address";
             }
-            // if (props.error.includes("email")) {
-            //     errors.email = "Email already exists"
-            // }
             if (!values.password || values.password.length < 7) {
-                errors.password = "Must be 6 or more characters"
+                errors.password = "Must be 7 or more characters"
             }
             if (values.password !== values.password2) {
                 errors.password2 = "Passwords does not match"
@@ -63,28 +55,28 @@ const Register: React.FC<PropsType> = (props) => {
                     <div className={classes.register__inputs}>
                         <div>
                             <Input label={"Email"}
-                                   error={!!formik.errors.email}
+                                   error={!!formik.errors.email && formik.touched.email}
                                    placeholder={"email"}
                                    {...formik.getFieldProps("email")}/>
-                            {formik.errors.email ? <span
+                            {formik.errors.email && formik.touched.email ? <span
                                 className={classes.register__inputs_error}>{formik.errors.email}</span> : null}
                         </div>
                         <div>
                             <Input label={"Password"}
-                                   error={!!formik.errors.password}
+                                   error={!!formik.errors.password && formik.touched.password}
                                    type={"password"}
                                    placeholder={"password"}
                                    {...formik.getFieldProps("password")}/>
-                            {formik.errors.password ? <span
+                            {formik.errors.password && formik.touched.password ? <span
                                 className={classes.register__inputs_error}>{formik.errors.password}</span> : null}
                         </div>
                         <div>
                             <Input label={"Repeat password"}
-                                   error={!!formik.errors.password2}
+                                   error={!!formik.errors.password2 && formik.touched.password2}
                                    type={"password"}
                                    placeholder={"Confirm password"}
                                    {...formik.getFieldProps("password2")} />
-                            {formik.errors.password2 ? <div
+                            {formik.errors.password2 && formik.touched.password2 ? <div
                                 className={classes.register__inputs_error}>{formik.errors.password2}</div> : null}
                         </div>
                     </div>

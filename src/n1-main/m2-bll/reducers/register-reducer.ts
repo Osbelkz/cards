@@ -44,10 +44,8 @@ export const addUserTC = (data: RegisterDataType) => async (dispatch: Dispatch) 
     dispatch(setStatusAC("loading"))
     try {
         let response = await registerAPI.register(data)
-        console.log(response)
         dispatch(setStatusAC("succeeded"))
     } catch (e) {
-        console.log(e.response.data)
         dispatch(setErrorAC(e.response.data.error))
         dispatch(setStatusAC("failed"))
     }
