@@ -1,11 +1,7 @@
 import React, {useState} from 'react';
 import NewPassword from "./NewPassword";
-import {useDispatch} from "react-redux";
 
 const NewPasswordContainer = () => {
-
-    const dispatch = useDispatch();
-
     const [firstInput, setFirstInput] = useState('')
     const [secondInput, setSecondInput] = useState('')
 

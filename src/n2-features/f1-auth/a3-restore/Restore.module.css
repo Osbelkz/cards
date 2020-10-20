@@ -6,3 +6,27 @@
     margin-top: 150px;
 }
 
+.restore form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.infoTextGreen {
+    transition: border 0.3s ease;
+    border: #00b300 solid 2px;
+    border-radius: 999px;
+    font-family: "Open Sans", sans-serif;
+    color: #00b300;
+    padding: 10px 20px;
+}
+
+.infoTextRed {
+    transition: border 0.3s ease;
+    border: #ff4d4d solid 2px;
+    border-radius: 999px;
+    font-family: "Open Sans", sans-serif;
+    color: #ff4d4d;
+    padding: 10px 20px;
+}
