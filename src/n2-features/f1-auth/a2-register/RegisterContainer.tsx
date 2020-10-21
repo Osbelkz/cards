@@ -1,13 +1,30 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import Register from "./Register";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {Redirect} from "react-router-dom";
+import {addUserTC, StatusType} from "../../../n1-main/m2-bll/reducers/register-reducer";
+import {RootStateType} from "../../../n1-main/m2-bll/store";
+import {RegisterDataType} from "../../../n1-main/m3-dal/register-api";
 
 const RegisterContainer = () => {
 
+    console.log("register container")
+
     const dispatch = useDispatch();
+    const error = useSelector<RootStateType, string>(state => state.register.error)
+    const status = useSelector<RootStateType, StatusType>(state => state.register.status)
+
+
+    const onSubmitHandler = useCallback((values: RegisterDataType) => {
+        dispatch(addUserTC(values))
+    }, [])
+
+    if (status==="succeeded") {
+        return <Redirect to={"/login"}/>
+    }
 
     return (
-        <Register />
+        <Register onSubmit={onSubmitHandler} error={error} status={status}/>
     );
 };
 

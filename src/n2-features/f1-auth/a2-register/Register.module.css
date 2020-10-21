@@ -1,0 +1,44 @@
+.register {
+    min-height: calc(100vh - 61px);
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.register__container {
+    background-color: #FAFBFC;
+    padding: 0 15px;
+    width: 1000px;
+    display: flex;
+    justify-content: center;
+    height: inherit;
+}
+
+.register__form {
+    margin-top: 20px;
+    text-align: center;
+    min-width: 50%;
+}
+
+
+.register__title {
+}
+
+
+.register__inputs {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+}
+.register__inputs > div {
+    margin-top: 10px;
+}
+.register__error {
+    color: #ff4d4d;
+}
+.register__loading {
+    color: darkorange;
+}
+.register__buttons {
+    margin-top: 10px;
+}
