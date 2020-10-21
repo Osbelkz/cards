@@ -4,12 +4,13 @@ import {Input} from "../../../n1-main/m1-ui/common/Input/Input";
 import {Button} from "../../../n1-main/m1-ui/common/Button/Button";
 import NavItem from "../../../n1-main/m1-ui/common/NavItem/NavItem";
 import {useFormik} from "formik";
-import {Redirect, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 
 type NewPasswordPropsType = {
     isSetNewPassword: boolean
     error: string
     isOk: string
+    isLoading: boolean
     handleOnSubmit: (value: string, token: string) => void
 }
 
@@ -54,6 +55,7 @@ const NewPassword = React.memo((props: NewPasswordPropsType) => {
             <form onSubmit={formik.handleSubmit}>
                 <h3>New password page</h3>
                 <Input
+                    label={"Password"}
                     placeholder={"Please, put new password"}
                     errorCondition={!!formik.errors.password1 && formik.touched.password1}
                     errorText={formik.errors.password1}
@@ -61,15 +63,21 @@ const NewPassword = React.memo((props: NewPasswordPropsType) => {
 
                 />
                 <Input
+                    label={"Password"}
                     placeholder={"Put new password again"}
                     errorCondition={!!formik.errors.password2 && formik.touched.password2}
                     errorText={formik.errors.password2}
                     {...formik.getFieldProps("password2")}
                 />
-                <Button
-                    type={"submit"}
-                    btnName={"Set new password"}
-                />
+                <div className={classes.btn}>
+                    <Button
+                        type={"submit"}
+                        btnName={"Set new password"}
+                        disabled={props.isLoading}
+                        btnType={"green"}
+                    />
+                    <Button btnName={"Reset"} onClick={() => formik.resetForm()}/>
+                </div>
                 <NavItem path={"/login"} title={"Login"}/>
             </form>
             {!props.isSetNewPassword && props.error
@@ -80,6 +88,7 @@ const NewPassword = React.memo((props: NewPasswordPropsType) => {
                 ? <div className={classes.infoTextGreen}>{props.isOk}</div>
                 : ""
             }
+            {props.isLoading && <div className={classes.loading}>...Loading</div>}
         </div>
     );
 });

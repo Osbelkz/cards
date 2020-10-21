@@ -6,7 +6,8 @@ export type NewPasswordStateType = typeof initialState
 const initialState = {
     isSetNewPassword: false as boolean,
     error: "" as string,
-    isOk: "" as string
+    isOk: "" as string,
+    isLoading: false as boolean
 }
 
 export const newPasswordReducer = (state = initialState, action: ActionsType): NewPasswordStateType => {
@@ -17,12 +18,15 @@ export const newPasswordReducer = (state = initialState, action: ActionsType): N
             return {...state, error: action.error}
         case "newPassword/SET-VALUE-IS-OK":
             return {...state, isOk: action.text}
+        case "restore/SET-VALUE-IS-LOADING":
+            return {...state, isLoading: action.isLoading}
         default:
             return state;
     }
 };
 
 export const setNewPasswordTC = (newPassword: string, token: string) => (dispatch: Dispatch) => {
+    dispatch(setValueIsLoading(true))
     newPasswordAPI.setNewPassword({
         password: newPassword,
         resetPasswordToken: token
@@ -32,10 +36,12 @@ export const setNewPasswordTC = (newPassword: string, token: string) => (dispatc
             if (res.status === 200) {
                 dispatch(setValueIsSetNewPassword(true))
                 dispatch(setValueIsOk(res.data.info))
+                dispatch(setValueIsLoading(false))
             }
         })
         .catch(error => {
             dispatch(setErrorText(error.response.data.error))
+            dispatch(setValueIsLoading(false))
         })
 }
 
@@ -48,6 +54,10 @@ export const setErrorText = (error: string) =>
 export const setValueIsOk = (text: string) =>
     ({type: "newPassword/SET-VALUE-IS-OK", text} as const)
 
+export const setValueIsLoading = (isLoading: boolean) =>
+    ({type: "restore/SET-VALUE-IS-LOADING", isLoading} as const)
+
 type ActionsType = ReturnType<typeof setValueIsSetNewPassword>
                 | ReturnType<typeof setErrorText>
                 | ReturnType<typeof setValueIsOk>
+                | ReturnType<typeof setValueIsLoading>

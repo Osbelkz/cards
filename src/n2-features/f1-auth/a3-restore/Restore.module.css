@@ -6,6 +6,13 @@
     margin-top: 150px;
 }
 
+.restore form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: start;
+}
+
 .infoTextGreen {
     transition: border 0.3s ease;
     border: #00b300 solid 2px;
@@ -27,5 +34,9 @@
 }
 
 .restore button{
-    margin-top: 10px;
+    margin: 10px 5px;
+}
+
+.loading {
+    color: darkorange;
 }

@@ -8,6 +8,7 @@ import {useFormik} from "formik";
 type RestorePropsType = {
     textAfterRequest: string,
     isSentSuccess: boolean,
+    isLoading: boolean,
     handleOnSubmit: (value: string) => void
 }
 
@@ -40,18 +41,27 @@ const Restore = React.memo((props: RestorePropsType) => {
             <form onSubmit={formik.handleSubmit}>
                 <h3>Restore password page</h3>
                 <Input
+                    label={"Email"}
                     placeholder={"Please, put your email"}
                     errorCondition={!!formik.errors.email && formik.touched.email}
                     errorText={formik.errors.email}
                     {...formik.getFieldProps("email")}
                 />
-                <Button
-                    type={"submit"}
-                    btnName={"Send email"}
-                />
+                <div className={classes.btn}>
+                    <Button
+                        type={"submit"}
+                        btnName={"Send email"}
+                        disabled={props.isLoading}
+                        btnType={"green"}
+                    />
+                    <Button btnName={"Reset"} onClick={() => formik.resetForm()}/>
+                </div>
                 <NavItem path={"/login"} title={"Login"}/>
             </form>
-            {props.textAfterRequest && <div className={props.isSentSuccess ? classes.infoTextGreen : classes.infoTextRed}>{props.textAfterRequest}</div>}
+            {props.textAfterRequest && <div className={
+                props.isSentSuccess ? classes.infoTextGreen : classes.infoTextRed
+            }>{props.textAfterRequest}</div>}
+            {props.isLoading && <div className={classes.loading}>...Loading</div>}
         </div>
     );
 });

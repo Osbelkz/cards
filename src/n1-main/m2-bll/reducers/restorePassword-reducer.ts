@@ -5,7 +5,8 @@ export type RestorePasswordStateType = typeof initialState
 
 const initialState = {
     isSentSuccess: false as boolean,
-    textAfterRequest: "" as string
+    textAfterRequest: "" as string,
+    isLoading: false as boolean
 }
 
 export const restorePasswordReducer = (state = initialState, action: ActionsType): RestorePasswordStateType => {
@@ -14,12 +15,15 @@ export const restorePasswordReducer = (state = initialState, action: ActionsType
             return {...state, isSentSuccess: action.value}
         case "restore/SET-TEXT-AFTER-REQUEST":
             return {...state, textAfterRequest: action.textAfterRequest}
+        case "restore/SET-VALUE-IS-LOADING":
+            return {...state, isLoading: action.isLoading}
         default:
             return state;
     }
 };
 
 export const restoreTC = (value: string) => (dispatch: Dispatch) => {
+    dispatch(setValueIsLoading(true))
     restoreAPI.getLinkForResetPassword({
         email: value,
         from: "admin",
@@ -33,10 +37,12 @@ export const restoreTC = (value: string) => (dispatch: Dispatch) => {
             if (res.data.success ) {
                 dispatch(setValueIsSentSuccess(true))
                 dispatch(setRestoreTextAfterRequest(res.data.info))
+                dispatch(setValueIsLoading(false))
             }
         })
         .catch(error => {
             dispatch(setRestoreTextAfterRequest(error.response.data.error))
+            dispatch(setValueIsLoading(false))
         })
 }
 
@@ -46,6 +52,10 @@ export const setValueIsSentSuccess = (value: boolean) =>
 export const setRestoreTextAfterRequest = (textAfterRequest: string) =>
     ({type: "restore/SET-TEXT-AFTER-REQUEST", textAfterRequest} as const)
 
+export const setValueIsLoading = (isLoading: boolean) =>
+    ({type: "restore/SET-VALUE-IS-LOADING", isLoading} as const)
+
 type ActionsType = ReturnType<typeof setValueIsSentSuccess>
-    |ReturnType<typeof setRestoreTextAfterRequest>
+    | ReturnType<typeof setRestoreTextAfterRequest>
+    | ReturnType<typeof setValueIsLoading>
 

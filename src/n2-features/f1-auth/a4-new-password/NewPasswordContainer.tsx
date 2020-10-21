@@ -10,6 +10,7 @@ const NewPasswordContainer = () => {
     const isSetNewPassword = useSelector<RootStateType, boolean>(state => state.newPassword.isSetNewPassword)
     const error = useSelector<RootStateType, string>(state => state.newPassword.error)
     const isOk = useSelector<RootStateType, string>(state => state.newPassword.isOk)
+    const isLoading = useSelector<RootStateType, boolean>(state => state.newPassword.isLoading)
 
     const handleOnSubmit = useCallback((newPassword: string, token: string) => {
         dispatch(setNewPasswordTC(newPassword, token))
@@ -26,6 +27,7 @@ const NewPasswordContainer = () => {
             error={error}
             handleOnSubmit={handleOnSubmit}
             isOk={isOk}
+            isLoading={isLoading}
         />
     );
 };
