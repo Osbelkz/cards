@@ -1,0 +1,31 @@
+.restore {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 150px;
+}
+
+.infoTextGreen {
+    transition: border 0.3s ease;
+    border: #00b300 solid 2px;
+    border-radius: 999px;
+    font-family: "Open Sans", sans-serif;
+    color: #00b300;
+    padding: 10px 20px;
+    margin-top: 10px;
+}
+
+.infoTextRed {
+    transition: border 0.3s ease;
+    border: #ff4d4d solid 2px;
+    border-radius: 999px;
+    font-family: "Open Sans", sans-serif;
+    color: #ff4d4d;
+    padding: 10px 20px;
+    margin-top: 10px;
+}
+
+.restore button{
+    margin-top: 10px;
+}
