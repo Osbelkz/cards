@@ -18,7 +18,9 @@ type FormikErrorType = {
     password2?: string
 }
 
-const Register: React.FC<PropsType> = (props) => {
+const Register: React.FC<PropsType> = React.memo((props) => {
+
+    console.log("register")
 
     const formik = useFormik({
         initialValues: {
@@ -42,7 +44,7 @@ const Register: React.FC<PropsType> = (props) => {
             return errors;
         },
 
-        onSubmit: (values, {resetForm}) => {
+        onSubmit: (values) => {
             props.onSubmit({email: values.email, password: values.password})
         },
     });
@@ -51,42 +53,39 @@ const Register: React.FC<PropsType> = (props) => {
         <div className={classes.register}>
             <div className={classes.register__container}>
                 <form className={classes.register__form} onSubmit={formik.handleSubmit}>
-                    <h3>Registration</h3>
+                    <div className={classes.register__title}>
+                        <h3>Registration</h3>
+                    </div>
                     <div className={classes.register__inputs}>
-                        <div>
-                            <Input label={"Email"}
-                                   error={!!formik.errors.email && formik.touched.email}
-                                   placeholder={"email"}
-                                   {...formik.getFieldProps("email")}/>
-                            {formik.errors.email && formik.touched.email ? <span
-                                className={classes.register__inputs_error}>{formik.errors.email}</span> : null}
-                        </div>
-                        <div>
-                            <Input label={"Password"}
-                                   error={!!formik.errors.password && formik.touched.password}
-                                   type={"password"}
-                                   placeholder={"password"}
-                                   {...formik.getFieldProps("password")}/>
-                            {formik.errors.password && formik.touched.password ? <span
-                                className={classes.register__inputs_error}>{formik.errors.password}</span> : null}
-                        </div>
-                        <div>
-                            <Input label={"Repeat password"}
-                                   error={!!formik.errors.password2 && formik.touched.password2}
-                                   type={"password"}
-                                   placeholder={"Confirm password"}
-                                   {...formik.getFieldProps("password2")} />
-                            {formik.errors.password2 && formik.touched.password2 ? <div
-                                className={classes.register__inputs_error}>{formik.errors.password2}</div> : null}
-                        </div>
+                        <Input label={"Email"}
+                               errorCondition={!!formik.errors.email && formik.touched.email}
+                               placeholder={"email"}
+                               errorText={formik.errors.email}
+                               {...formik.getFieldProps("email")}/>
+                        <Input label={"Password"}
+                               errorCondition={!!formik.errors.password && formik.touched.password}
+                               type={"password"}
+                               placeholder={"password"}
+                               errorText={formik.errors.password}
+                               {...formik.getFieldProps("password")}/>
+                        <Input label={"Repeat password"}
+                               errorCondition={!!formik.errors.password2 && formik.touched.password2}
+                               type={"password"}
+                               errorText={formik.errors.password2}
+                               placeholder={"confirm password"}
+                               {...formik.getFieldProps("password2")} />
+                    </div>
+                    <div className={classes.register__buttons}>
+                        <Button btnName={"Join"} btnType={"green"} type={"submit"}
+                                disabled={!formik.isValid || (props.status === "loading")}/>
+                        <Button btnName={"Reset"} onClick={() => formik.resetForm()}/>
                     </div>
                     {props.error && <div className={classes.register__error}>{props.error}</div>}
-                    <Button btnName={"Join"} btnType={"green"} type={"submit"} disabled={!formik.isValid}/>
-                    <Button btnName={"Reset"} onClick={() => formik.resetForm()}/>
+                    {props.status === "loading" && <div className={classes.register__loading}>...Loading</div>}
                 </form>
             </div>
         </div>
     );
-};
+})
 
 export default Register;

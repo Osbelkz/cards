@@ -42,11 +42,12 @@ export type ActionsType =
 
 export const addUserTC = (data: RegisterDataType) => async (dispatch: Dispatch) => {
     dispatch(setStatusAC("loading"))
+    dispatch(setErrorAC(""))
     try {
         let response = await registerAPI.register(data)
         dispatch(setStatusAC("succeeded"))
     } catch (e) {
-        dispatch(setErrorAC(e.response.data.error))
+        dispatch(setErrorAC(e.response ? e.response.data.error : "unknown error"))
         dispatch(setStatusAC("failed"))
     }
 }

@@ -7,7 +7,7 @@
 
 .register__container {
     background-color: #FAFBFC;
-    padding: 15px;
+    padding: 0 15px;
     width: 1000px;
     display: flex;
     justify-content: center;
@@ -15,30 +15,30 @@
 }
 
 .register__form {
+    margin-top: 20px;
+    text-align: center;
     min-width: 50%;
 }
 
-.register__form > button {
-    margin-top: 10px;
+
+.register__title {
 }
 
+
 .register__inputs {
+    text-align: left;
     display: flex;
     flex-direction: column;
 }
 .register__inputs > div {
-    position: relative;
     margin-top: 10px;
 }
-.register__inputs_error {
-    position: absolute;
-    bottom: -5px;
-    right: 15px;
-    font-weight: 600;
-    font-size: 12px;
+.register__error {
     color: #ff4d4d;
 }
-.register__error {
-    text-align: center;
-    color: #ff4d4d;
+.register__loading {
+    color: darkorange;
+}
+.register__buttons {
+    margin-top: 10px;
 }
