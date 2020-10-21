@@ -13,7 +13,7 @@ const Routes = () => {
             <Route path={"/login"} render={() => <LoginContainer/>}/>
             <Route path={"/register"} render={() => <RegisterContainer/>}/>
             <Route path={"/restore"} render={() => <RestoreContainer/>}/>
-            <Route path={"/newPassword"} render={() => <NewPasswordContainer/>}/>
+            <Route path={"/newPassword/:token"} render={() => <NewPasswordContainer/>}/>
             <Route path={"*"} render={() => <ProfileContainer/>}/>
         </Switch>
     );

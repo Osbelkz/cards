@@ -1,5 +1,5 @@
 import {Dispatch} from "redux";
-import {RequestParamsType, restoreAPI} from "../../m3-dal/restore-api";
+import {restoreAPI} from "../../m3-dal/restore-api";
 
 export type RestorePasswordStateType = typeof initialState
 
@@ -10,7 +10,7 @@ const initialState = {
 
 export const restorePasswordReducer = (state = initialState, action: ActionsType): RestorePasswordStateType => {
     switch (action.type) {
-        case "restore/SET-IS-SENT-SUCCESS":
+        case "restore/SET-VALUE-IS-SENT-SUCCESS":
             return {...state, isSentSuccess: action.value}
         case "restore/SET-TEXT-AFTER-REQUEST":
             return {...state, textAfterRequest: action.textAfterRequest}
@@ -19,12 +19,19 @@ export const restorePasswordReducer = (state = initialState, action: ActionsType
     }
 };
 
-export const restoreTC = (data: RequestParamsType) => (dispatch: Dispatch) => {
-
-    restoreAPI.getLinkForResetPassword(data)
+export const restoreTC = (value: string) => (dispatch: Dispatch) => {
+    restoreAPI.getLinkForResetPassword({
+        email: value,
+        from: "admin",
+        message: `<div style="background-color: lime; padding: 15px">
+                    password recovery link: 
+                    <a href="http://localhost:3000/cards#/newPassword/$token$"> 
+                    link</a>
+                </div>` // после полной заливки на ghp, заменить ссылку на страницу new password on ghp
+    })
         .then(res => {
             if (res.data.success ) {
-                dispatch(setIsSentSuccess(true))
+                dispatch(setValueIsSentSuccess(true))
                 dispatch(setRestoreTextAfterRequest(res.data.info))
             }
         })
@@ -33,12 +40,12 @@ export const restoreTC = (data: RequestParamsType) => (dispatch: Dispatch) => {
         })
 }
 
-export const setIsSentSuccess = (value: boolean) =>
-    ({type: 'restore/SET-IS-SENT-SUCCESS', value} as const)
+export const setValueIsSentSuccess = (value: boolean) =>
+    ({type: "restore/SET-VALUE-IS-SENT-SUCCESS", value} as const)
 
 export const setRestoreTextAfterRequest = (textAfterRequest: string) =>
-    ({type: 'restore/SET-TEXT-AFTER-REQUEST', textAfterRequest} as const)
+    ({type: "restore/SET-TEXT-AFTER-REQUEST", textAfterRequest} as const)
 
-type ActionsType = ReturnType<typeof setIsSentSuccess>
+type ActionsType = ReturnType<typeof setValueIsSentSuccess>
     |ReturnType<typeof setRestoreTextAfterRequest>
 

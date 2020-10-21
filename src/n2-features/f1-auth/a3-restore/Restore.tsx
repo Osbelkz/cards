@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import classes from "./Restore.module.css";
 import {Input} from "../../../n1-main/m1-ui/common/Input/Input";
 import {Button} from "../../../n1-main/m1-ui/common/Button/Button";
@@ -11,12 +11,24 @@ type RestorePropsType = {
     handleOnSubmit: (value: string) => void
 }
 
+type FormikErrorType = {
+    email?: string
+}
+
 const Restore = React.memo((props: RestorePropsType) => {
-    console.log("restore render")
 
     const formik = useFormik({
         initialValues: {
-            email: ''
+            email: ""
+        },
+        validate: (values) => {
+            const errors: FormikErrorType = {};
+            if (!values.email) {
+                errors.email = "Field is required!"
+            } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+                errors.email = "Invalid email address";
+            }
+            return errors
         },
         onSubmit: values => {
             props.handleOnSubmit(values.email)
@@ -29,15 +41,16 @@ const Restore = React.memo((props: RestorePropsType) => {
                 <h3>Restore password page</h3>
                 <Input
                     placeholder={"Please, put your email"}
-                    error={false}
+                    errorCondition={!!formik.errors.email && formik.touched.email}
+                    errorText={formik.errors.email}
                     {...formik.getFieldProps("email")}
                 />
                 <Button
-                    type={'submit'}
+                    type={"submit"}
                     btnName={"Send email"}
                 />
+                <NavItem path={"/login"} title={"Login"}/>
             </form>
-            <NavItem path={"/login"} title={"Login"}/>
             {props.textAfterRequest && <div className={props.isSentSuccess ? classes.infoTextGreen : classes.infoTextRed}>{props.textAfterRequest}</div>}
         </div>
     );
