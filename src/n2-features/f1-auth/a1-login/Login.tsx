@@ -5,9 +5,10 @@ import {Button} from "../../../n1-main/m1-ui/common/Button/Button";
 import {useFormik} from "formik";
 
 type RestorePropsType = {
-    isSentSuccess: boolean,
+    isLoggedSuccess: boolean,
     isLoading: boolean,
-    handleOnSubmit: () => void
+    error: string,
+    handleOnSubmit: (email: string, password: string, rememberMe: boolean) => void
 }
 
 type FormikErrorType = {
@@ -38,8 +39,7 @@ const Login = React.memo((props: RestorePropsType) => {
             return errors
         },
         onSubmit: values => {
-            alert(values.email + " " + values.password + " " + values.rememberMe)
-            // props.handleOnSubmit(values.email)
+            props.handleOnSubmit(values.email, values.password, values.rememberMe)
         }
     })
 
@@ -72,13 +72,14 @@ const Login = React.memo((props: RestorePropsType) => {
                 <div className={classes.btn}>
                     <Button
                         type={"submit"}
-                        btnName={"Send email"}
+                        btnName={"Login"}
                         disabled={props.isLoading}
                         btnType={"green"}
                     />
                     <Button btnName={"Reset"} onClick={() => formik.resetForm()}/>
                 </div>
             </form>
+            {props.error && <div className={classes.infoTextRed}>{props.error}</div>}
             {props.isLoading && <div className={classes.loading}>...Loading</div>}
         </div>
     );

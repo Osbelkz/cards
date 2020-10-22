@@ -27,7 +27,7 @@ const testProfile: UserDataType = {
 const initialState = {
     error: "",
     status: "idle" as StatusType,
-    userData: testProfile as UserDataType | null
+    userData: null as UserDataType | null
 }
 
 export const profileReducer = (state: ProfileStateType = initialState, action: ActionsType): ProfileStateType => {
@@ -69,11 +69,12 @@ export type ActionsType =
 // thunk
 
 export const authMeTC = () => async (dispatch: Dispatch, getState: () => RootStateType) => {
+    debugger
     dispatch(setProfileStatusAC("loading"))
     dispatch(setProfileErrorAC(""))
     if (getState().profile.status === "loading") console.log("loading")
     try {
-        let response = await authAPI.me()
+        await authAPI.me()
         dispatch(setProfileStatusAC("succeeded"))
     } catch (e) {
         dispatch(setProfileErrorAC(e.response ? e.response.data.error : "unknown error"))

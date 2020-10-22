@@ -24,3 +24,13 @@
 .checkbox {
     border: #BBC1E1 solid 2px;
 }
+
+.infoTextRed {
+    transition: border 0.3s ease;
+    border: #ff4d4d solid 2px;
+    border-radius: 999px;
+    font-family: "Open Sans", sans-serif;
+    color: #ff4d4d;
+    padding: 10px 20px;
+    margin-top: 10px;
+}

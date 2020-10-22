@@ -2,8 +2,7 @@ import axios from "axios"
 
 export const restoreAPI = {
     getLinkForResetPassword(data: RequestParamsType) {
-        const promise = axios.post<ResponseType>(`https://neko-back.herokuapp.com/2.0/auth/forgot`, data, {withCredentials: true})
-        return promise
+        return  axios.post<ResponseType>(`https://neko-back.herokuapp.com/2.0/auth/forgot`, data, {withCredentials: true})
     }
 }
 export type RequestParamsType = {
