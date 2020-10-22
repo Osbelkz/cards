@@ -1,6 +1,6 @@
 import React from 'react';
 import {Route, Switch} from "react-router-dom";
-import ProfileContainer from "../Profile/ProfileContainer";
+import ProfileContainer from "../../../n2-features/f1-auth/a5-profile/ProfileContainer";
 import LoginContainer from "../../../n2-features/f1-auth/a1-login/LoginContainer";
 import RegisterContainer from "../../../n2-features/f1-auth/a2-register/RegisterContainer";
 import RestoreContainer from "../../../n2-features/f1-auth/a3-restore/RestoreContainer";
