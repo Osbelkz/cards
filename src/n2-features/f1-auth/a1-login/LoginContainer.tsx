@@ -5,9 +5,16 @@ import {useDispatch} from "react-redux";
 const LoginContainer = () => {
 
     const dispatch = useDispatch();
+    const isSentSuccess = false
+    const isLoading = false
+    const handleOnSubmit = () => alert("hello")
 
     return (
-        <Login />
+        <Login
+            isLoading={isLoading}
+            isSentSuccess={isSentSuccess}
+            handleOnSubmit={handleOnSubmit}
+        />
     );
 };
 

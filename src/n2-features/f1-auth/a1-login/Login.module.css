@@ -1,0 +1,26 @@
+.login {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 150px;
+}
+
+.login form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: start;
+}
+
+.login button {
+    margin: 10px 5px;
+}
+
+.loading {
+    color: darkorange;
+}
+
+.checkbox {
+    border: #BBC1E1 solid 2px;
+}
