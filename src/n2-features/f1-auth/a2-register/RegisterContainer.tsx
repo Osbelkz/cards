@@ -8,8 +8,6 @@ import {RegisterDataType} from "../../../n1-main/m3-dal/register-api";
 
 const RegisterContainer = () => {
 
-    console.log("register container")
-
     const dispatch = useDispatch();
     const error = useSelector<RootStateType, string>(state => state.register.error)
     const status = useSelector<RootStateType, StatusType>(state => state.register.status)
