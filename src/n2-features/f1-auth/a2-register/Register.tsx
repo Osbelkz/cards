@@ -20,8 +20,6 @@ type FormikErrorType = {
 
 const Register: React.FC<PropsType> = React.memo((props) => {
 
-    console.log("register")
-
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -78,7 +76,7 @@ const Register: React.FC<PropsType> = React.memo((props) => {
                     <div className={classes.register__buttons}>
                         <Button btnName={"Join"} btnType={"green"} type={"submit"}
                                 disabled={!formik.isValid || (props.status === "loading")}/>
-                        <Button btnName={"Reset"} onClick={() => formik.resetForm()}/>
+                        <Button btnName={"Reset"} type={"reset"} onClick={() => formik.resetForm()}/>
                     </div>
                     {props.error && <div className={classes.register__error}>{props.error}</div>}
                     {props.status === "loading" && <div className={classes.register__loading}>...Loading</div>}
