@@ -22,13 +22,13 @@ const ProfileContainer = () => {
         console.log(error)
     }, [status, userData])
 
-    if (status !== "succeeded") {
-        if (status==="failed") {
-            setTimeout(()=> history.push("/login"), 2000)
-        }
-
-        return <div>{status === "loading" ? "loading" : error}</div>
-    }
+    // if (status !== "succeeded") {
+    //     if (status==="failed") {
+    //         setTimeout(()=> history.push("/login"), 2000)
+    //     }
+    //
+    //     return <div>{status === "loading" ? "loading" : error}</div>
+    // }
     return <Profile userData={userData}/>
 };
 
