@@ -49,6 +49,7 @@ export const addUserTC = (data: RequestRegisterType) => async (dispatch: Dispatc
     } catch (e) {
         dispatch(setErrorAC(e.response ? e.response.data.error : "unknown error"))
         dispatch(setStatusAC("failed"))
+        setTimeout(dispatch, 5000, setErrorAC(""))
     }
 }
 

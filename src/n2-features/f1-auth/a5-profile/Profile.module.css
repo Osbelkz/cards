@@ -12,6 +12,11 @@
     align-items: center;
     height: inherit;
 }
+
+.profile__title {
+    margin-top: 20px;
+}
+
 .profile__info {
     text-align: center;
     margin-top: 20px;

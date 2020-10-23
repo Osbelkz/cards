@@ -13,7 +13,10 @@ const Profile: React.FC<PropsType> = ({userData, logout}) => {
     return (
         <div className={classes.profile}>
             <div className={classes.profile__container}>
-                <h3>Profile page</h3>
+                <div className={classes.profile__title}>
+                    <h3>Profile page</h3>
+                </div>
+
                 <div className={classes.profile__info}>
                     <table>
                         <tbody>

@@ -42,6 +42,7 @@ export const setNewPasswordTC = (newPassword: string, token: string) => (dispatc
         .catch(error => {
             dispatch(setErrorText(error.response.data.error))
             dispatch(setValueIsLoading(false))
+            setTimeout(dispatch, 5000, setErrorText(""))
         })
 }
 

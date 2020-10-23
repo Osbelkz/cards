@@ -47,5 +47,4 @@ export const logoutUserInAppTC = () =>async (dispatch: Dispatch) => {
 export type ActionsType = ReturnType<typeof setProfileUserDataAC>
 
 export type ProfileStateType = typeof initialState
-export type StatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 

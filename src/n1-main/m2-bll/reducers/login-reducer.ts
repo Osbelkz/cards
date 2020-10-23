@@ -42,6 +42,7 @@ export const logInUserInAppTC = (email: string, password: string, rememberMe: bo
             dispatch(setValueIsLoading(false))
             const error = e.response ? e.response.data.error : (e.message + ', more details in the console')
             dispatch(setErrorText(error))
+            setTimeout(dispatch, 5000, setErrorText(""))
     })
 }
 

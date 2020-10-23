@@ -29,7 +29,7 @@ export const restoreTC = (value: string) => (dispatch: Dispatch) => {
         from: "admin",
         message: `<div style="background-color: lime; padding: 15px">
                     password recovery link: 
-                    <a href="http://localhost:3000/cards#/newPassword/$token$"> 
+                    <a href="https://osbelkz.github.io/cards#/newPassword/$token$"> 
                     link</a>
                 </div>` // после полной заливки на ghp, заменить ссылку на страницу new password on ghp
     })
@@ -43,6 +43,7 @@ export const restoreTC = (value: string) => (dispatch: Dispatch) => {
         .catch(error => {
             dispatch(setRestoreTextAfterRequest(error.response.data.error))
             dispatch(setValueIsLoading(false))
+            setTimeout(dispatch, 5000, setRestoreTextAfterRequest(""))
         })
 }
 
