@@ -56,6 +56,7 @@ const Login = React.memo((props: RestorePropsType) => {
                 />
                 <Input
                     label={"Password"}
+                    type={"password"}
                     placeholder={"Please, put your password"}
                     errorCondition={!!formik.errors.password && formik.touched.password}
                     errorText={formik.errors.password}
