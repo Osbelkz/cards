@@ -1,5 +1,5 @@
 import {Dispatch} from "redux";
-import {restoreAPI} from "../../m3-dal/restore-api";
+import {authAPI} from "../../m3-dal/auth-api";
 
 export type RestorePasswordStateType = typeof initialState
 
@@ -24,7 +24,7 @@ export const restorePasswordReducer = (state = initialState, action: ActionsType
 
 export const restoreTC = (value: string) => (dispatch: Dispatch) => {
     dispatch(setValueIsLoading(true))
-    restoreAPI.getLinkForResetPassword({
+    authAPI.getLinkForResetPassword({
         email: value,
         from: "admin",
         message: `<div style="background-color: lime; padding: 15px">

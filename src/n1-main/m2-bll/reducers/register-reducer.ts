@@ -1,5 +1,5 @@
 import {Dispatch} from "redux";
-import {registerAPI, RegisterDataType} from "../../m3-dal/register-api";
+import {authAPI, RequestRegisterType} from "../../m3-dal/auth-api";
 
 enum ACTION_TYPE {
     SET_ERROR = "SET_ERROR",
@@ -40,11 +40,11 @@ export type ActionsType =
 
 // thunk
 
-export const addUserTC = (data: RegisterDataType) => async (dispatch: Dispatch) => {
+export const addUserTC = (data: RequestRegisterType) => async (dispatch: Dispatch) => {
     dispatch(setStatusAC("loading"))
     dispatch(setErrorAC(""))
     try {
-        let response = await registerAPI.register(data)
+        let response = await authAPI.register(data)
         dispatch(setStatusAC("succeeded"))
     } catch (e) {
         dispatch(setErrorAC(e.response ? e.response.data.error : "unknown error"))

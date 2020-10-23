@@ -3,11 +3,11 @@ import {Input} from '../../../n1-main/m1-ui/common/Input/Input';
 import classes from "./Register.module.css";
 import {Button} from "../../../n1-main/m1-ui/common/Button/Button";
 import {useFormik} from "formik";
-import {RegisterDataType} from "../../../n1-main/m3-dal/register-api";
 import {StatusType} from "../../../n1-main/m2-bll/reducers/register-reducer";
+import {RequestRegisterType} from "../../../n1-main/m3-dal/auth-api";
 
 type PropsType = {
-    onSubmit: (data: RegisterDataType) => void
+    onSubmit: (data: RequestRegisterType) => void
     error: string
     status: StatusType
 }

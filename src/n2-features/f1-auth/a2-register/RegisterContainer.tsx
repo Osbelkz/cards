@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {Redirect} from "react-router-dom";
 import {addUserTC, StatusType} from "../../../n1-main/m2-bll/reducers/register-reducer";
 import {RootStateType} from "../../../n1-main/m2-bll/store";
-import {RegisterDataType} from "../../../n1-main/m3-dal/register-api";
+import { RequestRegisterType } from '../../../n1-main/m3-dal/auth-api';
 
 const RegisterContainer = () => {
 
@@ -13,7 +13,7 @@ const RegisterContainer = () => {
     const status = useSelector<RootStateType, StatusType>(state => state.register.status)
 
 
-    const onSubmitHandler = useCallback((values: RegisterDataType) => {
+    const onSubmitHandler = useCallback((values: RequestRegisterType) => {
         dispatch(addUserTC(values))
     }, [])
 

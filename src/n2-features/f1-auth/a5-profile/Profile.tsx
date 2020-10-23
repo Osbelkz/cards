@@ -1,7 +1,7 @@
 import React from 'react';
 import classes from "./Profile.module.css";
 import {Button} from "../../../n1-main/m1-ui/common/Button/Button";
-import {UserDataType} from "../../../n1-main/m3-dal/profile-api";
+import { UserDataType } from '../../../n1-main/m3-dal/auth-api';
 
 type PropsType = {
     userData: UserDataType
@@ -16,6 +16,7 @@ const Profile: React.FC<PropsType> = ({userData, logout}) => {
                 <h3>Profile page</h3>
                 <div className={classes.profile__info}>
                     <table>
+                        <tbody>
                         <tr>
                             <th>Id:</th>
                             <td>{userData._id}</td>
@@ -36,6 +37,8 @@ const Profile: React.FC<PropsType> = ({userData, logout}) => {
                             <th>Packs of cards:</th>
                             <td>{userData.publicCardPacksCount}</td>
                         </tr>
+                        </tbody>
+
                     </table>
                 </div>
                 <div className={classes.profile__buttons}>

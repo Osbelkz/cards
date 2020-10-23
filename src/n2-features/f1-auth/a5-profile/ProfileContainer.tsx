@@ -2,10 +2,10 @@ import React, {useEffect} from 'react';
 import Profile from "./Profile";
 import {useDispatch, useSelector} from "react-redux";
 import {RootStateType} from "../../../n1-main/m2-bll/store";
-import {UserDataType} from "../../../n1-main/m3-dal/profile-api";
 import {Redirect} from 'react-router-dom';
 import {authMeTC, StatusType} from "../../../n1-main/m2-bll/reducers/app-reducer";
 import { logoutUserInAppTC } from '../../../n1-main/m2-bll/reducers/profileP-reducer';
+import { UserDataType } from '../../../n1-main/m3-dal/auth-api';
 
 const ProfileContainer = () => {
 
@@ -20,7 +20,7 @@ const ProfileContainer = () => {
         if (initApp === "idle" && !isLoggedSuccess) {
             dispatch(authMeTC())
         }
-    }, [initApp])
+    }, [initApp, isLoggedSuccess])
 
 
     const logoutHandler = () => {

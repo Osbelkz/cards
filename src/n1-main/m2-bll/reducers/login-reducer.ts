@@ -1,7 +1,6 @@
-import {loginAPI} from "../../m3-dal/login-api";
 import {Dispatch} from "redux";
 import {setProfileUserDataAC} from "./profileP-reducer";
-import {setInitAppAC} from "./app-reducer";
+import {authAPI} from "../../m3-dal/auth-api";
 
 export type LoginStateType = typeof initialState
 
@@ -26,7 +25,7 @@ export const loginReducer = (state = initialState, action: ActionsType): LoginSt
 
 export const logInUserInAppTC = (email: string, password: string, rememberMe: boolean) => (dispatch: Dispatch) => {
     dispatch(setValueIsLoading(true))
-    loginAPI.logInUserInApp({
+    authAPI.logInUserInApp({
         email: email,
         password: password,
         rememberMe: rememberMe

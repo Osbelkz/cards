@@ -1,6 +1,6 @@
 import {Dispatch} from "redux";
+import { authAPI } from "../../m3-dal/auth-api";
 import {RootStateType} from "../store";
-import {authAPI} from "../../m3-dal/profile-api";
 import { setValueIsLoggedSuccess } from "./login-reducer";
 import {setProfileUserDataAC} from "./profileP-reducer";
 

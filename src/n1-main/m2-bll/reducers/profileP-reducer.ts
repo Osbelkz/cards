@@ -1,7 +1,6 @@
-import {authAPI, UserDataType} from "../../m3-dal/profile-api";
 import {Dispatch} from "redux";
+import {authAPI, UserDataType} from "../../m3-dal/auth-api";
 import {setAppErrorAC, setInitAppAC} from "./app-reducer";
-import {loginAPI} from "../../m3-dal/login-api";
 import {setErrorText, setValueIsLoggedSuccess} from "./login-reducer";
 
 
@@ -37,7 +36,7 @@ export const logoutUserInAppTC = () =>async (dispatch: Dispatch) => {
     dispatch(setInitAppAC("loading"))
     dispatch(setAppErrorAC(""))
     try {
-        let response = loginAPI.logoutUserInApp()
+        let response = authAPI.logoutUserInApp()
         dispatch(setProfileUserDataAC(null))
         dispatch(setValueIsLoggedSuccess(false))
     } catch (e) {

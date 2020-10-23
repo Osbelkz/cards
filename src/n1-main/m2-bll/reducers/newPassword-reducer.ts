@@ -1,5 +1,5 @@
 import {Dispatch} from "redux";
-import {newPasswordAPI} from "../../m3-dal/newPassword-api";
+import {authAPI} from "../../m3-dal/auth-api";
 
 export type NewPasswordStateType = typeof initialState
 
@@ -27,7 +27,7 @@ export const newPasswordReducer = (state = initialState, action: ActionsType): N
 
 export const setNewPasswordTC = (newPassword: string, token: string) => (dispatch: Dispatch) => {
     dispatch(setValueIsLoading(true))
-    newPasswordAPI.setNewPassword({
+    authAPI.setNewPassword({
         password: newPassword,
         resetPasswordToken: token
     })
