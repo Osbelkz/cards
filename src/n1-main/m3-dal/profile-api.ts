@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const BASE_URL = "https://neko-back.herokuapp.com/2.0"
+const BASE_URL = "http://localhost:7542/2.0"
 
 const instanse = axios.create({
     baseURL: BASE_URL,
@@ -9,7 +9,7 @@ const instanse = axios.create({
 
 export const authAPI = {
     me() {
-        return instanse.post<ResponseType | ErrorType>("/auth/me", {})
+        return instanse.post<UserDataType>("/auth/me", {})
     }
 }
 
@@ -27,10 +27,6 @@ export type UserDataType = {
     token: string
     tokenDeathTime: number
     avatar: null | string
-}
-
-type ResponseType = {
-    addedUser: UserDataType
 }
 
 type ErrorType = {

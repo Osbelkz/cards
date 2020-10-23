@@ -2,7 +2,10 @@ import axios from "axios"
 
 export const loginAPI = {
     logInUserInApp(data: RequestParamsType) {
-        return  axios.post<ResponseType>(`https://neko-back.herokuapp.com/2.0/auth/login`, data, {withCredentials: true})
+        return  axios.post<ResponseType>(`http://localhost:7542/2.0/auth/login`, data, {withCredentials: true})
+    },
+    logoutUserInApp() {
+        return  axios.delete<ResponseType>(`http://localhost:7542/2.0/auth/me`)
     }
 }
 export type RequestParamsType = {

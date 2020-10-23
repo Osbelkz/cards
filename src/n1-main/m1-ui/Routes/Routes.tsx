@@ -14,7 +14,6 @@ const Routes = () => {
             <Route path={"/register"} render={() => <RegisterContainer/>}/>
             <Route path={"/restore"} render={() => <RestoreContainer/>}/>
             <Route path={"/newPassword/:token"} render={() => <NewPasswordContainer/>}/>
-            <Route path={"*"} render={() => <ProfileContainer/>}/>
         </Switch>
     );
 };

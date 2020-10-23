@@ -1,6 +1,7 @@
 import {loginAPI} from "../../m3-dal/login-api";
 import {Dispatch} from "redux";
 import {setProfileUserDataAC} from "./profileP-reducer";
+import {setInitAppAC} from "./app-reducer";
 
 export type LoginStateType = typeof initialState
 
@@ -32,9 +33,10 @@ export const logInUserInAppTC = (email: string, password: string, rememberMe: bo
     })
         .then(res => {
             if (res.status === 200) {
+                dispatch(setProfileUserDataAC({...res.data}))
                 dispatch(setValueIsLoggedSuccess(true))
                 dispatch(setValueIsLoading(false))
-                dispatch(setProfileUserDataAC({...res.data}))
+
             }
         })
         .catch(e => {
