@@ -32,7 +32,6 @@ export const setNewPasswordTC = (newPassword: string, token: string) => (dispatc
         resetPasswordToken: token
     })
         .then(res => {
-            debugger
             if (res.status === 200) {
                 dispatch(setValueIsSetNewPassword(true))
                 dispatch(setValueIsOk(res.data.info))

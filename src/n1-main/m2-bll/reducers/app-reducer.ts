@@ -47,7 +47,6 @@ export const authMeTC = () => async (dispatch: Dispatch, getState: () => RootSta
     if (getState().app.initApp === "loading") console.log("loading")
     try {
         let response = await authAPI.me()
-        debugger
         dispatch(setProfileUserDataAC(response.data))
         dispatch(setValueIsLoggedSuccess(true))
         dispatch(setInitAppAC("succeeded"))
