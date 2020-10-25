@@ -1,7 +1,7 @@
 import {Dispatch} from "redux";
 import { authAPI } from "../../m3-dal/auth-api";
 import {RootStateType} from "../store";
-import { setValueIsLoggedSuccess } from "./login-reducer";
+import {setErrorText, setValueIsLoggedSuccess } from "./login-reducer";
 import {setProfileUserDataAC} from "./profileP-reducer";
 
 enum ACTION_TYPE {
@@ -42,17 +42,18 @@ export type ActionsType = ReturnType<typeof setAppErrorAC> | ReturnType<typeof s
 // thunk
 
 export const authMeTC = () => async (dispatch: Dispatch, getState: () => RootStateType) => {
-    dispatch(setInitAppAC("succeeded"))
+    dispatch(setInitAppAC("loading"))
     dispatch(setAppErrorAC(""))
     if (getState().app.initApp === "loading") console.log("loading")
     try {
         let response = await authAPI.me()
-        dispatch(setProfileUserDataAC(response.data))
         dispatch(setValueIsLoggedSuccess(true))
         dispatch(setInitAppAC("succeeded"))
+        dispatch(setProfileUserDataAC(response.data))
     } catch (e) {
         dispatch(setAppErrorAC(e.response ? e.response.data.error : "unknown error"))
         dispatch(setInitAppAC("failed"))
+        dispatch(setErrorText(e.response.data.error))
     }
 }
 

@@ -31,19 +31,16 @@ export const logInUserInAppTC = (email: string, password: string, rememberMe: bo
         rememberMe: rememberMe
     })
         .then(res => {
-            if (res.status === 200) {
-                dispatch(setProfileUserDataAC({...res.data}))
-                dispatch(setValueIsLoggedSuccess(true))
-                dispatch(setValueIsLoading(false))
-
-            }
+            dispatch(setProfileUserDataAC({...res.data}))
+            dispatch(setValueIsLoggedSuccess(true))
+            dispatch(setValueIsLoading(false))
         })
         .catch(e => {
             dispatch(setValueIsLoading(false))
             const error = e.response ? e.response.data.error : (e.message + ', more details in the console')
             dispatch(setErrorText(error))
             setTimeout(dispatch, 5000, setErrorText(""))
-    })
+        })
 }
 
 export const setValueIsLoading = (isLoading: boolean) =>
@@ -56,7 +53,7 @@ export const setErrorText = (error: string) =>
     ({type: "login/SET-ERROR-TEXT", error} as const)
 
 type ActionsType = ReturnType<typeof setValueIsLoading>
-            | ReturnType<typeof setValueIsLoggedSuccess>
-            | ReturnType<typeof setErrorText>
-            | ReturnType<typeof setProfileUserDataAC>
+    | ReturnType<typeof setValueIsLoggedSuccess>
+    | ReturnType<typeof setErrorText>
+    | ReturnType<typeof setProfileUserDataAC>
 

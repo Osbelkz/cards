@@ -23,8 +23,16 @@ export const authAPI = {
     register (data: RequestRegisterType) {
         return instance.post<RegisterResponseType>("/auth/register", data)
     },
-    getLinkForResetPassword(data: RequestResetPasswordType) {
-        return  instance.post<NewPasswordResponseType>(`/auth/forgot`, data)
+    getLinkForResetPassword(value: string) {
+        return  instance.post<NewPasswordResponseType>(`/auth/forgot`, {
+            email: value,
+            from: "admin",
+            message: `<div style="background-color: lime; padding: 15px">
+                    password recovery link: 
+                    <a href="https://osbelkz.github.io/cards#/newPassword/$token$"> 
+                    link</a>
+                </div>` // после полной заливки на ghp, заменить ссылку на страницу new password on ghp
+        })
     }
 }
 

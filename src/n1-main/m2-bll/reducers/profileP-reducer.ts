@@ -39,7 +39,9 @@ export const logoutUserInAppTC = () =>async (dispatch: Dispatch) => {
         let response = authAPI.logoutUserInApp()
         dispatch(setProfileUserDataAC(null))
         dispatch(setValueIsLoggedSuccess(false))
+        dispatch(setInitAppAC("succeeded"))
     } catch (e) {
+        dispatch(setInitAppAC("failed"))
         dispatch(setErrorText(e.response ? e.response.data.error : "unknown error"))
     }
 }

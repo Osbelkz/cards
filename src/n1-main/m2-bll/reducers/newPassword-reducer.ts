@@ -32,11 +32,9 @@ export const setNewPasswordTC = (newPassword: string, token: string) => (dispatc
         resetPasswordToken: token
     })
         .then(res => {
-            if (res.status === 200) {
-                dispatch(setValueIsSetNewPassword(true))
-                dispatch(setValueIsOk(res.data.info))
-                dispatch(setValueIsLoading(false))
-            }
+            dispatch(setValueIsSetNewPassword(true))
+            dispatch(setValueIsOk(res.data.info))
+            dispatch(setValueIsLoading(false))
         })
         .catch(error => {
             dispatch(setErrorText(error.response.data.error))
@@ -58,6 +56,6 @@ export const setValueIsLoading = (isLoading: boolean) =>
     ({type: "restore/SET-VALUE-IS-LOADING", isLoading} as const)
 
 type ActionsType = ReturnType<typeof setValueIsSetNewPassword>
-                | ReturnType<typeof setErrorText>
-                | ReturnType<typeof setValueIsOk>
-                | ReturnType<typeof setValueIsLoading>
+    | ReturnType<typeof setErrorText>
+    | ReturnType<typeof setValueIsOk>
+    | ReturnType<typeof setValueIsLoading>

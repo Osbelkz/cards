@@ -24,23 +24,13 @@ export const restorePasswordReducer = (state = initialState, action: ActionsType
 
 export const restoreTC = (value: string) => (dispatch: Dispatch) => {
     dispatch(setValueIsLoading(true))
-    authAPI.getLinkForResetPassword({
-        email: value,
-        from: "admin",
-        message: `<div style="background-color: lime; padding: 15px">
-                    password recovery link: 
-                    <a href="https://osbelkz.github.io/cards#/newPassword/$token$"> 
-                    link</a>
-                </div>` // после полной заливки на ghp, заменить ссылку на страницу new password on ghp
-    })
+    authAPI.getLinkForResetPassword(value)
         .then(res => {
-            if (res.data.success ) {
-                dispatch(setValueIsSentSuccess(true))
-                dispatch(setRestoreTextAfterRequest(res.data.info))
-                dispatch(setValueIsLoading(false))
-            }
+            dispatch(setValueIsSentSuccess(true))
+            dispatch(setRestoreTextAfterRequest(res.data.info))
+            dispatch(setValueIsLoading(false))
         })
-        .catch(error => {
+        .catch((error: {response: {data: {error: string}}})=> {
             dispatch(setRestoreTextAfterRequest(error.response.data.error))
             dispatch(setValueIsLoading(false))
             setTimeout(dispatch, 5000, setRestoreTextAfterRequest(""))
