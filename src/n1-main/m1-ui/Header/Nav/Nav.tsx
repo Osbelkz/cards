@@ -10,6 +10,7 @@ const Nav = () => {
             <NavItem path={"/register"} title={"Registration"}/>
             <NavItem path={"/restore"} title={"Restore password"}/>
             <NavItem path={"/newPassword"} title={"New password"}/>
+            <NavItem path={"/packs"} title={"Packs"}/>
         </nav>
     );
 };
