@@ -31,7 +31,7 @@ export const authAPI = {
                     password recovery link: 
                     <a href="https://osbelkz.github.io/cards#/newPassword/$token$"> 
                     link</a>
-                </div>` // после полной заливки на ghp, заменить ссылку на страницу new password on ghp
+                </div>`
         })
     }
 }
