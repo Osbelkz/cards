@@ -8,7 +8,7 @@ import {
     changePageCountAC,
     createPackTC,
     deletePackTC,
-    getPacksTC,
+    getPacksTC, setSearchParamsAC,
     updatePackTC
 } from "../../../n1-main/m2-bll/reducers/packs-reducer";
 
@@ -21,11 +21,14 @@ const PacksContainer = () => {
     const page = useSelector<RootStateType, number>(state => state.packs.page)
     const pageCount = useSelector<RootStateType, number>(state => state.packs.pageCount)
     const cardPacksTotalCount = useSelector<RootStateType, number>(state => state.packs.cardPacksTotalCount)
+    const min = useSelector<RootStateType, number | undefined>(state => state.packs.max)
+    const max = useSelector<RootStateType, number | undefined>(state => state.packs.min)
+    const searchName = useSelector<RootStateType, string | undefined>(state => state.packs.packName)
 
 
     useEffect(() => {
         dispatch(getPacksTC())
-    }, [page, pageCount])
+    }, [page, pageCount, min, max, searchName])
 
     const deletePackHandler = useCallback((id: string) => {
         dispatch(deletePackTC(id))
@@ -42,6 +45,9 @@ const PacksContainer = () => {
     const changePageCountHandler = useCallback((pageCount: number) => {
         dispatch(changePageCountAC(pageCount))
     }, [dispatch])
+    const setSearchParamsHandler = useCallback((searchName?: string, min?: number, max?: number) => {
+        dispatch(setSearchParamsAC(searchName, min, max))
+    }, [dispatch])
 
     return (
         <Packs packs={packs}
@@ -53,6 +59,7 @@ const PacksContainer = () => {
                updatePack={updatePackHandler}
                changePage={changePageHandler}
                changePageCount={changePageCountHandler}
+               setSearchParams={setSearchParamsHandler}
         />
     );
 };
