@@ -6,6 +6,7 @@ import RegisterContainer from "../../../n2-features/f1-auth/a2-register/Register
 import RestoreContainer from "../../../n2-features/f1-auth/a3-restore/RestoreContainer";
 import NewPasswordContainer from "../../../n2-features/f1-auth/a4-new-password/NewPasswordContainer";
 import AuthRedirect from "../common/AuthRedirect/AuthRedirect";
+import PacksContainer from "../../../n2-features/f3-cards/c1-packs/PacksContainer";
 
 const Routes = () => {
     return (
@@ -15,7 +16,7 @@ const Routes = () => {
             <Route path={"/register"} render={() => <RegisterContainer/>}/>
             <Route path={"/restore"} render={() => <RestoreContainer/>}/>
             <Route path={"/newPassword/:token"} render={() => <NewPasswordContainer/>}/>
-            <Route path={"/"} render={() => <AuthRedirect><ProfileContainer/></AuthRedirect>}/>
+            <Route path={"/packs"} render={() => <AuthRedirect><PacksContainer/></AuthRedirect>}/>
         </Switch>
     );
 };
