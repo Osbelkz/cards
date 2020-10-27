@@ -24,7 +24,7 @@ const PacksContainer = () => {
     const min = useSelector<RootStateType, number | undefined>(state => state.packs.max)
     const max = useSelector<RootStateType, number | undefined>(state => state.packs.min)
     const searchName = useSelector<RootStateType, string | undefined>(state => state.packs.packName)
-
+    const userId = useSelector<RootStateType, string | undefined>(state => state.profile.userData?._id)
 
     useEffect(() => {
         dispatch(getPacksTC())
@@ -51,6 +51,7 @@ const PacksContainer = () => {
 
     return (
         <Packs packs={packs}
+               userId={userId}
                page={page}
                pageCount={pageCount}
                cardPacksTotalCount={cardPacksTotalCount}

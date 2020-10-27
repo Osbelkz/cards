@@ -53,6 +53,10 @@ export type CardPackType = {
     created: string
     updated: string
     __v: number
+    cardsCount: number
+    more_id: string
+    private: boolean
+    user_name: string
 }
 
 type CreateCardPackType = {

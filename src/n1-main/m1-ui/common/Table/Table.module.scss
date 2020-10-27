@@ -1,14 +1,12 @@
-table, th, td {
-  border: 1px solid black;
-  border-collapse: collapse;
-}
-
 .table {
-  border: 1px solid;
   &__row_header {
-
+    display: flex;
+    border-bottom: 10px solid;
+    background-color: cornflowerblue;
+    color: white;
   }
   &__row_data {
+    display: flex;
     border-bottom: 1px solid;
   }
 }

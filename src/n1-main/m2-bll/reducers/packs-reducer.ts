@@ -62,7 +62,7 @@ export const getPacksTC = () => async (dispatch: Dispatch, getState: () => RootS
     const {page, pageCount, packName, min, max} = getState().packs
     try {
         const response = await packsApi.getPacks({page, pageCount, packName, min, max})
-        console.log(response.data.maxCardsCount)
+        console.log(response.data)
         dispatch(setPacksAC(response.data.cardPacks, response.data.cardPacksTotalCount))
     } catch (e) {
         alert(e.response.data.error)

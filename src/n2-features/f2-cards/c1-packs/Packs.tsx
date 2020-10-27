@@ -1,9 +1,11 @@
 import classes from './Packs.module.scss';
 import React, {ReactNode} from 'react';
 import {CardPackType} from "../../../n1-main/m3-dal/packs-api";
+import Table, {ITableModel} from '../../../n1-main/m1-ui/common/Table/Table';
 
 type PropsType = {
     packs: Array<CardPackType> | null
+    userId: string | undefined
     page: number
     pageCount: number
     cardPacksTotalCount: number
@@ -25,6 +27,7 @@ export type TableRowType = {
 
 const Packs: React.FC<PropsType> = ({
                                         packs,
+                                        userId,
                                         page,
                                         pageCount,
                                         cardPacksTotalCount,
@@ -37,37 +40,55 @@ const Packs: React.FC<PropsType> = ({
                                     }) => {
 
     // @ts-ignore
-    let tableData: Array<TableRowType> = packs?.map(pack => ({
-        key: pack._id,
-        name: pack.name,
-        rating: pack.rating,
-        buttons: <>
-            <button onClick={() => deletePack(pack._id)}>delete</button>
-            <button onClick={() => updatePack("update pack name", pack._id)}>update</button>
-        </>
-    }))
+
+    const testModel: ITableModel[] = [
+        {
+            title: (i: number) => (<div style={{flex: "1 1 30%", padding: "10px 0"}} key={i}>name</div>),
+            render: (d: CardPackType) => (<div style={{flex: "1 1 30%", padding: "10px 0"}} key={d._id}>{d.name}</div>)
+        },
+        {
+            title: (i: number) => (<div style={{flex: "1 1 30%", padding: "10px 0"}} key={i}>cards count</div>),
+            render: (d: CardPackType) => (
+                <div style={{flex: "1 1 30%", padding: "10px 0"}} key={d._id}>{d.cardsCount}</div>)
+        },
+        {
+            title: (i: number) => (<div style={{flex: "1 1 30%", padding: "10px 0"}} key={i}>owner</div>),
+            render: (d: CardPackType) => (
+                <div style={{flex: "1 1 30%", padding: "10px 0"}} key={d._id}>{d.user_name}</div>)
+        },
+        {
+            title: (i: number) => (
+                <div style={{flex: "1 1 10%", padding: "10px 0"}} key={i}>
+                    buttons
+                    <button onClick={() => createPack("new pack")}>+</button>
+                </div>
+            ),
+            render: (d: CardPackType) => (
+                <div style={{flex: "1 1 10%", padding: "10px 0"}} key={d._id}>
+                    <button onClick={() => deletePack(d._id)} disabled={userId !== d.user_id}>X</button>
+                    <button onClick={() => updatePack("update pack name", d._id)} disabled={userId !== d.user_id}>update</button>
+                </div>
+            )
+        },
+
+    ];
+
+    if (!packs) {
+        return <div></div>
+    }
 
     return (
         <div className={classes.packs}>
-            {
-                packs?.map(pack => {
-                    return <div>
-                        <div>
-                            <div>{pack.name}</div>
-                            <button onClick={() => deletePack(pack._id)}>delete</button>
-                            <button onClick={() => createPack("new pack")}>create</button>
-                            <button onClick={() => updatePack("update pack name", pack._id)}>update</button>
-                        </div>
-
-                    </div>
-                })
-            }
+            <div>{cardPacksTotalCount}</div>
+            <Table data={packs} model={testModel}/>
             <button onClick={() => changePage(page + 1)}>next page</button>
             <button onClick={() => changePage(page - 1)}>prev page</button>
-            <div><button onClick={()=>setSearchParams("react")}>search react</button></div>
-            <div><button onClick={()=>setSearchParams(undefined,16)}>search min 16 cards</button></div>
-            <div>{cardPacksTotalCount}</div>
-            {/*<Table data={tableData}/>*/}
+            <div>
+                <button onClick={() => setSearchParams("react")}>search react</button>
+            </div>
+            <div>
+                <button onClick={() => setSearchParams(undefined, 16)}>search min 16 cards</button>
+            </div>
         </div>
     );
 };
