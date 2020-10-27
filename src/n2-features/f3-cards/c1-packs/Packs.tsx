@@ -1,6 +1,7 @@
 import classes from './Packs.module.scss';
 import React from 'react';
 import {CardPackType} from "../../../n1-main/m3-dal/packs-api";
+import {Paginator} from "../../../n1-main/m1-ui/common/Paginator/Paginator";
 
 
 type PropsType = {
@@ -41,8 +42,13 @@ const Packs: React.FC<PropsType> = ({
                     </div>
                 })
             }
-            <button onClick={()=>changePage(page+1)}>next page</button>
-            <button onClick={()=>changePage(page-1)}>prev page</button>
+            {/*<button onClick={()=>changePage(page+1)}>next page</button>*/}
+            {/*<button onClick={()=>changePage(page-1)}>prev page</button>*/}
+            <Paginator
+                currentPage={page}
+                pageAmount={pageCount}
+                changePage={changePage}
+            />
             <div>{cardPacksTotalCount}</div>
         </div>
     );
