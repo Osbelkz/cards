@@ -8,36 +8,28 @@ enum ACTION_TYPES {
     SET_TOTAL_COUNT = "packs/SET_TOTAL_COUNT",
     SET_PACKS = "packs/SET_PACKS",
     SET_SEARCH_NAME = "packs/SET_SEARCH_NAME",
+    SET_SEARCH_PARAMS = "packs/SET_SEARCH_PARAMS",
 }
 
 
 const initialState = {
+    packs: null as Array<CardPackType> | null,
     cardPacksTotalCount: 0,
     page: 1,
     pageCount: 10,
-    searchName: "",
-    packs: null as Array<CardPackType> | null
+    packName: "" as string | undefined,
+    min: undefined as undefined | number,
+    max: undefined as undefined | number
 }
 
 export const packsReducer = (state: PacksStateType = initialState, action: ActionsType): PacksStateType => {
     switch (action.type) {
         case ACTION_TYPES.CHANGE_PAGE:
-            return {
-                ...state, ...action.payload
-            }
         case ACTION_TYPES.CHANGE_PAGE_COUNT:
-            return {
-                ...state, ...action.payload
-            }
         case ACTION_TYPES.SET_TOTAL_COUNT:
-            return {
-                ...state, ...action.payload
-            }
         case ACTION_TYPES.SET_PACKS:
-            return {
-                ...state, ...action.payload
-            }
         case ACTION_TYPES.SET_SEARCH_NAME:
+        case ACTION_TYPES.SET_SEARCH_PARAMS:
             return {
                 ...state, ...action.payload
             }
@@ -58,17 +50,19 @@ const setTotalCountAC = (cardPacksTotalCount: number) => {
 const setPacksAC = (packs: Array<CardPackType>, cardPacksTotalCount: number) => {
     return {type: ACTION_TYPES.SET_PACKS, payload: {packs, cardPacksTotalCount}} as const
 }
-export const setSearchNameAC = (searchName: string) => {
-    return {type: ACTION_TYPES.SET_SEARCH_NAME, payload: {searchName}} as const
+export const setSearchNameAC = (packName: string) => {
+    return {type: ACTION_TYPES.SET_SEARCH_NAME, payload: {packName}} as const
+}
+export const setSearchParamsAC = (packName?: string, min?: number, max?: number) => {
+    return {type: ACTION_TYPES.SET_SEARCH_PARAMS, payload: {packName, min, max}} as const
 }
 
 
-
-export const getPacksTC = (packName?: string, min?: number, max?: number) => async (dispatch: Dispatch, getState: () => RootStateType) => {
-    const {page, pageCount} = getState().packs
+export const getPacksTC = () => async (dispatch: Dispatch, getState: () => RootStateType) => {
+    const {page, pageCount, packName, min, max} = getState().packs
     try {
         const response = await packsApi.getPacks({page, pageCount, packName, min, max})
-
+        console.log(response.data.maxCardsCount)
         dispatch(setPacksAC(response.data.cardPacks, response.data.cardPacksTotalCount))
     } catch (e) {
         alert(e.response.data.error)
@@ -111,3 +105,4 @@ type ActionsType = ReturnType<typeof changePageAC>
     | ReturnType<typeof setTotalCountAC>
     | ReturnType<typeof setPacksAC>
     | ReturnType<typeof setSearchNameAC>
+    | ReturnType<typeof setSearchParamsAC>

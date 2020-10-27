@@ -1,0 +1,14 @@
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+.table {
+  border: 1px solid;
+  &__row_header {
+
+  }
+  &__row_data {
+    border-bottom: 1px solid;
+  }
+}
