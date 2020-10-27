@@ -43,6 +43,7 @@ const Packs: React.FC<PropsType> = ({
             }
             <button onClick={()=>changePage(page+1)}>next page</button>
             <button onClick={()=>changePage(page-1)}>prev page</button>
+            //place for columnSortingModule
             <div>{cardPacksTotalCount}</div>
         </div>
     );
