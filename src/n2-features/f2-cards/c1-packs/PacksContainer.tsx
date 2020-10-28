@@ -11,6 +11,8 @@ import {
     getPacksTC, setSearchParamsAC,
     updatePackTC
 } from "../../../n1-main/m2-bll/reducers/packs-reducer";
+import {Preloader} from "../../../n1-main/m1-ui/common/Preloader/Preloader";
+import {StatusType} from "../../../n1-main/m2-bll/reducers/app-reducer";
 
 
 const PacksContainer = () => {
@@ -25,6 +27,8 @@ const PacksContainer = () => {
     const max = useSelector<RootStateType, number | undefined>(state => state.packs.min)
     const searchName = useSelector<RootStateType, string | undefined>(state => state.packs.packName)
     const userId = useSelector<RootStateType, string | undefined>(state => state.profile.userData?._id)
+    const pageStatus = useSelector<RootStateType, StatusType>(state => state.packs.pageStatus)
+
 
     useEffect(() => {
         dispatch(getPacksTC())
@@ -61,6 +65,7 @@ const PacksContainer = () => {
                changePage={changePageHandler}
                changePageCount={changePageCountHandler}
                setSearchParams={setSearchParamsHandler}
+               pageStatus={pageStatus}
         />
     );
 };

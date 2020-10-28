@@ -1,12 +1,19 @@
 .table {
+  border-radius: 10px 10px 0 0;
+  overflow: hidden;
+  &__loading {
+    color: #b3b3b3;
+  }
   &__row_header {
     display: flex;
-    border-bottom: 10px solid;
     background-color: cornflowerblue;
-    color: white;
+    color: white !important;
   }
   &__row_data {
     display: flex;
-    border-bottom: 1px solid;
+    border-bottom: 1px solid #cccccc;
+    &:hover {
+      background-color: #cad6ed;
+    }
   }
 }

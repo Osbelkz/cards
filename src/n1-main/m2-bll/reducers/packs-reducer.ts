@@ -1,6 +1,7 @@
 import {CardPackType, packsApi} from "../../m3-dal/packs-api"
 import {Dispatch} from "redux";
 import {RootStateType} from "../store";
+import { StatusType } from "./app-reducer";
 
 enum ACTION_TYPES {
     CHANGE_PAGE = "packs/CHANGE_PAGE",
@@ -9,6 +10,7 @@ enum ACTION_TYPES {
     SET_PACKS = "packs/SET_PACKS",
     SET_SEARCH_NAME = "packs/SET_SEARCH_NAME",
     SET_SEARCH_PARAMS = "packs/SET_SEARCH_PARAMS",
+    SET_IS_LOADING = "packs/SET_IS_LOADING"
 }
 
 
@@ -19,7 +21,8 @@ const initialState = {
     pageCount: 10,
     packName: "" as string | undefined,
     min: undefined as undefined | number,
-    max: undefined as undefined | number
+    max: undefined as undefined | number,
+    pageStatus: "idle" as StatusType
 }
 
 export const packsReducer = (state: PacksStateType = initialState, action: ActionsType): PacksStateType => {
@@ -30,6 +33,7 @@ export const packsReducer = (state: PacksStateType = initialState, action: Actio
         case ACTION_TYPES.SET_PACKS:
         case ACTION_TYPES.SET_SEARCH_NAME:
         case ACTION_TYPES.SET_SEARCH_PARAMS:
+        case ACTION_TYPES.SET_IS_LOADING:
             return {
                 ...state, ...action.payload
             }
@@ -56,16 +60,25 @@ export const setSearchNameAC = (packName: string) => {
 export const setSearchParamsAC = (packName?: string, min?: number, max?: number) => {
     return {type: ACTION_TYPES.SET_SEARCH_PARAMS, payload: {packName, min, max}} as const
 }
+export const setPageStatus = (pageStatus: StatusType) => {
+    return {type: ACTION_TYPES.SET_IS_LOADING, payload: {pageStatus}} as const
+}
 
-
-export const getPacksTC = () => async (dispatch: Dispatch, getState: () => RootStateType) => {
+export const getPacksTC = (selectPage?: number) => async (dispatch: Dispatch, getState: () => RootStateType) => {
     const {page, pageCount, packName, min, max} = getState().packs
+    dispatch(setPageStatus("loading"))
     try {
-        const response = await packsApi.getPacks({page, pageCount, packName, min, max})
+        const response = await packsApi.getPacks({page: selectPage || page, pageCount, packName, min, max})
         console.log(response.data)
         dispatch(setPacksAC(response.data.cardPacks, response.data.cardPacksTotalCount))
+        selectPage && dispatch(changePageAC(selectPage))
+        dispatch(setPageStatus("succeeded"))
     } catch (e) {
+        console.log("get packs tc")
         alert(e.response.data.error)
+        dispatch(setPageStatus("failed"))
+    } finally {
+
     }
 }
 
@@ -82,8 +95,9 @@ export const deletePackTC = (id: string) => async (dispatch: any) => {
 export const createPackTC = (name: string) => async (dispatch: any) => {
     try {
         const response = await packsApi.createPack({name})
-        dispatch(getPacksTC())
+        dispatch(getPacksTC(1))
     } catch (e) {
+        console.log("create tc")
         alert(e.response.data.error)
     }
 }
@@ -92,7 +106,7 @@ export const createPackTC = (name: string) => async (dispatch: any) => {
 export const updatePackTC = (name: string, _id: string) => async (dispatch: any) => {
     try {
         const response = await packsApi.updatePack({name, _id})
-        dispatch(getPacksTC())
+        dispatch(getPacksTC(1))
     } catch (e) {
         alert(e.response.data.error)
     }
@@ -106,3 +120,4 @@ type ActionsType = ReturnType<typeof changePageAC>
     | ReturnType<typeof setPacksAC>
     | ReturnType<typeof setSearchNameAC>
     | ReturnType<typeof setSearchParamsAC>
+    | ReturnType<typeof setPageStatus>
