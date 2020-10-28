@@ -1,9 +1,9 @@
 import classes from './Packs.module.scss';
-import React from 'react';
+import React, {useMemo} from 'react';
 import {CardPackType} from "../../../n1-main/m3-dal/packs-api";
 import Table, {ITableModel} from '../../../n1-main/m1-ui/common/Table/Table';
 import {StatusType} from "../../../n1-main/m2-bll/reducers/app-reducer";
-import {Preloader} from "../../../n1-main/m1-ui/common/Preloader/Preloader";
+import EditableTableCell from '../../../n1-main/m1-ui/common/Table/EditableTableCell/EditableTableCell';
 
 type PropsType = {
     packs: Array<CardPackType> | null
@@ -20,61 +20,64 @@ type PropsType = {
     pageStatus: StatusType
 }
 
-const Packs: React.FC<PropsType> = ({
-                                        packs,
-                                        userId,
-                                        page,
-                                        pageCount,
-                                        cardPacksTotalCount,
-                                        createPack,
-                                        deletePack,
-                                        updatePack,
-                                        changePage,
-                                        changePageCount,
-                                        setSearchParams,
-                                        pageStatus
-                                    }) => {
+const Packs: React.FC<PropsType> = React.memo(({
+                                                   packs,
+                                                   userId,
+                                                   page,
+                                                   pageCount,
+                                                   cardPacksTotalCount,
+                                                   createPack,
+                                                   deletePack,
+                                                   updatePack,
+                                                   changePage,
+                                                   changePageCount,
+                                                   setSearchParams,
+                                                   pageStatus
+                                               }) => {
 
     console.log("packs")
 
-    const testModel: ITableModel[] = [
+    const testModel: ITableModel[] = useMemo(() => ([
         {
-            title: (i: number) => (<div style={{flex: "1 1 30%", padding: "10px 0 10px 10px"}} key={i}>name</div>),
+            title: (i: number) => (<th style={{width: "40%", padding: "10px 0 10px 20px"}} key={i}>
+                <span>Name</span>
+            </th>),
             render: (d: CardPackType, i: number) => (
-                <div style={{flex: "1 1 30%", padding: "10px 0 10px 10px"}} key={i}>{d.name}</div>)
+                <td style={{width: "40%", padding: "10px 10px 10px 20px"}} key={i}>
+                    {
+                        userId === d.user_id
+                            ? <EditableTableCell text={d.name} changeText={(text) => updatePack(text, d._id)}/>
+                            : <span>{d.name}</span>
+                    }
+                </td>)
         },
         {
-            title: (i: number) => (<div style={{flex: "1 1 10%", padding: "10px 0"}} key={i}>cards count</div>),
+            title: (i: number) => (<th style={{width: "20%", padding: "10px 0"}} key={i}>Cards count</th>),
             render: (d: CardPackType, i: number) => (
-                <div style={{flex: "1 1 10%", padding: "10px 0"}} key={i}>{d.cardsCount}</div>)
+                <td style={{width: "20%", padding: "10px 0"}} key={i}>{d.cardsCount}</td>)
         },
         {
-            title: (i: number) => (<div style={{flex: "1 1 30%", padding: "10px 0"}} key={i}>owner</div>),
+            title: (i: number) => (<th style={{width: "30%", padding: "10px 0"}} key={i}>Owner</th>),
             render: (d: CardPackType, i: number) => (
-                <div style={{flex: "1 1 30%", padding: "10px 0"}} key={i}>{d.user_name}</div>)
+                <td style={{width: "30%", padding: "10px 0"}} key={i}>{d.user_name}</td>)
         },
         {
             title: (i: number) => (
-                <div style={{flex: "1 1 50px",padding: "10px 10px 10px 0"}} key={i}>
-                    buttons
+                <th style={{width: "80px", padding: "10px 10px 10px 0"}} key={i}>
+                    Buttons
                     <button onClick={() => createPack("new pack")}>+</button>
-                </div>
+                </th>
             ),
-            render: (d: CardPackType, i: number) => (
-                <div style={{flex: "1 1 50px", padding: "10px 10px 10px 0"}} key={i}>
-                    <button onClick={() => deletePack(d._id)} disabled={userId !== d.user_id || pageStatus==="loading"}>"X"</button>
-                    <button onClick={() => updatePack("update pack name", d._id)}
-                            disabled={userId !== d.user_id || pageStatus==="loading"}>"update"
+            render: (d: CardPackType, i: number) => {
+                return <td style={{width: "80px", padding: "10px 10px 10px 0"}} key={i}>
+                    <button onClick={() => deletePack(d._id)}
+                            disabled={userId !== d.user_id || pageStatus === "loading"}>X
                     </button>
-                </div>
-            )
+                </td>
+            }
         },
 
-    ];
-
-    if (!packs || pageStatus==="idle") {
-        return <Preloader/>
-    }
+    ]), [pageStatus]);
 
     return (
         <div className={classes.packs}>
@@ -98,6 +101,6 @@ const Packs: React.FC<PropsType> = ({
             </div>
         </div>
     );
-};
+})
 
 export default Packs;

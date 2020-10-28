@@ -14,22 +14,26 @@ interface ITableProps {
     pageStatus: StatusType
 }
 
-const Table: React.FC<ITableProps> = ({model, data, pageStatus}) => {
+const Table: React.FC<ITableProps> = React.memo(({model, data, pageStatus}) => {
 
     console.log("table")
 
     return (
-        <div className={`${classes.table} ${pageStatus==="loading" ? classes.table__loading : ""}`}>
-            <div className={classes.table__row_header}>
+        <table className={`${classes.table} ${pageStatus==="loading" ? classes.table__loading : ""}`}>
+            <thead>
+            <tr className={classes.table__row_header}>
                 {model.map((m: ITableModel, index: number) => m.title(index))}
-            </div>
-                {data.map((dataItem: any, dataIndex: number) => (
-                    <div className={classes.table__row_data} key={dataItem._id}>
-                        {model.map((m, modelIndex) => m.render(dataItem, modelIndex, dataIndex))}
-                    </div>
-                ))}
-        </div>
+            </tr>
+            </thead>
+            <tbody>
+            {data.map((dataItem: any, dataIndex: number) => (
+                <tr className={classes.table__row_data} key={dataItem._id}>
+                    {model.map((m, modelIndex) => m.render(dataItem, modelIndex, dataIndex))}
+                </tr>
+            ))}
+            </tbody>
+        </table>
     );
-};
+})
 
 export default Table;

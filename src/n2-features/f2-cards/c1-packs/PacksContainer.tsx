@@ -15,8 +15,9 @@ import {Preloader} from "../../../n1-main/m1-ui/common/Preloader/Preloader";
 import {StatusType} from "../../../n1-main/m2-bll/reducers/app-reducer";
 
 
-const PacksContainer = () => {
+const PacksContainer = React.memo(() => {
 
+    console.log("packs container")
 
     const dispatch = useDispatch()
     const packs = useSelector<RootStateType, Array<CardPackType> | null>(state => state.packs.packs)
@@ -29,29 +30,32 @@ const PacksContainer = () => {
     const userId = useSelector<RootStateType, string | undefined>(state => state.profile.userData?._id)
     const pageStatus = useSelector<RootStateType, StatusType>(state => state.packs.pageStatus)
 
+    const deletePackHandler = useCallback((id: string) => {
+        dispatch(deletePackTC(id))
+    }, [])
+    const createPackHandler = useCallback((name: string) => {
+        dispatch(createPackTC(name))
+    }, [])
+    const updatePackHandler = useCallback((name: string, id: string) => {
+        dispatch(updatePackTC(name, id))
+    }, [])
+    const changePageHandler = useCallback((page: number) => {
+        dispatch(changePageAC(page))
+    }, [])
+    const changePageCountHandler = useCallback((pageCount: number) => {
+        dispatch(changePageCountAC(pageCount))
+    }, [])
+    const setSearchParamsHandler = useCallback((searchName?: string, min?: number, max?: number) => {
+        dispatch(setSearchParamsAC(searchName, min, max))
+    }, [])
 
     useEffect(() => {
         dispatch(getPacksTC())
     }, [page, pageCount, min, max, searchName])
 
-    const deletePackHandler = useCallback((id: string) => {
-        dispatch(deletePackTC(id))
-    }, [dispatch])
-    const createPackHandler = useCallback((name: string) => {
-        dispatch(createPackTC(name))
-    }, [dispatch])
-    const updatePackHandler = useCallback((name: string, id: string) => {
-        dispatch(updatePackTC(name, id))
-    }, [dispatch])
-    const changePageHandler = useCallback((page: number) => {
-        dispatch(changePageAC(page))
-    }, [dispatch])
-    const changePageCountHandler = useCallback((pageCount: number) => {
-        dispatch(changePageCountAC(pageCount))
-    }, [dispatch])
-    const setSearchParamsHandler = useCallback((searchName?: string, min?: number, max?: number) => {
-        dispatch(setSearchParamsAC(searchName, min, max))
-    }, [dispatch])
+    if (!packs || pageStatus==="idle") {
+        return <Preloader/>
+    }
 
     return (
         <Packs packs={packs}
@@ -68,6 +72,6 @@ const PacksContainer = () => {
                pageStatus={pageStatus}
         />
     );
-};
+})
 
 export default PacksContainer;
