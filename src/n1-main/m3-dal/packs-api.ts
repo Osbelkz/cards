@@ -15,11 +15,7 @@ export const packsApi = {
         return instance.post<{ newCardsPack: CardPackType }>("/cards/pack", {cardsPack})
     },
     deletePack(id: string) {
-        return instance.delete<{ deletedCardsPack: CardPackType }>("cards/pack", {
-            params: {
-                id
-            }
-        })
+        return instance.delete<{ deletedCardsPack: CardPackType }>("cards/pack", {params: {id}})
     },
     updatePack(cardsPack: {name: string, _id: string}) {
         return instance.put<{ updatedCardsPack: CardPackType }>("/cards/pack", {cardsPack})
@@ -38,11 +34,11 @@ type QueryParamsPacksType = {
 
 type ResponsePacksType = {
     cardPacks: Array<CardPackType>
-    cardPacksTotalCount: 14 // количество колод
-    maxCardsCount: 4
-    minCardsCount: 0
-    page: 1 // выбранная страница
-    pageCount: 4 // количество элементов на странице
+    cardPacksTotalCount: number // количество колод
+    maxCardsCount: number
+    minCardsCount: number
+    page: number // выбранная страница
+    pageCount: number // количество элементов на странице
 
 }
 export type CardPackType = {
