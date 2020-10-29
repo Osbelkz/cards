@@ -19,10 +19,14 @@ const initialState = {
     cardPacksTotalCount: 0,
     page: 1,
     pageCount: 10,
-    packName: "" as string | undefined,
     min: undefined as undefined | number,
     max: undefined as undefined | number,
-    pageStatus: "idle" as StatusType
+    pageStatus: "idle" as StatusType,
+    searchParams: {
+        packName: "" as string | undefined,
+        min: undefined as undefined | number,
+        max: undefined as undefined | number,
+    }
 }
 
 export const packsReducer = (state: PacksStateType = initialState, action: ActionsType): PacksStateType => {
@@ -31,11 +35,17 @@ export const packsReducer = (state: PacksStateType = initialState, action: Actio
         case ACTION_TYPES.CHANGE_PAGE_COUNT:
         case ACTION_TYPES.SET_TOTAL_COUNT:
         case ACTION_TYPES.SET_PACKS:
-        case ACTION_TYPES.SET_SEARCH_NAME:
-        case ACTION_TYPES.SET_SEARCH_PARAMS:
         case ACTION_TYPES.SET_IS_LOADING:
             return {
                 ...state, ...action.payload
+            }
+        case ACTION_TYPES.SET_SEARCH_NAME:
+            return {
+                ...state, searchParams: {...state.searchParams, packName: action.payload.packName}
+            }
+        case ACTION_TYPES.SET_SEARCH_PARAMS:
+            return {
+                ...state, searchParams: {...action.payload}
             }
         default:
             return state
@@ -51,8 +61,8 @@ export const changePageCountAC = (pageCount: number) => {
 const setTotalCountAC = (cardPacksTotalCount: number) => {
     return {type: ACTION_TYPES.SET_TOTAL_COUNT, payload: {cardPacksTotalCount}} as const
 }
-const setPacksAC = (packs: Array<CardPackType>, cardPacksTotalCount: number) => {
-    return {type: ACTION_TYPES.SET_PACKS, payload: {packs, cardPacksTotalCount}} as const
+const setPacksAC = (packs: Array<CardPackType>, cardPacksTotalCount: number, min: number, max: number, pageStatus: StatusType) => {
+    return {type: ACTION_TYPES.SET_PACKS, payload: {packs, cardPacksTotalCount, pageStatus}} as const
 }
 export const setSearchNameAC = (packName: string) => {
     return {type: ACTION_TYPES.SET_SEARCH_NAME, payload: {packName}} as const
@@ -64,15 +74,18 @@ export const setPageStatus = (pageStatus: StatusType) => {
     return {type: ACTION_TYPES.SET_IS_LOADING, payload: {pageStatus}} as const
 }
 
-export const getPacksTC = (selectPage?: number) => async (dispatch: Dispatch, getState: () => RootStateType) => {
-    const {page, pageCount, packName, min, max} = getState().packs
+export const getPacksTC = (selectedPage?: number) => async (dispatch: Dispatch, getState: () => RootStateType) => {
+    const {page, pageCount, searchParams: {packName, min, max}} = getState().packs
     dispatch(setPageStatus("loading"))
     try {
-        const response = await packsApi.getPacks({page: selectPage || page, pageCount, packName, min, max})
+        const response = await packsApi.getPacks({page: selectedPage || page, pageCount, packName, min, max})
         console.log(response.data)
-        dispatch(setPacksAC(response.data.cardPacks, response.data.cardPacksTotalCount))
-        selectPage && dispatch(changePageAC(selectPage))
-        dispatch(setPageStatus("succeeded"))
+        dispatch(setPacksAC(response.data.cardPacks,
+            response.data.cardPacksTotalCount,
+            response.data.minCardsCount,
+            response.data.maxCardsCount,
+            "succeeded"))
+        selectedPage && dispatch(changePageAC(selectedPage))
     } catch (e) {
         console.log("get packs tc")
         alert(e.response.data.error)
@@ -84,6 +97,7 @@ export const getPacksTC = (selectPage?: number) => async (dispatch: Dispatch, ge
 
 //dispatch hasn't types
 export const deletePackTC = (id: string) => async (dispatch: any) => {
+    dispatch(setPageStatus("loading"))
     try {
         const response = await packsApi.deletePack(id)
         dispatch(getPacksTC())
@@ -93,6 +107,7 @@ export const deletePackTC = (id: string) => async (dispatch: any) => {
 }
 //dispatch hasn't types
 export const createPackTC = (name: string) => async (dispatch: any) => {
+    dispatch(setPageStatus("loading"))
     try {
         const response = await packsApi.createPack({name})
         dispatch(getPacksTC(1))
@@ -104,6 +119,7 @@ export const createPackTC = (name: string) => async (dispatch: any) => {
 //under construction
 //dispatch hasn't types
 export const updatePackTC = (name: string, _id: string) => async (dispatch: any) => {
+    dispatch(setPageStatus("loading"))
     try {
         const response = await packsApi.updatePack({name, _id})
         dispatch(getPacksTC(1))
@@ -113,6 +129,8 @@ export const updatePackTC = (name: string, _id: string) => async (dispatch: any)
 }
 
 type PacksStateType = typeof initialState
+export type SearchParamsType = typeof initialState.searchParams
+
 
 type ActionsType = ReturnType<typeof changePageAC>
     | ReturnType<typeof changePageCountAC>

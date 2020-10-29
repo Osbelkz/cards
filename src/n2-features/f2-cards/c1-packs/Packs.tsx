@@ -4,12 +4,15 @@ import {CardPackType} from "../../../n1-main/m3-dal/packs-api";
 import Table, {ITableModel} from '../../../n1-main/m1-ui/common/Table/Table';
 import {StatusType} from "../../../n1-main/m2-bll/reducers/app-reducer";
 import EditableTableCell from '../../../n1-main/m1-ui/common/Table/EditableTableCell/EditableTableCell';
+import {TableButton} from "../../../n1-main/m1-ui/common/Table/TableButton/TableButton";
 
 type PropsType = {
     packs: Array<CardPackType> | null
     userId: string | undefined
     page: number
     pageCount: number
+    min: number | undefined
+    max: number | undefined
     cardPacksTotalCount: number
     deletePack: (id: string) => void
     createPack: (name: string) => void
@@ -20,30 +23,22 @@ type PropsType = {
     pageStatus: StatusType
 }
 
-const Packs: React.FC<PropsType> = React.memo(({
-                                                   packs,
-                                                   userId,
-                                                   page,
-                                                   pageCount,
-                                                   cardPacksTotalCount,
-                                                   createPack,
-                                                   deletePack,
-                                                   updatePack,
-                                                   changePage,
-                                                   changePageCount,
-                                                   setSearchParams,
-                                                   pageStatus
-                                               }) => {
-
+const Packs: React.FC<PropsType> = React.memo((props) => {
+    let {packs, userId, page,
+        pageCount, cardPacksTotalCount, createPack,
+        deletePack, updatePack, changePage,
+        changePageCount, setSearchParams, pageStatus,
+        min, max
+    } = props
     console.log("packs")
 
     const testModel: ITableModel[] = useMemo(() => ([
         {
-            title: (i: number) => (<th style={{width: "30%", padding: "10px 0 10px 20px"}} key={i}>
+            title: (i: number) => (<th style={{width: "32%", padding: "10px 0 10px 20px"}} key={i}>
                 <span>Name</span>
             </th>),
             render: (d: CardPackType, i: number) => (
-                <td style={{width: "30%", padding: "10px 10px 10px 20px"}} key={i}>
+                <td style={{width: "32%", padding: "10px 10px 10px 20px"}} key={i}>
                     {
                         userId === d.user_id
                             ? <EditableTableCell text={d.name} changeText={(text) => updatePack(text, d._id)}/>
@@ -67,9 +62,9 @@ const Packs: React.FC<PropsType> = React.memo(({
 
         },
         {
-            title: (i: number) => (<th style={{width: "20%", padding: "10px 0"}} key={i}>Cards count</th>),
+            title: (i: number) => (<th style={{width: "8%", padding: "10px 0"}} key={i}>Cards count</th>),
             render: (d: CardPackType, i: number) => (
-                <td style={{width: "20%", padding: "10px 0"}} key={i}>{d.cardsCount}</td>)
+                <td style={{width: "8%", padding: "10px 0"}} key={i}>{d.cardsCount}</td>)
         },
         {
             title: (i: number) => (<th style={{width: "30%", padding: "10px 0"}} key={i}>Owner</th>),
@@ -78,16 +73,15 @@ const Packs: React.FC<PropsType> = React.memo(({
         },
         {
             title: (i: number) => (
-                <th style={{width: "80px", padding: "10px 10px 10px 0"}} key={i}>
-                    Buttons
-                    <button onClick={() => createPack("new pack")}>+</button>
+                <th style={{width: "10%", padding: "10px 20px 10px 0", textAlign: "right"}} key={i}>
+                    <TableButton btnName={"+"} btnType={"green"} onClick={() => createPack("new pack")}
+                                 disabled={pageStatus === "loading"}/>
                 </th>
             ),
             render: (d: CardPackType, i: number) => {
-                return <td style={{width: "80px", padding: "10px 10px 10px 0"}} key={i}>
-                    <button onClick={() => deletePack(d._id)}
-                            disabled={userId !== d.user_id || pageStatus === "loading"}>X
-                    </button>
+                return <td style={{width: "10%", padding: "10px 20px 10px 0", textAlign: "right"}} key={i}>
+                    <TableButton btnName={"-"} btnType={"red"}  onClick={() => deletePack(d._id)}
+                            disabled={userId !== d.user_id || pageStatus === "loading"}/>
                 </td>
             }
         },
@@ -111,7 +105,7 @@ const Packs: React.FC<PropsType> = React.memo(({
                     <button onClick={() => setSearchParams("new")}>search react</button>
                 </div>
                 <div>
-                    <button onClick={() => setSearchParams(undefined, 16)}>search min 16 cards</button>
+                    <button onClick={() => setSearchParams(undefined, 5, 15)}>search min 16 cards</button>
                 </div>
             </div>
         </div>

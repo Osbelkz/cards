@@ -8,7 +8,7 @@ import {
     changePageCountAC,
     createPackTC,
     deletePackTC,
-    getPacksTC, setSearchParamsAC,
+    getPacksTC, SearchParamsType, setSearchParamsAC,
     updatePackTC
 } from "../../../n1-main/m2-bll/reducers/packs-reducer";
 import {Preloader} from "../../../n1-main/m1-ui/common/Preloader/Preloader";
@@ -26,9 +26,9 @@ const PacksContainer = React.memo(() => {
     const cardPacksTotalCount = useSelector<RootStateType, number>(state => state.packs.cardPacksTotalCount)
     const min = useSelector<RootStateType, number | undefined>(state => state.packs.max)
     const max = useSelector<RootStateType, number | undefined>(state => state.packs.min)
-    const searchName = useSelector<RootStateType, string | undefined>(state => state.packs.packName)
     const userId = useSelector<RootStateType, string | undefined>(state => state.profile.userData?._id)
     const pageStatus = useSelector<RootStateType, StatusType>(state => state.packs.pageStatus)
+    const searchParams  = useSelector<RootStateType, SearchParamsType>(state => state.packs.searchParams)
 
     const deletePackHandler = useCallback((id: string) => {
         dispatch(deletePackTC(id))
@@ -51,7 +51,7 @@ const PacksContainer = React.memo(() => {
 
     useEffect(() => {
         dispatch(getPacksTC())
-    }, [page, pageCount, min, max, searchName])
+    }, [page, pageCount, searchParams])
 
     if (!packs || pageStatus==="idle") {
         return <Preloader/>
@@ -61,6 +61,8 @@ const PacksContainer = React.memo(() => {
         <Packs packs={packs}
                userId={userId}
                page={page}
+               min={min}
+               max={max}
                pageCount={pageCount}
                cardPacksTotalCount={cardPacksTotalCount}
                createPack={createPackHandler}
