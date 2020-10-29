@@ -32,8 +32,6 @@ const PacksContainer = React.memo(() => {
     const pageStatus = useSelector<RootStateType, StatusType>(state => state.packs.pageStatus)
     const searchParams  = useSelector<RootStateType, SearchParamsType>(state => state.packs.searchParams)
 
-    console.log(min, max)
-
     const deletePackHandler = useCallback((id: string) => {
         dispatch(deletePackTC(id))
     }, [])

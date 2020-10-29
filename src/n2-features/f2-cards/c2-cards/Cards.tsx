@@ -28,7 +28,8 @@ type PropsType = {
 
 const Cards: React.FC<PropsType> = React.memo((props) => {
     let {cards, userId, page,
-        pageCount, cardsTotalCount, createCard, deleteCard, updateCard, changePage,
+        pageCount, cardsTotalCount,
+        createCard, deleteCard, updateCard, changePage,
         changePageCount, setSearchParams, pageStatus,
         min, max, searchParams: {cardQuestion}
     } = props
@@ -36,11 +37,11 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
 
     const testModel: ITableModel[] = useMemo(() => ([
         {
-            title: (i: number) => (<th style={{width: "32%", padding: "10px 0 10px 20px"}} key={i}>
+            title: (i: number) => (<th style={{width: "25%", padding: "10px 0 10px 20px"}} key={i}>
                 <span>Question</span>
             </th>),
             render: (d: CardType, i: number) => (
-                <td style={{width: "32%", padding: "10px 10px 10px 20px"}} key={i}>
+                <td style={{width: "25%", padding: "10px 10px 10px 20px"}} key={i}>
                     {
                         userId === d.user_id
                             ? <EditableTableCell text={d.question} changeText={(text) => updateCard(text, d._id)}/>
@@ -49,12 +50,12 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
                 </td>)
         },
         {
-            title: (i: number) => (<th style={{width: "8%", padding: "10px 0"}} key={i}>Answer</th>),
+            title: (i: number) => (<th style={{width: "25%", padding: "10px 0"}} key={i}>Answer</th>),
             render: (d: CardType, i: number) => (
-                <td style={{width: "8%", padding: "10px 0"}} key={i}>{d.answer}</td>)
+                <td style={{width: "25%", padding: "10px 0"}} key={i}>{d.answer}</td>)
         },
         {
-            title: (i: number) => (<th style={{width: "20%", padding: "10px 0"}} key={i}>
+            title: (i: number) => (<th style={{width: "25%", padding: "10px 0"}} key={i}>
                 <span>Added</span>
             </th>),
             render: (d: CardType, i: number) => {
@@ -64,14 +65,14 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
                 let month = dm.getMonth() < 10 ? "0" + dm.getMonth() : dm.getMonth()
                 let day = dm.getDay() < 10 ? "0" + dm.getDay() : dm.getDay()
 
-                return <td style={{width: "20%", padding: "10px 0"}} key={i}>{`${year}-${month}-${day}`}</td>
+                return <td style={{width: "25%", padding: "10px 0"}} key={i}>{`${year}-${month}-${day}`}</td>
             }
 
         },
         {
-            title: (i: number) => (<th style={{width: "30%", padding: "10px 0"}} key={i}>Grade</th>),
+            title: (i: number) => (<th style={{width: "15%", padding: "10px 0"}} key={i}>Grade</th>),
             render: (d: CardType, i: number) => (
-                <td style={{width: "30%", padding: "10px 0"}} key={i}>{d.grade}</td>)
+                <td style={{width: "15%", padding: "10px 0"}} key={i}>{d.grade}</td>)
         },
         {
             title: (i: number) => (

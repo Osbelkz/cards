@@ -16,9 +16,9 @@ export const cardsApi = {
         return instance.post<{ newCard: CardType }>("/cards/card", {card})
     },
     deleteCard(id: string) {
-        return instance.delete<{ deletedCard: CardType }>("cards/card", {params: {id}})
+        return instance.delete<{ deletedCard: CardType }>("/cards/card", {params: {id}})
     },
-    updateCard(card: {question?: string, answer?: string, _id: string}) {
+    updateCard(card: UpdateCardType) {
         return instance.put<{ updatedCard: CardType }>("/cards/card", {card})
     }
 }
@@ -64,8 +64,8 @@ export type CardType = {
     comments: string,
 }
 
-type CreateCardType = {
-    cardsPack_id: string
+export type CreateCardType = {
+    cardsPack_id?: string
     question?: string // если не отправить будет таким
     answer?: string // если не отправить будет таким
     grade?: number // 0..5, не обязателен
@@ -76,4 +76,9 @@ type CreateCardType = {
     questionVideo?: string // не обязателен
     answerVideo?: string // не обязателен
     type?: "card"
+}
+export type UpdateCardType = {
+    question?: string,
+    answer?: string,
+    _id: string
 }

@@ -2,6 +2,7 @@ import {CardPackType, packsApi} from "../../m3-dal/packs-api"
 import {Dispatch} from "redux";
 import {RootStateType} from "../store";
 import { StatusType } from "./app-reducer";
+import { ThunkDispatch } from "redux-thunk";
 
 enum ACTION_TYPES {
     CHANGE_PAGE = "packs/CHANGE_PAGE",
@@ -96,7 +97,7 @@ export const getPacksTC = (selectedPage?: number) => async (dispatch: Dispatch, 
 }
 
 //dispatch hasn't types
-export const deletePackTC = (id: string) => async (dispatch: any) => {
+export const deletePackTC = (id: string) => async (dispatch: ThunkDispatch<RootStateType, {}, ActionsType>) => {
     dispatch(setPageStatus("loading"))
     try {
         const response = await packsApi.deletePack(id)
@@ -106,7 +107,7 @@ export const deletePackTC = (id: string) => async (dispatch: any) => {
     }
 }
 //dispatch hasn't types
-export const createPackTC = (name: string) => async (dispatch: any) => {
+export const createPackTC = (name: string) => async (dispatch: ThunkDispatch<RootStateType, {}, ActionsType>) => {
     dispatch(setPageStatus("loading"))
     try {
         const response = await packsApi.createPack({name})
@@ -118,7 +119,7 @@ export const createPackTC = (name: string) => async (dispatch: any) => {
 }
 //under construction
 //dispatch hasn't types
-export const updatePackTC = (name: string, _id: string) => async (dispatch: any) => {
+export const updatePackTC = (name: string, _id: string) => async (dispatch: ThunkDispatch<RootStateType, {}, ActionsType>) => {
     dispatch(setPageStatus("loading"))
     try {
         const response = await packsApi.updatePack({name, _id})

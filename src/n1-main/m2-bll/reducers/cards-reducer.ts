@@ -2,7 +2,8 @@ import {packsApi} from "../../m3-dal/packs-api"
 import {Dispatch} from "redux";
 import {RootStateType} from "../store";
 import { StatusType } from "./app-reducer";
-import {cardsApi, CardType} from "../../m3-dal/cards-api";
+import {cardsApi, CardType, CreateCardType} from "../../m3-dal/cards-api";
+import {ThunkDispatch} from "redux-thunk";
 
 enum ACTION_TYPES {
     CHANGE_PAGE = "cards/CHANGE_PAGE",
@@ -101,7 +102,8 @@ export const getCardsTC = (selectedPage?: number ) => async (dispatch: Dispatch,
 }
 
 //dispatch hasn't types
-export const deleteCardTC = (cardId: string) => async (dispatch: any) => {
+export const deleteCardTC = (cardId: string) =>
+    async (dispatch: ThunkDispatch<RootStateType, {}, ActionsType>) => {
     dispatch(setCardsPageStatus("loading"))
     try {
         const response = await cardsApi.deleteCard(cardId)
@@ -111,11 +113,12 @@ export const deleteCardTC = (cardId: string) => async (dispatch: any) => {
     }
 }
 //dispatch hasn't types
-export const createCardTC = (question: string) => async (dispatch: any, getState: () => RootStateType) => {
+export const createCardTC = (card: CreateCardType) =>
+    async (dispatch: ThunkDispatch<RootStateType, {}, ActionsType>, getState: () => RootStateType) => {
     dispatch(setCardsPageStatus("loading"))
     let {cardsPack_id} = getState().cards
     try {
-        const response = await cardsApi.createCard({cardsPack_id, question})
+        const response = await cardsApi.createCard({...card, cardsPack_id})
         dispatch(getCardsTC(1))
     } catch (e) {
         console.log("create tc")
@@ -124,10 +127,11 @@ export const createCardTC = (question: string) => async (dispatch: any, getState
 }
 //under construction
 //dispatch hasn't types
-export const updateCardTC = (question: string, _id: string) => async (dispatch: any) => {
+export const updateCardTC = (card: { question: string, _id: string }) =>
+    async (dispatch: ThunkDispatch<RootStateType, {}, ActionsType>) => {
     dispatch(setCardsPageStatus("loading"))
     try {
-        const response = await cardsApi.updateCard({question, _id})
+        const response = await cardsApi.updateCard(card)
         dispatch(getCardsTC(1))
     } catch (e) {
         alert(e.response.data.error)
