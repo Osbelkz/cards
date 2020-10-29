@@ -1,0 +1,147 @@
+import {packsApi} from "../../m3-dal/packs-api"
+import {Dispatch} from "redux";
+import {RootStateType} from "../store";
+import { StatusType } from "./app-reducer";
+import {cardsApi, CardType} from "../../m3-dal/cards-api";
+
+enum ACTION_TYPES {
+    CHANGE_PAGE = "cards/CHANGE_PAGE",
+    CHANGE_PAGE_COUNT = "cards/CHANGE_PAGE_COUNT",
+    SET_CARDS = "cards/SET_CARDS",
+    SET_SEARCH_NAME = "cards/SET_SEARCH_NAME",
+    SET_SEARCH_PARAMS = "cards/SET_SEARCH_PARAMS",
+    SET_IS_LOADING = "cards/SET_IS_LOADING",
+    SET_PACK_ID =  "cards/SET_PACK_ID"
+}
+
+
+const initialState = {
+    cardsPack_id: "" as string,
+    cards: null as Array<CardType> | null,
+    cardsTotalCount: 0,
+    page: 1,
+    pageCount: 10,
+    minGrade: undefined as undefined | number,
+    maxGrade: undefined as undefined | number,
+    pageStatus: "idle" as StatusType,
+    searchParams: {
+        cardQuestion: "" as undefined | string,
+        cardAnswer: "" as undefined | string,
+        min: undefined as undefined | number,
+        max: undefined as undefined | number,
+    }
+}
+
+export const cardsReducer = (state: CardsStateType = initialState, action: ActionsType): CardsStateType => {
+    switch (action.type) {
+        case ACTION_TYPES.CHANGE_PAGE:
+        case ACTION_TYPES.CHANGE_PAGE_COUNT:
+        case ACTION_TYPES.SET_CARDS:
+        case ACTION_TYPES.SET_IS_LOADING:
+        case ACTION_TYPES.SET_PACK_ID:
+            return {
+                ...state, ...action.payload
+            }
+        case ACTION_TYPES.SET_SEARCH_NAME:
+            return {
+                ...state, searchParams: {...state.searchParams, cardQuestion: action.payload.question}
+            }
+        case ACTION_TYPES.SET_SEARCH_PARAMS:
+            return {
+                ...state, searchParams: {...state.searchParams, ...action.payload}
+            }
+        default:
+            return state
+    }
+}
+
+export const changeCardsPageAC = (page: number) => {
+    return {type: ACTION_TYPES.CHANGE_PAGE, payload: {page}} as const
+}
+export const changeCardsPageCountAC = (pageCount: number) => {
+    return {type: ACTION_TYPES.CHANGE_PAGE_COUNT, payload: {pageCount}} as const
+}
+const setCardsAC = (cards: Array<CardType>, cardsTotalCount: number, minGrade: number, maxGrade: number, pageStatus: StatusType) => {
+    return {type: ACTION_TYPES.SET_CARDS, payload: {cards, cardsTotalCount, minGrade, maxGrade, pageStatus}} as const
+}
+export const setCardsSearchQuestionAC = (question: string) => {
+    return {type: ACTION_TYPES.SET_SEARCH_NAME, payload: {question}} as const
+}
+export const setCardsSearchParamsAC = (cardQuestion?: string, min?: number, max?: number) => {
+    return {type: ACTION_TYPES.SET_SEARCH_PARAMS, payload: {cardQuestion, min, max}} as const
+}
+export const setCardsPageStatus = (pageStatus: StatusType) => {
+    return {type: ACTION_TYPES.SET_IS_LOADING, payload: {pageStatus}} as const
+}
+export const setPackIdAC = (cardsPack_id: string) => {
+    return {type: ACTION_TYPES.SET_PACK_ID, payload: {cardsPack_id}} as const
+}
+
+
+export const getCardsTC = (selectedPage?: number ) => async (dispatch: Dispatch, getState: () => RootStateType) => {
+    const {cardsPack_id, page, pageCount, searchParams: {cardQuestion, min, max}} = getState().cards
+    dispatch(setCardsPageStatus("loading"))
+    try {
+        const response = await cardsApi.getPack({cardsPack_id, page: selectedPage || page, pageCount, cardQuestion, min, max})
+        console.log(response.data)
+        dispatch(setCardsAC(response.data.cards,
+            response.data.cardsTotalCount,
+            response.data.minGrade,
+            response.data.maxGrade,
+            "succeeded"))
+        selectedPage && dispatch(changeCardsPageAC(selectedPage))
+        console.log(getState().cards)
+    } catch (e) {
+        console.log("get packs tc")
+        alert(e.response.data.error)
+        dispatch(setCardsPageStatus("failed"))
+    } finally {
+
+    }
+}
+
+//dispatch hasn't types
+export const deleteCardTC = (cardId: string) => async (dispatch: any) => {
+    dispatch(setCardsPageStatus("loading"))
+    try {
+        const response = await cardsApi.deleteCard(cardId)
+        dispatch(getCardsTC())
+    } catch (e) {
+        alert(e.response.data.error)
+    }
+}
+//dispatch hasn't types
+export const createCardTC = (question: string) => async (dispatch: any, getState: () => RootStateType) => {
+    dispatch(setCardsPageStatus("loading"))
+    let {cardsPack_id} = getState().cards
+    try {
+        const response = await cardsApi.createCard({cardsPack_id, question})
+        dispatch(getCardsTC(1))
+    } catch (e) {
+        console.log("create tc")
+        alert(e.response.data.error)
+    }
+}
+//under construction
+//dispatch hasn't types
+export const updateCardTC = (question: string, _id: string) => async (dispatch: any) => {
+    dispatch(setCardsPageStatus("loading"))
+    try {
+        const response = await cardsApi.updateCard({question, _id})
+        dispatch(getCardsTC(1))
+    } catch (e) {
+        alert(e.response.data.error)
+    }
+}
+
+type CardsStateType = typeof initialState
+export type CardsSearchParamsType = typeof initialState.searchParams
+
+
+type ActionsType = ReturnType<typeof changeCardsPageAC>
+    | ReturnType<typeof changeCardsPageCountAC>
+    | ReturnType<typeof setCardsAC>
+    | ReturnType<typeof setCardsSearchQuestionAC>
+    | ReturnType<typeof setCardsSearchParamsAC>
+    | ReturnType<typeof setCardsPageStatus>
+    | ReturnType<typeof setPackIdAC>
