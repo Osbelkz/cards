@@ -1,54 +1,68 @@
-import React from "react";
+import React, {ChangeEvent, useState} from "react";
 import classes from "./Paginator.module.scss";
 import {Button} from "../Button/Button";
+import {Input} from "../Input/Input";
 
 type PaginatorPropsType = {
     currentPage: number
-    pageAmount: number
+    cardPacksTotalCount: number
+    pageCount: number
     changePage: (page: number) => void
+    changePageCount: (page: number) => void
 }
 
 export const Paginator = (props: PaginatorPropsType) => {
-    const firstButton = props.currentPage - 2
-    const secondButton = props.currentPage - 1
-    const thirdButton = props.currentPage
-    const fourthButton = props.currentPage + 1
-    const fifthButton = props.currentPage + 2
-    const tenPreviousPage = () => {
-        props.changePage(props.currentPage - 10)
-    }
-    const onFirstPage = () => {
-        props.changePage(1)
+    const [pageNumber, setPageNumber] = useState(props.currentPage)
+    const [pageCount, setPageCount] = useState(props.pageCount)
+    let pageAmount = Math.ceil(props.cardPacksTotalCount / props.pageCount)
+
+    const pageCountOnChangeHandler = (e: ChangeEvent<HTMLSelectElement>) => {
+        let value = +e.currentTarget.value
+        setPageCount(value)
+        props.changePageCount(value)
     }
     const onePreviousPage = () => {
-        props.changePage(props.currentPage - 1)
+        let value = props.currentPage - 1
+        props.changePage(value)
+        setPageNumber(value)
     }
-    const twoPreviousPage = () => {
-        props.changePage(props.currentPage - 2)
+    const pageNumberOnChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        let value = +e.currentTarget.value
+        setPageNumber(value)
+        props.changePage(value)
     }
     const oneNextPage = () => {
-        props.changePage(props.currentPage + 1)
+        let value = props.currentPage + 1
+        props.changePage(value)
+        setPageNumber(value)
     }
-    const twoNextPage = () => {
-        props.changePage(props.currentPage + 2)
-    }
-    const onLastPage = () => {
-        props.changePage(props.pageAmount)
-    }
-    const tenNextPage = () => {
-        props.changePage(props.currentPage + 10)
-    }
+
     return <div className={classes.paginator}>
-        <Button btnName={"<<"} btnType={"green"} onClick={tenPreviousPage} disabled={props.currentPage < 11}/>
-        {props.currentPage > 3 ? <Button btnName={"1"} btnType={"green"} onClick={onFirstPage}/> : ""}
-        {"..."}
-        {props.currentPage > 2 ? <Button btnName={`${firstButton}`} btnType={"green"} onClick={twoPreviousPage}/> : ""}
-        {props.currentPage > 1 ? <Button btnName={`${secondButton}`} btnType={"green"} onClick={onePreviousPage}/> : ""}
-        <Button btnName={`${thirdButton}`} btnType={"green"} style={{borderColor: "black"}}/>
-        {props.currentPage < props.pageAmount ? <Button btnName={`${fourthButton}`} btnType={"green"} onClick={oneNextPage}/> : ""}
-        {props.currentPage < (props.pageAmount-1) ? <Button btnName={`${fifthButton}`} btnType={"green"} onClick={twoNextPage}/> : ""}
-        {"..."}
-        {props.currentPage < (props.pageAmount-2) ? <Button btnName={`${props.pageAmount}`} btnType={"green"} onClick={onLastPage}/> : ""}
-        <Button btnName={">>"} btnType={"green"} onClick={tenNextPage} disabled={props.currentPage > props.pageAmount - 10}/>
+        {`Items per page:`}
+        <select onChange={pageCountOnChangeHandler} value={pageCount}>
+            <option>10</option>
+            <option>20</option>
+            <option>50</option>
+            <option>100</option>
+        </select>
+        <Button
+            btnName={`Prev`}
+            onClick={onePreviousPage}
+            disabled={props.currentPage < 2}
+        />
+        {`Page: `}
+        <Input type={"number"}
+               value={pageNumber}
+               step={1} min={0}
+               max={pageAmount}
+               onChange={pageNumberOnChangeHandler}
+        />
+        of {pageAmount}
+        <Button
+            btnName={`Next`}
+            onClick={oneNextPage}
+            disabled={props.currentPage === pageAmount}
+        />
+
     </div>
 }

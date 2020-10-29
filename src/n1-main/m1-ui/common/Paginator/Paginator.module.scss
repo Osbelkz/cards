@@ -1,17 +1,30 @@
 .paginator {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
-  width: 400px;
-  height: 50px;
+
+  input {
+    height: 10px;
+    width: 80px;
+  }
 
   button {
     width: 30px;
-    height: 30px;
-    border-radius: 50%;
+    height: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 0 5px;
+  }
+
+  select {
+    height: 25px;
+    width: 80px;
+    box-sizing: border-box;
+    padding: 1px 10px;
+    transition: border 0.3s ease;
+    border: #BBC1E1 solid 2px;
+    border-radius: 999px;
+    outline: none;
   }
 }
