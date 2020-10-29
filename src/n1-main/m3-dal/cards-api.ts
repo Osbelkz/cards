@@ -8,33 +8,36 @@ const instance = axios.create({
     withCredentials: true,
 })
 
-export const packsApi = {
-    getPacks(params: QueryParamsPacksType) {
+export const cardsApi = {
+    getPacks(params: QueryParamsCardsType) {
         return instance.get<ResponsePacksType>("/cards/pack", {params})
     },
     createPack(cardsPack: CreateCardPackType) {
-        return instance.post<{ newCardsPack: CardPackType }>("/cards/pack", {cardsPack})
+        return instance.post<{ newCardsPack: CardType }>("/cards/pack", {cardsPack})
     },
     deletePack(id: string) {
-        return instance.delete<{ deletedCardsPack: CardPackType }>("cards/pack", {params: {id}})
+        return instance.delete<{ deletedCardsPack: CardType }>("cards/pack", {params: {id}})
     },
     updatePack(cardsPack: {name: string, _id: string}) {
-        return instance.put<{ updatedCardsPack: CardPackType }>("/cards/pack", {cardsPack})
+        return instance.put<{ updatedCardsPack: CardType }>("/cards/pack", {cardsPack})
     }
 }
 
-type QueryParamsPacksType = {
-    packName?: string
+type QueryParamsCardsType = {
+    cardsPack_id: string
+    cardAnswer?: string
+    cardQuestion?: string
+    sortCards?: number
     min?: number
     max?: number
-    sortPacks?: number
     page?: number
     pageCount?: number
     user_id?: string
+
 }
 
 type ResponsePacksType = {
-    cardPacks: Array<CardPackType>
+    cardPacks: Array<CardType>
     cardPacksTotalCount: number // количество колод
     maxCardsCount: number
     minCardsCount: number
@@ -42,7 +45,7 @@ type ResponsePacksType = {
     pageCount: number // количество элементов на странице
 
 }
-export type CardPackType = {
+export type CardType = {
     _id: string
     user_id: string
     name: string

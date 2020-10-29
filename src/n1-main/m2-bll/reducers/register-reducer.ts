@@ -1,5 +1,6 @@
 import {Dispatch} from "redux";
 import {authAPI, RequestRegisterType} from "../../m3-dal/auth-api";
+import { StatusType } from "./app-reducer";
 
 enum ACTION_TYPE {
     SET_ERROR = "SET_ERROR",
@@ -14,9 +15,6 @@ const initialState = {
 export const registerReducer = (state: RegisterStateType = initialState, action: ActionsType): RegisterStateType => {
     switch (action.type) {
         case ACTION_TYPE.SET_ERROR:
-            return {
-                ...state, ...action.payload
-            }
         case ACTION_TYPE.SET_STATUS:
             return {
                 ...state, ...action.payload
@@ -54,5 +52,3 @@ export const addUserTC = (data: RequestRegisterType) => async (dispatch: Dispatc
 }
 
 export type RegisterStateType = typeof initialState
-export type StatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
-
