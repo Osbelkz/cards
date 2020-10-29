@@ -39,17 +39,32 @@ const Packs: React.FC<PropsType> = React.memo(({
 
     const testModel: ITableModel[] = useMemo(() => ([
         {
-            title: (i: number) => (<th style={{width: "40%", padding: "10px 0 10px 20px"}} key={i}>
+            title: (i: number) => (<th style={{width: "30%", padding: "10px 0 10px 20px"}} key={i}>
                 <span>Name</span>
             </th>),
             render: (d: CardPackType, i: number) => (
-                <td style={{width: "40%", padding: "10px 10px 10px 20px"}} key={i}>
+                <td style={{width: "30%", padding: "10px 10px 10px 20px"}} key={i}>
                     {
                         userId === d.user_id
                             ? <EditableTableCell text={d.name} changeText={(text) => updatePack(text, d._id)}/>
                             : <span>{d.name}</span>
                     }
                 </td>)
+        },
+        {
+            title: (i: number) => (<th style={{width: "20%", padding: "10px 0"}} key={i}>
+                <span>Added</span>
+            </th>),
+            render: (d: CardPackType, i: number) => {
+
+                let dm = new Date(d.created)
+                let year = dm.getFullYear()
+                let month = dm.getMonth() < 10 ? "0" + dm.getMonth() : dm.getMonth()
+                let day = dm.getDay() < 10 ? "0" + dm.getDay() : dm.getDay()
+
+                return <td style={{width: "20%", padding: "10px 0"}} key={i}>{`${year}-${month}-${day}`}</td>
+            }
+
         },
         {
             title: (i: number) => (<th style={{width: "20%", padding: "10px 0"}} key={i}>Cards count</th>),

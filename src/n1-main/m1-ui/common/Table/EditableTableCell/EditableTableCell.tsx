@@ -17,12 +17,12 @@ const EditableTableCell:React.FC<PropsType> = ({text, changeText}) => {
         if (text !== editableText) {
             changeText(editableText)
         }
-
     }
 
 
     return (
         <div className={classes.editable_cell}>
+            <button onClick={()=>setEdit(true)}>Change</button>
             {edit
                 ? <input className={classes.editable_cell__input}
                     type="text"
@@ -31,9 +31,9 @@ const EditableTableCell:React.FC<PropsType> = ({text, changeText}) => {
                          autoFocus
                          value={editableText}
                 />
-                : <div>{editableText}</div>
+                : <div onDoubleClick={()=>setEdit(true)}>{editableText}</div>
             }
-            <button onClick={()=>setEdit(true)}>Change</button>
+
         </div>
     );
 };

@@ -4,8 +4,8 @@ import {StatusType} from "../../../m2-bll/reducers/app-reducer";
 
 
 export interface ITableModel {
-    title: (index: number) => ReactNode;
-    render: (dataItem: any, modelIndex: number, dataIndex: number) => ReactNode;
+    title: (index: number) => JSX.Element;
+    render: (dataItem: any, modelIndex: number, dataIndex: number) => JSX.Element;
 }
 
 interface ITableProps {

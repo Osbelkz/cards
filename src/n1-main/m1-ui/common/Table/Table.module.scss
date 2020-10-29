@@ -10,7 +10,7 @@
     box-sizing: border-box;
     height: 60px;
     text-align: left;
-    background-color: cornflowerblue;
+    background-color: #6495ed;
     color: white !important;
   }
   &__row_data {
@@ -18,7 +18,7 @@
     height: 50px;
     border-bottom: 1px solid #e6e6e6;
     &:hover {
-      background-color: #d5deed;
+      background-color: #e6eeff;
     }
   }
 }
