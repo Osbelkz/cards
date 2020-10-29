@@ -32,7 +32,7 @@ export const Slider = (props: SliderPropsType) => {
     return <div className={classes.doubleRange}>
         <div
             className={classes.rangeNum}
-            style={{left: `${props.min/1.6}%`}}
+            style={{left: `${props.min/0.17}%`}}
         >
             {props.min}
         </div>
@@ -47,7 +47,7 @@ export const Slider = (props: SliderPropsType) => {
         />
         <div
             className={classes.rangeNum}
-            style={{left: `${props.max/1.6}%`}}
+            style={{left: `${props.max/0.17}%`}}
         >
             {props.max}
         </div>

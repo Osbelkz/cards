@@ -5,64 +5,58 @@ import {Input} from "../Input/Input";
 
 type PaginatorPropsType = {
     currentPage: number
-    cardPacksTotalCount: number
+    itemsTotalCount: number
     pageCount: number
     changePage: (page: number) => void
     changePageCount: (page: number) => void
+    itemsName: string
 }
 
 export const Paginator = (props: PaginatorPropsType) => {
-    const [pageNumber, setPageNumber] = useState(props.currentPage)
-    const [pageCount, setPageCount] = useState(props.pageCount)
-    let pageAmount = Math.ceil(props.cardPacksTotalCount / props.pageCount)
+    let pageAmount = Math.ceil(props.itemsTotalCount / props.pageCount)
 
-    const pageCountOnChangeHandler = (e: ChangeEvent<HTMLSelectElement>) => {
-        let value = +e.currentTarget.value
-        setPageCount(value)
-        props.changePageCount(value)
+    const pageCountChangeHandler = (e: ChangeEvent<HTMLSelectElement>) => {
+        props.changePageCount(+e.currentTarget.value)
     }
     const onePreviousPage = () => {
-        let value = props.currentPage - 1
-        props.changePage(value)
-        setPageNumber(value)
+        props.changePage(props.currentPage - 1)
     }
-    const pageNumberOnChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        let value = +e.currentTarget.value
-        setPageNumber(value)
-        props.changePage(value)
+    const pageChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        props.changePage(+e.currentTarget.value)
     }
     const oneNextPage = () => {
-        let value = props.currentPage + 1
-        props.changePage(value)
-        setPageNumber(value)
+        props.changePage(props.currentPage + 1)
     }
 
     return <div className={classes.paginator}>
-        {`Items per page:`}
-        <select onChange={pageCountOnChangeHandler} value={pageCount}>
-            <option>10</option>
-            <option>20</option>
-            <option>50</option>
-            <option>100</option>
-        </select>
-        <Button
-            btnName={`Prev`}
-            onClick={onePreviousPage}
-            disabled={props.currentPage < 2}
-        />
-        {`Page: `}
-        <Input type={"number"}
-               value={pageNumber}
-               step={1} min={0}
-               max={pageAmount}
-               onChange={pageNumberOnChangeHandler}
-        />
-        of {pageAmount}
-        <Button
-            btnName={`Next`}
-            onClick={oneNextPage}
-            disabled={props.currentPage === pageAmount}
-        />
-
+        <div className={classes.leftBlock}>
+            {`Total ${props.itemsName}: ${props.itemsTotalCount}. ${props.itemsName} per page:`}
+            <select onChange={pageCountChangeHandler} value={props.pageCount}>
+                <option>10</option>
+                <option>20</option>
+                <option>50</option>
+                <option>100</option>
+            </select>
+        </div>
+        <div className={classes.rightBlock}>
+            <Button
+                btnName={`Prev`}
+                onClick={onePreviousPage}
+                disabled={props.currentPage < 2}
+            />
+            {`Page: `}
+            <Input type={"number"}
+                   value={props.currentPage}
+                   step={1} min={1}
+                   max={pageAmount}
+                   onChange={pageChangeHandler}
+            />
+            of {pageAmount}
+            <Button
+                btnName={`Next`}
+                onClick={oneNextPage}
+                disabled={props.currentPage === pageAmount}
+            />
+        </div>
     </div>
 }
