@@ -1,83 +1,39 @@
-import React, {CSSProperties, ReactNode} from 'react';
+import React, {ReactNode} from 'react';
+import classes from "./Table.module.scss";
+import {StatusType} from "../../../m2-bll/reducers/app-reducer";
+
 
 export interface ITableModel {
-    title: (index: number) => ReactNode;
-    render: (dataItem: any, modelIndex: number, dataIndex: number) => ReactNode;
+    title: (index: number) => JSX.Element;
+    render: (dataItem: any, modelIndex: number, dataIndex: number) => JSX.Element;
 }
 
 interface ITableProps {
-
     model: ITableModel[];
     data: any;
-
-    headerStyle?: CSSProperties,
-    tableStyle?: CSSProperties,
-    rowsStyle?: CSSProperties,
-    rowStyle?: CSSProperties,
+    pageStatus: StatusType
 }
 
-const Table: React.FC<ITableProps> = ({model, data, headerStyle, tableStyle, rowsStyle, rowStyle,}) => {
+const Table: React.FC<ITableProps> = React.memo(({model, data, pageStatus}) => {
+
+    console.log("table")
 
     return (
-        <div
-            style={{
-                margin: '0 10px',
-// minHeight: '80vh',
-                display: 'flex',
-                flexFlow: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                ...tableStyle,
-            }}
-        >
-            table
-
-            {/*{loading*/}
-            {/*? <div style={{color: 'orange'}}>loading...</div>*/}
-            {/*: error*/}
-            {/*? <div style={{color: 'red'}}>{error}</div>*/}
-            {/*: <div><br/></div>*/}
-            {/*}*/}
-
-            <div
-                style={{
-                    border: '1px solid red',
-                    width: '100%',
-                    display: 'flex',
-                    flexFlow: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    ...headerStyle,
-                }}
-            >
+        <table className={`${classes.table} ${pageStatus==="loading" ? classes.table__loading : ""}`}>
+            <thead>
+            <tr className={classes.table__row_header}>
                 {model.map((m: ITableModel, index: number) => m.title(index))}
-            </div>
-
-            <div
-                style={{
-                    border: '1px solid lime',
-                    width: '100%',
-                    ...rowsStyle,
-                }}
-            >
-                {data.map((dataItem: any, dataIndex: number) => (
-                    <div
-                        key={dataItem._id || dataIndex}
-                        style={{
-                            width: '100%',
-                            display: 'flex',
-                            flexFlow: 'row',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            ...rowStyle,
-                        }}
-                    >
-                        {model.map((m, modelIndex) => m.render(dataItem, modelIndex, dataIndex))}
-                    </div>
-                ))}
-            </div>
-        </div>
+            </tr>
+            </thead>
+            <tbody>
+            {data.map((dataItem: any, dataIndex: number) => (
+                <tr className={classes.table__row_data} key={dataItem._id}>
+                    {model.map((m, modelIndex) => m.render(dataItem, modelIndex, dataIndex))}
+                </tr>
+            ))}
+            </tbody>
+        </table>
     );
-};
+})
 
 export default Table;
