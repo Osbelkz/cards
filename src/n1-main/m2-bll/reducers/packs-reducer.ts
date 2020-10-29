@@ -62,7 +62,7 @@ const setTotalCountAC = (cardPacksTotalCount: number) => {
     return {type: ACTION_TYPES.SET_TOTAL_COUNT, payload: {cardPacksTotalCount}} as const
 }
 const setPacksAC = (packs: Array<CardPackType>, cardPacksTotalCount: number, min: number, max: number, pageStatus: StatusType) => {
-    return {type: ACTION_TYPES.SET_PACKS, payload: {packs, cardPacksTotalCount, pageStatus}} as const
+    return {type: ACTION_TYPES.SET_PACKS, payload: {packs, cardPacksTotalCount, min, max, pageStatus}} as const
 }
 export const setSearchNameAC = (packName: string) => {
     return {type: ACTION_TYPES.SET_SEARCH_NAME, payload: {packName}} as const

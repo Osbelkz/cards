@@ -24,11 +24,13 @@ const PacksContainer = React.memo(() => {
     const page = useSelector<RootStateType, number>(state => state.packs.page)
     const pageCount = useSelector<RootStateType, number>(state => state.packs.pageCount)
     const cardPacksTotalCount = useSelector<RootStateType, number>(state => state.packs.cardPacksTotalCount)
-    const min = useSelector<RootStateType, number | undefined>(state => state.packs.max)
-    const max = useSelector<RootStateType, number | undefined>(state => state.packs.min)
+    const min = useSelector<RootStateType, number | undefined>(state => state.packs.min)
+    const max = useSelector<RootStateType, number | undefined>(state => state.packs.max)
     const userId = useSelector<RootStateType, string | undefined>(state => state.profile.userData?._id)
     const pageStatus = useSelector<RootStateType, StatusType>(state => state.packs.pageStatus)
     const searchParams  = useSelector<RootStateType, SearchParamsType>(state => state.packs.searchParams)
+
+    console.log(min, max)
 
     const deletePackHandler = useCallback((id: string) => {
         dispatch(deletePackTC(id))
@@ -64,6 +66,7 @@ const PacksContainer = React.memo(() => {
                min={min}
                max={max}
                pageCount={pageCount}
+               searchParams={searchParams}
                cardPacksTotalCount={cardPacksTotalCount}
                createPack={createPackHandler}
                deletePack={deletePackHandler}

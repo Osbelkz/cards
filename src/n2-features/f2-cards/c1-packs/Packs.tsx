@@ -4,7 +4,9 @@ import {CardPackType} from "../../../n1-main/m3-dal/packs-api";
 import Table, {ITableModel} from '../../../n1-main/m1-ui/common/Table/Table';
 import {StatusType} from "../../../n1-main/m2-bll/reducers/app-reducer";
 import EditableTableCell from '../../../n1-main/m1-ui/common/Table/EditableTableCell/EditableTableCell';
-import {TableButton} from "../../../n1-main/m1-ui/common/Table/TableButton/TableButton";
+import {Search} from "../../../n1-main/m1-ui/common/Search/Search";
+import { TableButton } from '../../../n1-main/m1-ui/common/Table/TableButton/TableButton';
+import {SearchParamsType} from "../../../n1-main/m2-bll/reducers/packs-reducer";
 
 type PropsType = {
     packs: Array<CardPackType> | null
@@ -14,6 +16,7 @@ type PropsType = {
     min: number | undefined
     max: number | undefined
     cardPacksTotalCount: number
+    searchParams: SearchParamsType
     deletePack: (id: string) => void
     createPack: (name: string) => void
     updatePack: (name: string, id: string) => void
@@ -28,7 +31,7 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
         pageCount, cardPacksTotalCount, createPack,
         deletePack, updatePack, changePage,
         changePageCount, setSearchParams, pageStatus,
-        min, max
+        min, max, searchParams: {packName}
     } = props
     console.log("packs")
 
@@ -95,18 +98,22 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
                 <div className={classes.packs__title}>
                     <h3>Packs</h3>
                 </div>
-
-                <Table data={packs} model={testModel} pageStatus={pageStatus}/>
+                <div className={classes.packs__body}>
+                    <Search name={packName}
+                            label={"Search"}
+                            minValue={min?min:0}
+                            maxValue={max?max:0}
+                            stepValue={1}
+                            setSearchParams={setSearchParams}/>
+                    <Table data={packs}
+                           model={testModel}
+                           pageStatus={pageStatus}/>
+                </div>
 
                 <div>{cardPacksTotalCount}</div>
                 <button onClick={() => changePage(page + 1)}>next page</button>
                 <button onClick={() => changePage(page - 1)}>prev page</button>
-                <div>
-                    <button onClick={() => setSearchParams("new")}>search react</button>
-                </div>
-                <div>
-                    <button onClick={() => setSearchParams(undefined, 5, 15)}>search min 16 cards</button>
-                </div>
+
             </div>
         </div>
     );

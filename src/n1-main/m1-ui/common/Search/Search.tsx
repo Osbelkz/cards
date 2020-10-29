@@ -14,9 +14,10 @@ type SearchPropsType = {
 }
 
 export const Search = (props: SearchPropsType) => {
+
     const [name, setName] = useState(props.name)
-    const [min, setMin] = useState(0)
-    const [max, setMax] = useState(150)
+    const [min, setMin] = useState(props.minValue)
+    const [max, setMax] = useState(props.maxValue)
     const inputOnChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setName(e.currentTarget.value)
     }
