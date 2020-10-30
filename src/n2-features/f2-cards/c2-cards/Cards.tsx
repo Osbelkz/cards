@@ -10,7 +10,7 @@ import {CardType} from "../../../n1-main/m3-dal/cards-api";
 
 type PropsType = {
     cards: Array<CardType> | null
-    userId: string | undefined
+    owner: boolean
     page: number
     pageCount: number
     min: number | undefined
@@ -27,7 +27,7 @@ type PropsType = {
 }
 
 const Cards: React.FC<PropsType> = React.memo((props) => {
-    let {cards, userId, page,
+    let {cards, page, owner,
         pageCount, cardsTotalCount,
         createCard, deleteCard, updateCard, changePage,
         changePageCount, setSearchParams, pageStatus,
@@ -43,7 +43,7 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
             render: (d: CardType, i: number) => (
                 <td style={{width: "25%", padding: "10px 10px 10px 20px"}} key={i}>
                     {
-                        userId === d.user_id
+                        owner
                             ? <EditableTableCell text={d.question} changeText={(text) => updateCard(text, d._id)}/>
                             : <span>{d.question}</span>
                     }
@@ -78,18 +78,18 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
             title: (i: number) => (
                 <th style={{width: "10%", padding: "10px 20px 10px 0", textAlign: "right"}} key={i}>
                     <TableButton btnName={"+"} btnType={"green"} onClick={() => createCard("new card")}
-                                 disabled={pageStatus === "loading"}/>
+                                 disabled={!owner || pageStatus === "loading"}/>
                 </th>
             ),
             render: (d: CardType, i: number) => {
                 return <td style={{width: "10%", padding: "10px 20px 10px 0", textAlign: "right"}} key={i}>
                     <TableButton btnName={"-"} btnType={"red"}  onClick={() => deleteCard(d._id)}
-                            disabled={userId !== d.user_id || pageStatus === "loading"}/>
+                            disabled={!owner || pageStatus === "loading"}/>
                 </td>
             }
         },
 
-    ]), [pageStatus]);
+    ]), [pageStatus, owner]);
 
     return (
         <div className={classes.packs}>

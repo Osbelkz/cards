@@ -18,6 +18,7 @@ enum ACTION_TYPES {
 
 const initialState = {
     cardsPack_id: "" as string,
+    cardsOwner: "",
     cards: null as Array<CardType> | null,
     cardsTotalCount: 0,
     page: 1,
@@ -74,8 +75,8 @@ export const setCardsSearchParamsAC = (cardQuestion?: string, min?: number, max?
 export const setCardsPageStatus = (pageStatus: StatusType) => {
     return {type: ACTION_TYPES.SET_IS_LOADING, payload: {pageStatus}} as const
 }
-export const setPackIdAC = (cardsPack_id: string) => {
-    return {type: ACTION_TYPES.SET_PACK_ID, payload: {cardsPack_id}} as const
+export const setPackAC = (cardsPack_id: string, cardsOwner: string) => {
+    return {type: ACTION_TYPES.SET_PACK_ID, payload: {cardsPack_id, cardsOwner}} as const
 }
 
 
@@ -148,4 +149,4 @@ type ActionsType = ReturnType<typeof changeCardsPageAC>
     | ReturnType<typeof setCardsSearchQuestionAC>
     | ReturnType<typeof setCardsSearchParamsAC>
     | ReturnType<typeof setCardsPageStatus>
-    | ReturnType<typeof setPackIdAC>
+    | ReturnType<typeof setPackAC>

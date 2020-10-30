@@ -7,7 +7,7 @@ import {StatusType} from "../../../n1-main/m2-bll/reducers/app-reducer";
 import {
     CardsSearchParamsType, changeCardsPageAC, changeCardsPageCountAC, createCardTC,
     deleteCardTC,
-    getCardsTC, setCardsSearchParamsAC, setPackIdAC, updateCardTC
+    getCardsTC, setCardsSearchParamsAC, setPackAC, updateCardTC
 } from "../../../n1-main/m2-bll/reducers/cards-reducer";
 import {CardType} from "../../../n1-main/m3-dal/cards-api";
 import {useParams} from "react-router-dom";
@@ -28,13 +28,13 @@ const CardsContainer = React.memo(() => {
     const userId = useSelector<RootStateType, string | undefined>(state => state.profile.userData?._id)
     const pageStatus = useSelector<RootStateType, StatusType>(state => state.cards.pageStatus)
     const searchParams = useSelector<RootStateType, CardsSearchParamsType>(state => state.cards.searchParams)
-
+    const cardsOwner = useSelector<RootStateType, string>(state => state.cards.cardsOwner)
 
     let {packId} = useParams<{packId: string}>()
     if (cardsPack_id !== packId) {
-        dispatch(setPackIdAC(packId))
+        dispatch(setPackAC(packId, ""))
     }
-
+    console.log(cardsOwner, userId)
     const deleteCardHandler = useCallback((cardId: string) => {
         dispatch(deleteCardTC(cardId))
     }, [])
@@ -63,8 +63,8 @@ const CardsContainer = React.memo(() => {
     }
     return (
         <Cards cards={cards}
-               userId={userId}
                page={cardsPage}
+               owner={cardsOwner===userId}
                min={min}
                max={max}
                pageCount={pageCount}
