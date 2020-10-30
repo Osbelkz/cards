@@ -1,0 +1,33 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  button {
+    padding: 0;
+    height: 30px;
+    width: 20px;
+    font-family: "Open Sans", sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background-color 0.4s ease;
+    color: cornflowerblue;
+    border: cornflowerblue 2px solid;
+    outline: none;
+    background-color: #fff;
+  }
+  :hover {
+    cursor: pointer;
+    color: white;
+    background-color: cornflowerblue;
+  }
+
+  .up {
+    border-radius: 999px 999px 0 0;
+  }
+
+  .down {
+    border-radius: 0 0 999px 999px;
+  }
+}
