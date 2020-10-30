@@ -13,12 +13,14 @@ import {
 } from "../../../n1-main/m2-bll/reducers/packs-reducer";
 import {Preloader} from "../../../n1-main/m1-ui/common/Preloader/Preloader";
 import {StatusType} from "../../../n1-main/m2-bll/reducers/app-reducer";
+import {setPackAC} from "../../../n1-main/m2-bll/reducers/cards-reducer";
+import {useHistory, useParams } from 'react-router-dom';
 
 
 const PacksContainer = React.memo(() => {
 
     console.log("packs container")
-
+    const history = useHistory()
     const dispatch = useDispatch()
     const packs = useSelector<RootStateType, Array<CardPackType> | null>(state => state.packs.packs)
     const page = useSelector<RootStateType, number>(state => state.packs.page)
@@ -29,8 +31,6 @@ const PacksContainer = React.memo(() => {
     const userId = useSelector<RootStateType, string | undefined>(state => state.profile.userData?._id)
     const pageStatus = useSelector<RootStateType, StatusType>(state => state.packs.pageStatus)
     const searchParams  = useSelector<RootStateType, SearchParamsType>(state => state.packs.searchParams)
-
-    console.log(min, max)
 
     const deletePackHandler = useCallback((id: string) => {
         dispatch(deletePackTC(id))
@@ -49,6 +49,10 @@ const PacksContainer = React.memo(() => {
     }, [])
     const setSearchParamsHandler = useCallback((searchName?: string, min?: number, max?: number) => {
         dispatch(setSearchParamsAC(searchName, min, max))
+    }, [])
+    const choosePackHandler = useCallback((packId: string, cardsOwner: string) => {
+        dispatch(setPackAC(packId, cardsOwner))
+        history.push(`/cards/${packId}`)
     }, [])
 
     useEffect(() => {
@@ -72,6 +76,7 @@ const PacksContainer = React.memo(() => {
                deletePack={deletePackHandler}
                updatePack={updatePackHandler}
                changePage={changePageHandler}
+               choosePack={choosePackHandler}
                changePageCount={changePageCountHandler}
                setSearchParams={setSearchParamsHandler}
                pageStatus={pageStatus}

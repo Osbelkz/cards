@@ -7,6 +7,7 @@ import EditableTableCell from '../../../n1-main/m1-ui/common/Table/EditableTable
 import {Search} from "../../../n1-main/m1-ui/common/Search/Search";
 import { TableButton } from '../../../n1-main/m1-ui/common/Table/TableButton/TableButton';
 import {SearchParamsType} from "../../../n1-main/m2-bll/reducers/packs-reducer";
+import CardsContainer from "../c2-cards/CardsContainer";
 
 type PropsType = {
     packs: Array<CardPackType> | null
@@ -23,13 +24,14 @@ type PropsType = {
     changePage: (page: number) => void
     changePageCount: (page: number) => void
     setSearchParams: (searchName?: string, min?: number, max?: number) => void
+    choosePack: (packId: string, cardsOwner: string) => void
     pageStatus: StatusType
 }
 
 const Packs: React.FC<PropsType> = React.memo((props) => {
     let {packs, userId, page,
         pageCount, cardPacksTotalCount, createPack,
-        deletePack, updatePack, changePage,
+        deletePack, updatePack, changePage, choosePack,
         changePageCount, setSearchParams, pageStatus,
         min, max, searchParams: {packName}
     } = props
@@ -83,6 +85,8 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
             ),
             render: (d: CardPackType, i: number) => {
                 return <td style={{width: "10%", padding: "10px 20px 10px 0", textAlign: "right"}} key={i}>
+                    <TableButton btnName={"-"}  onClick={() => choosePack(d._id, d.user_id)}
+                                 disabled={pageStatus === "loading"}/>
                     <TableButton btnName={"-"} btnType={"red"}  onClick={() => deletePack(d._id)}
                             disabled={userId !== d.user_id || pageStatus === "loading"}/>
                 </td>
@@ -113,8 +117,8 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
                 <div>{cardPacksTotalCount}</div>
                 <button onClick={() => changePage(page + 1)}>next page</button>
                 <button onClick={() => changePage(page - 1)}>prev page</button>
-
             </div>
+
         </div>
     );
 })
