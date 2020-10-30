@@ -1,4 +1,4 @@
-import React, {ChangeEvent} from "react";
+import React, {ChangeEvent, useState} from "react";
 import classes from "./Paginator.module.scss";
 import {Button} from "../Button/Button";
 import {Input} from "../Input/Input";
@@ -13,19 +13,34 @@ type PaginatorPropsType = {
 }
 
 export const Paginator = (props: PaginatorPropsType) => {
+    const [pageNumber, setPageNumber] = useState(props.currentPage)
     let pageAmount = Math.ceil(props.itemsTotalCount / props.pageCount)
 
     const pageCountChangeHandler = (e: ChangeEvent<HTMLSelectElement>) => {
-        props.changePageCount(+e.currentTarget.value)
+        let value = +e.currentTarget.value
+        props.changePageCount(value)
     }
     const onePreviousPage = () => {
-        props.changePage(props.currentPage - 1)
+        props.changePage(pageNumber - 1)
+        setPageNumber(pageNumber - 1)
     }
     const pageChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        props.changePage(+e.currentTarget.value)
+        setPageNumber(+e.currentTarget.value)
+    }
+    const pageSetHandler = () => {
+        if (pageNumber < 1) {
+            props.changePage(1)
+            setPageNumber(1)
+        } else if (pageNumber > pageAmount) {
+            props.changePage(pageAmount)
+            setPageNumber(pageAmount)
+        } else {
+            props.changePage(pageNumber)
+        }
     }
     const oneNextPage = () => {
-        props.changePage(props.currentPage + 1)
+        props.changePage(pageNumber + 1)
+        setPageNumber(pageNumber + 1)
     }
 
     return <div className={classes.paginator}>
@@ -45,11 +60,13 @@ export const Paginator = (props: PaginatorPropsType) => {
                 disabled={props.currentPage < 2}
             />
             {`Page: `}
+            {pageNumber < 1}
             <Input type={"number"}
-                   value={props.currentPage}
+                   value={pageNumber}
                    step={1} min={1}
                    max={pageAmount}
                    onChange={pageChangeHandler}
+                   onBlur={pageSetHandler}
             />
             of {pageAmount}
             <Button
