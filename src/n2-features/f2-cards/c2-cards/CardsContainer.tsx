@@ -7,7 +7,7 @@ import {StatusType} from "../../../n1-main/m2-bll/reducers/app-reducer";
 import {
     CardsSearchParamsType, changeCardsPageAC, changeCardsPageCountAC, createCardTC,
     deleteCardTC,
-    getCardsTC, setCardsSearchParamsAC, setPackAC, updateCardTC
+    getCardsTC, setCardsSearchParamsAC, setCardsSortColumnParamsAC, setPackAC, updateCardTC
 } from "../../../n1-main/m2-bll/reducers/cards-reducer";
 import {CardType} from "../../../n1-main/m3-dal/cards-api";
 import {useParams} from "react-router-dom";
@@ -15,7 +15,7 @@ import {useParams} from "react-router-dom";
 
 const CardsContainer = React.memo(() => {
 
-    console.log("cards container")
+    // console.log("cards container")
 
     const dispatch = useDispatch()
     const cards = useSelector<RootStateType, Array<CardType> | null>(state => state.cards.cards)
@@ -34,7 +34,7 @@ const CardsContainer = React.memo(() => {
     if (cardsPack_id !== packId) {
         dispatch(setPackAC(packId, ""))
     }
-    console.log(cardsOwner, userId)
+    // console.log(cardsOwner, userId)
     const deleteCardHandler = useCallback((cardId: string) => {
         dispatch(deleteCardTC(cardId))
     }, [])
@@ -52,6 +52,9 @@ const CardsContainer = React.memo(() => {
     }, [])
     const setSearchParamsHandler = useCallback((cardQuestion?: string, min?: number, max?: number) => {
         dispatch(setCardsSearchParamsAC(cardQuestion, min, max))
+    }, [])
+    const setSortColumnHandler = useCallback((sortCards: string) => {
+        dispatch(setCardsSortColumnParamsAC(sortCards))
     }, [])
 
     useEffect(() => {
@@ -74,6 +77,7 @@ const CardsContainer = React.memo(() => {
                deleteCard={deleteCardHandler}
                updateCard={updateCardHandler}
                changePage={changePageHandler}
+               setSortColumn={setSortColumnHandler}
                changePageCount={changePageCountHandler}
                setSearchParams={setSearchParamsHandler}
                pageStatus={pageStatus}

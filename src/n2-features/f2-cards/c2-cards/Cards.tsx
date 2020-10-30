@@ -4,8 +4,8 @@ import Table, {ITableModel} from '../../../n1-main/m1-ui/common/Table/Table';
 import {StatusType} from "../../../n1-main/m2-bll/reducers/app-reducer";
 import EditableTableCell from '../../../n1-main/m1-ui/common/Table/EditableTableCell/EditableTableCell';
 import {Search} from "../../../n1-main/m1-ui/common/Search/Search";
-import { TableButton } from '../../../n1-main/m1-ui/common/Table/TableButton/TableButton';
-import { CardsSearchParamsType } from '../../../n1-main/m2-bll/reducers/cards-reducer';
+import {TableButton} from '../../../n1-main/m1-ui/common/Table/TableButton/TableButton';
+import {CardsSearchParamsType} from '../../../n1-main/m2-bll/reducers/cards-reducer';
 import {CardType} from "../../../n1-main/m3-dal/cards-api";
 import {Paginator} from "../../../n1-main/m1-ui/common/Paginator/Paginator";
 import {ColumnSorting} from "../../../n1-main/m1-ui/common/ColumnSorting/ColumnSorting";
@@ -26,24 +26,26 @@ type PropsType = {
     changePageCount: (page: number) => void
     setSearchParams: (searchName?: string, min?: number, max?: number) => void
     pageStatus: StatusType
+    setSortColumn: (sortCards: string) => void
 }
 
 const Cards: React.FC<PropsType> = React.memo((props) => {
-    let {cards, page, owner,
+    let {
+        cards, page, owner, setSortColumn,
         pageCount, cardsTotalCount,
         createCard, deleteCard, updateCard, changePage,
         changePageCount, setSearchParams, pageStatus,
         min, max, searchParams: {cardQuestion}
     } = props
-    console.log("packs")
+    // console.log("packs")
 
     const testModel: ITableModel[] = useMemo(() => ([
         {
-            title: (i: number) => (<th style={{width: "25%", padding: "10px 0 10px 20px"}} key={i}>
+            title: (i: number) => (<th style={{width: "30%", padding: "10px 0 10px 20px"}} key={i}>
                 <span>Question</span>
             </th>),
             render: (d: CardType, i: number) => (
-                <td style={{width: "25%", padding: "10px 10px 10px 20px"}} key={i}>
+                <td style={{width: "30%", padding: "10px 10px 10px 20px"}} key={i}>
                     {
                         owner
                             ? <EditableTableCell text={d.question} changeText={(text) => updateCard(text, d._id)}/>
@@ -52,12 +54,12 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
                 </td>)
         },
         {
-            title: (i: number) => (<th style={{width: "25%", padding: "10px 0"}} key={i}>Answer</th>),
+            title: (i: number) => (<th style={{width: "30%", padding: "10px 0"}} key={i}>Answer</th>),
             render: (d: CardType, i: number) => (
-                <td style={{width: "25%", padding: "10px 0"}} key={i}>{d.answer}</td>)
+                <td style={{width: "30%", padding: "10px 0"}} key={i}>{d.answer}</td>)
         },
         {
-            title: (i: number) => (<th style={{width: "25%", padding: "10px 0"}} key={i}>
+            title: (i: number) => (<th style={{width: "15%", padding: "10px 0"}} key={i}>
                 <span>Added</span>
             </th>),
             render: (d: CardType, i: number) => {
@@ -67,15 +69,16 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
                 let month = dm.getMonth() < 10 ? "0" + dm.getMonth() : dm.getMonth()
                 let day = dm.getDay() < 10 ? "0" + dm.getDay() : dm.getDay()
 
-                return <td style={{width: "25%", padding: "10px 0"}} key={i}>{`${year}-${month}-${day}`}</td>
+                return <td style={{width: "15%", padding: "10px 0"}} key={i}>{`${year}-${month}-${day}`}</td>
             }
 
         },
         {
-            title: (i: number) => (<th style={{width: "15%", padding: "10px 0", display: "flex", alignItems: "center"}} key={i}>
-                <div>Grade</div>
-                <ColumnSorting onClick={()=>console.log("sort")}/>
-            </th>),
+            title: (i: number) => (
+                <th style={{width: "15%", padding: "10px 0", display: "flex", alignItems: "center"}} key={i}>
+                    <div>Grade</div>
+                    <ColumnSorting onClick={(sort)=>setSortColumn(sort + "grade")}/>
+                </th>),
             render: (d: CardType, i: number) => (
                 <td style={{width: "15%", padding: "10px 0"}} key={i}>{d.grade}</td>)
         },
@@ -88,8 +91,8 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
             ),
             render: (d: CardType, i: number) => {
                 return <td style={{width: "10%", padding: "10px 20px 10px 0", textAlign: "right"}} key={i}>
-                    <TableButton btnName={"-"} btnType={"red"}  onClick={() => deleteCard(d._id)}
-                            disabled={!owner || pageStatus === "loading"}/>
+                    <TableButton btnName={"x"} btnType={"red"} onClick={() => deleteCard(d._id)}
+                                 disabled={!owner || pageStatus === "loading"}/>
                 </td>
             }
         },
@@ -106,8 +109,8 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
                 <div className={classes.packs__body}>
                     <Search name={cardQuestion}
                             label={"Search"}
-                            minValue={min?min:0}
-                            maxValue={max?max:0}
+                            minValue={min ? min : 0}
+                            maxValue={max ? max : 0}
                             stepValue={1}
                             setSearchParams={setSearchParams}/>
                     <Table data={cards}
@@ -120,7 +123,7 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
                                pageCount={pageCount}
                                changePage={changePage}
                                changePageCount={changePageCount}
-                               itemsName={"cards"} />
+                               itemsName={"cards"}/>
                 </div>
             </div>
         </div>

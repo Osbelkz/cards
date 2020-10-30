@@ -9,6 +9,7 @@ import { TableButton } from '../../../n1-main/m1-ui/common/Table/TableButton/Tab
 import {SearchParamsType} from "../../../n1-main/m2-bll/reducers/packs-reducer";
 import CardsContainer from "../c2-cards/CardsContainer";
 import {Paginator} from "../../../n1-main/m1-ui/common/Paginator/Paginator";
+import {ColumnSorting} from "../../../n1-main/m1-ui/common/ColumnSorting/ColumnSorting";
 
 type PropsType = {
     packs: Array<CardPackType> | null
@@ -26,25 +27,26 @@ type PropsType = {
     changePageCount: (page: number) => void
     setSearchParams: (searchName?: string, min?: number, max?: number) => void
     choosePack: (packId: string, cardsOwner: string) => void
+    setPacksSortColumn: (sortPacks: string) => void
     pageStatus: StatusType
 }
 
 const Packs: React.FC<PropsType> = React.memo((props) => {
-    let {packs, userId, page,
+    let {packs, userId, page, setPacksSortColumn,
         pageCount, cardPacksTotalCount, createPack,
         deletePack, updatePack, changePage, choosePack,
         changePageCount, setSearchParams, pageStatus,
         min, max, searchParams: {packName}
     } = props
-    console.log("packs")
+    // console.log("packs")
 
     const testModel: ITableModel[] = useMemo(() => ([
         {
-            title: (i: number) => (<th style={{width: "32%", padding: "10px 0 10px 20px"}} key={i}>
-                <span>Name</span>
+            title: (i: number) => (<th style={{width: "30%", padding: "10px 0 10px 20px"}} key={i}>
+                <div>Name</div>
             </th>),
             render: (d: CardPackType, i: number) => (
-                <td style={{width: "32%", padding: "10px 10px 10px 20px"}} key={i}>
+                <td style={{width: "30%", padding: "10px 10px 10px 20px"}} key={i}>
                     {
                         userId === d.user_id
                             ? <EditableTableCell text={d.name} changeText={(text) => updatePack(text, d._id)}/>
@@ -53,8 +55,8 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
                 </td>)
         },
         {
-            title: (i: number) => (<th style={{width: "20%", padding: "10px 0"}} key={i}>
-                <span>Added</span>
+            title: (i: number) => (<th style={{width: "15%", padding: "10px 0"}} key={i}>
+                <div>Added</div>
             </th>),
             render: (d: CardPackType, i: number) => {
 
@@ -63,32 +65,35 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
                 let month = dm.getMonth() < 10 ? "0" + dm.getMonth() : dm.getMonth()
                 let day = dm.getDay() < 10 ? "0" + dm.getDay() : dm.getDay()
 
-                return <td style={{width: "20%", padding: "10px 0"}} key={i}>{`${year}-${month}-${day}`}</td>
+                return <td style={{width: "15%", padding: "10px 0"}} key={i}>{`${year}-${month}-${day}`}</td>
             }
 
         },
         {
-            title: (i: number) => (<th style={{width: "8%", padding: "10px 0"}} key={i}>Cards count</th>),
+            title: (i: number) => (<th style={{width: "10%", padding: "10px 0", display: "flex", alignItems: "center"}} key={i}>
+                <div>Cards count</div>
+                <ColumnSorting onClick={(sort)=>setPacksSortColumn(sort+"cardsCount")}/>
+            </th>),
             render: (d: CardPackType, i: number) => (
-                <td style={{width: "8%", padding: "10px 0"}} key={i}>{d.cardsCount}</td>)
+                <td style={{width: "10%", padding: "10px 0"}} key={i}>{d.cardsCount}</td>)
         },
         {
-            title: (i: number) => (<th style={{width: "30%", padding: "10px 0"}} key={i}>Owner</th>),
+            title: (i: number) => (<th style={{width: "25%", padding: "10px 0"}} key={i}>Owner</th>),
             render: (d: CardPackType, i: number) => (
-                <td style={{width: "30%", padding: "10px 0"}} key={i}>{d.user_name}</td>)
+                <td style={{width: "25%", padding: "10px 0"}} key={i}>{d.user_name}</td>)
         },
         {
             title: (i: number) => (
-                <th style={{width: "10%", padding: "10px 20px 10px 0", textAlign: "right"}} key={i}>
+                <th style={{width: "15%", padding: "10px 20px 10px 0", textAlign: "right"}} key={i}>
                     <TableButton btnName={"+"} btnType={"green"} onClick={() => createPack("new pack")}
                                  disabled={pageStatus === "loading"}/>
                 </th>
             ),
             render: (d: CardPackType, i: number) => {
-                return <td style={{width: "10%", padding: "10px 20px 10px 0", textAlign: "right"}} key={i}>
-                    <TableButton btnName={"-"}  onClick={() => choosePack(d._id, d.user_id)}
+                return <td style={{width: "15%", padding: "10px 20px 10px 0", textAlign: "right"}} key={i}>
+                    <TableButton btnName={"open"}  onClick={() => choosePack(d._id, d.user_id)}
                                  disabled={pageStatus === "loading"}/>
-                    <TableButton btnName={"-"} btnType={"red"}  onClick={() => deletePack(d._id)}
+                    <TableButton btnName={"x"} btnType={"red"}  onClick={() => deletePack(d._id)}
                             disabled={userId !== d.user_id || pageStatus === "loading"}/>
                 </td>
             }

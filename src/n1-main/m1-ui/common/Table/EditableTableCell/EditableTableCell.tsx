@@ -1,5 +1,6 @@
 import classes from './EditableTableCell.module.scss';
 import React, {useState} from 'react';
+import { TableButton } from '../TableButton/TableButton';
 
 
 type PropsType = {
@@ -22,7 +23,6 @@ const EditableTableCell:React.FC<PropsType> = ({text, changeText}) => {
 
     return (
         <div className={classes.editable_cell}>
-            <button onClick={()=>setEdit(true)}>Change</button>
             {edit
                 ? <input className={classes.editable_cell__input}
                     type="text"
@@ -33,7 +33,7 @@ const EditableTableCell:React.FC<PropsType> = ({text, changeText}) => {
                 />
                 : <div onDoubleClick={()=>setEdit(true)}>{editableText}</div>
             }
-
+            <TableButton btnName={"edit"} onClick={()=>setEdit(true)}/>
         </div>
     );
 };

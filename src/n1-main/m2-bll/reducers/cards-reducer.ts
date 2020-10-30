@@ -1,4 +1,3 @@
-import {packsApi} from "../../m3-dal/packs-api"
 import {Dispatch} from "redux";
 import {RootStateType} from "../store";
 import { StatusType } from "./app-reducer";
@@ -12,7 +11,8 @@ enum ACTION_TYPES {
     SET_SEARCH_NAME = "cards/SET_SEARCH_NAME",
     SET_SEARCH_PARAMS = "cards/SET_SEARCH_PARAMS",
     SET_IS_LOADING = "cards/SET_IS_LOADING",
-    SET_PACK_ID =  "cards/SET_PACK_ID"
+    SET_PACK_ID =  "cards/SET_PACK_ID",
+    SET_SORT_COLUMN =  "cards/SET_SORT_COLUMN",
 }
 
 
@@ -29,6 +29,7 @@ const initialState = {
     searchParams: {
         cardQuestion: "" as undefined | string,
         cardAnswer: "" as undefined | string,
+        sortCards: "" as undefined | string,
         min: undefined as undefined | number,
         max: undefined as undefined | number,
     }
@@ -49,6 +50,7 @@ export const cardsReducer = (state: CardsStateType = initialState, action: Actio
                 ...state, searchParams: {...state.searchParams, cardQuestion: action.payload.question}
             }
         case ACTION_TYPES.SET_SEARCH_PARAMS:
+        case ACTION_TYPES.SET_SORT_COLUMN:
             return {
                 ...state, searchParams: {...state.searchParams, ...action.payload}
             }
@@ -81,26 +83,28 @@ export const setCardsPageStatus = (pageStatus: StatusType) => {
 export const setPackAC = (cardsPack_id: string, cardsOwner: string) => {
     return {type: ACTION_TYPES.SET_PACK_ID, payload: {cardsPack_id, cardsOwner}} as const
 }
-
+export const setCardsSortColumnParamsAC = (sortCards: string) => {
+    return {type: ACTION_TYPES.SET_SORT_COLUMN, payload: {sortCards}} as const
+}
 
 
 // thunks
 
 export const getCardsTC = (selectedPage?: number ) => async (dispatch: Dispatch, getState: () => RootStateType) => {
-    const {cardsPack_id, page, pageCount, searchParams: {cardQuestion, min, max}} = getState().cards
+    const {cardsPack_id, page, pageCount, searchParams: {cardQuestion, min, max, sortCards}} = getState().cards
     dispatch(setCardsPageStatus("loading"))
     try {
-        const response = await cardsApi.getPack({cardsPack_id, page: selectedPage || page, pageCount, cardQuestion, min, max})
-        console.log(response.data)
+        const response = await cardsApi.getPack({cardsPack_id, page: selectedPage || page, pageCount, cardQuestion, min, max, sortCards})
+        // console.log(response.data)
         dispatch(setCardsAC(response.data.cards,
             response.data.cardsTotalCount,
             response.data.minGrade,
             response.data.maxGrade,
             "succeeded"))
         selectedPage && dispatch(changeCardsPageAC(selectedPage))
-        console.log(getState().cards)
+        // console.log(getState().cards)
     } catch (e) {
-        console.log("get packs tc")
+        // console.log("get packs tc")
         alert(e.response.data.error)
         dispatch(setCardsPageStatus("failed"))
     } finally {
@@ -126,7 +130,7 @@ export const createCardTC = (card: CreateCardType) =>
         const response = await cardsApi.createCard({...card, cardsPack_id})
         dispatch(getCardsTC(1))
     } catch (e) {
-        console.log("create tc")
+        // console.log("create tc")
         alert(e.response.data.error)
     }
 }
@@ -153,3 +157,5 @@ type ActionsType = ReturnType<typeof changeCardsPageAC>
     | ReturnType<typeof setCardsSearchParamsAC>
     | ReturnType<typeof setCardsPageStatus>
     | ReturnType<typeof setPackAC>
+    | ReturnType<typeof setCardsSortColumnParamsAC>
+

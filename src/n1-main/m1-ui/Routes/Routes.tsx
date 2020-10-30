@@ -19,6 +19,7 @@ const Routes = () => {
             <Route path={"/newPassword/:token"} render={() => <NewPasswordContainer/>}/>
             <Route path={"/packs"} render={() => <AuthRedirect><PacksContainer/></AuthRedirect>}/>
             <Route path={"/cards/:packId"} render={() => <AuthRedirect><CardsContainer/></AuthRedirect>}/>
+            <Route path={"/"} render={() => <AuthRedirect><ProfileContainer/></AuthRedirect>}/>
         </Switch>
     );
 };

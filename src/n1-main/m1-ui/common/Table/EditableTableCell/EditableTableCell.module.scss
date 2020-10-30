@@ -1,5 +1,6 @@
 .editable_cell {
   display: flex;
+  justify-content: space-between;
   > button {
   }
   &__input {

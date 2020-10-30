@@ -8,7 +8,7 @@ import {
     changePageCountAC,
     createPackTC,
     deletePackTC,
-    getPacksTC, SearchParamsType, setSearchParamsAC,
+    getPacksTC, SearchParamsType, setPacksSortColumnAC, setSearchParamsAC,
     updatePackTC
 } from "../../../n1-main/m2-bll/reducers/packs-reducer";
 import {Preloader} from "../../../n1-main/m1-ui/common/Preloader/Preloader";
@@ -19,7 +19,7 @@ import {useHistory, useParams } from 'react-router-dom';
 
 const PacksContainer = React.memo(() => {
 
-    console.log("packs container")
+    // console.log("packs container")
     const history = useHistory()
     const dispatch = useDispatch()
     const packs = useSelector<RootStateType, Array<CardPackType> | null>(state => state.packs.packs)
@@ -50,6 +50,9 @@ const PacksContainer = React.memo(() => {
     const setSearchParamsHandler = useCallback((searchName?: string, min?: number, max?: number) => {
         dispatch(setSearchParamsAC(searchName, min, max))
     }, [])
+    const setPacksSortColumnHandler = useCallback((sortPacks: string) => {
+        dispatch(setPacksSortColumnAC(sortPacks))
+    }, [])
     const choosePackHandler = useCallback((packId: string, cardsOwner: string) => {
         dispatch(setPackAC(packId, cardsOwner))
         history.push(`/cards/${packId}`)
@@ -77,6 +80,7 @@ const PacksContainer = React.memo(() => {
                updatePack={updatePackHandler}
                changePage={changePageHandler}
                choosePack={choosePackHandler}
+               setPacksSortColumn={setPacksSortColumnHandler}
                changePageCount={changePageCountHandler}
                setSearchParams={setSearchParamsHandler}
                pageStatus={pageStatus}

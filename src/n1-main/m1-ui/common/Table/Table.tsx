@@ -16,7 +16,7 @@ interface ITableProps {
 
 const Table: React.FC<ITableProps> = React.memo(({model, data, pageStatus}) => {
 
-    console.log("table")
+    // console.log("table")
 
     return (
         <table className={`${classes.table} ${pageStatus==="loading" ? classes.table__loading : ""}`}>

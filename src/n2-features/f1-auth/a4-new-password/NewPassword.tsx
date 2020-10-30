@@ -21,7 +21,7 @@ type FormikErrorType = {
 
 
 const NewPassword = React.memo((props: NewPasswordPropsType) => {
-    console.log(props.isSetNewPassword, props.isOk)
+    // console.log(props.isSetNewPassword, props.isOk)
     const {token}  = useParams<{token: string}>()
 
     const formik = useFormik({

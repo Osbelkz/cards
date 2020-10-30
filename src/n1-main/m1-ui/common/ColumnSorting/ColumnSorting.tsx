@@ -3,15 +3,15 @@ import classes from "./ColumnSorting.module.scss";
 import {Button} from "../Button/Button";
 
 type ColumnSortingPropsType = {
-    onClick: (value: string) => void
+    onClick: (value: number) => void
 }
 
 export const ColumnSorting = (props: ColumnSortingPropsType) => {
     const upChangeHandler = () => {
-        props.onClick("up")
+        props.onClick(1)
     }
     const downChangeHandler = () => {
-        props.onClick("down")
+        props.onClick(0)
     }
 
     return <div className={classes.container}>

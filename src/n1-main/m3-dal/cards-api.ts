@@ -27,7 +27,7 @@ type QueryParamsCardsType = {
     cardsPack_id: string
     cardAnswer?: string
     cardQuestion?: string
-    sortCards?: number
+    sortCards?: string
     min?: number
     max?: number
     page?: number
