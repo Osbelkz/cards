@@ -1,0 +1,18 @@
+.uniSearch {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  input {
+    padding: 5px 15px;
+  }
+
+  .slider {
+    margin-bottom: 30px;
+  }
+
+  button {
+    padding: 5px 15px;
+  }
+}

@@ -1,0 +1,43 @@
+.paginator {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  font-weight: 600;
+  .leftBlock {
+
+    select {
+      font-weight: inherit;
+      height: 25px;
+      width: 60px;
+      box-sizing: border-box;
+      transition: border 0.3s ease;
+      border: #BBC1E1 solid 2px;
+      border-radius: 999px;
+      outline: none;
+      margin-left: 10px;
+    }
+  }
+
+  .rightBlock {
+    width: 40%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    input {
+      height: 25px;
+      width: 60px;
+      padding: 0 8px;
+    }
+
+    button {
+      width: 30px;
+      height: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 5px;
+    }
+  }
+}

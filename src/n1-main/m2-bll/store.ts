@@ -6,6 +6,8 @@ import {profileReducer} from "./reducers/profileP-reducer";
 import {registerReducer} from "./reducers/register-reducer";
 import {restorePasswordReducer} from "./reducers/restorePassword-reducer";
 import {appReducer} from "./reducers/app-reducer";
+import {packsReducer} from "./reducers/packs-reducer";
+import { cardsReducer } from "./reducers/cards-reducer";
 
 
 export const rootReducer = combineReducers({
@@ -14,6 +16,8 @@ export const rootReducer = combineReducers({
     restorePassword: restorePasswordReducer,
     newPassword: newPasswordReducer,
     profile: profileReducer,
+    packs: packsReducer,
+    cards: cardsReducer,
     app: appReducer
 })
 

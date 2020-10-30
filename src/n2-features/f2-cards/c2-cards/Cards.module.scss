@@ -1,0 +1,14 @@
+.packs {
+  display: flex;
+  justify-content: center;
+  &__container {
+    width: 1000px;
+    box-sizing: border-box;
+  }
+  &__title {
+    margin-top: 45px;
+    text-align: center;
+  }
+}
+
+

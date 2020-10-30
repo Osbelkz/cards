@@ -44,16 +44,15 @@ export type ActionsType = ReturnType<typeof setAppErrorAC> | ReturnType<typeof s
 export const authMeTC = () => async (dispatch: Dispatch, getState: () => RootStateType) => {
     dispatch(setInitAppAC("loading"))
     dispatch(setAppErrorAC(""))
-    if (getState().app.initApp === "loading") console.log("loading")
     try {
         let response = await authAPI.me()
+        dispatch(setProfileUserDataAC(response.data))
         dispatch(setValueIsLoggedSuccess(true))
         dispatch(setInitAppAC("succeeded"))
-        dispatch(setProfileUserDataAC(response.data))
     } catch (e) {
         dispatch(setAppErrorAC(e.response ? e.response.data.error : "unknown error"))
         dispatch(setInitAppAC("failed"))
-        dispatch(setErrorText(e.response.data.error))
+        dispatch(setErrorText(e.response ? e.response.data.error : "unknown error"))
     }
 }
 
