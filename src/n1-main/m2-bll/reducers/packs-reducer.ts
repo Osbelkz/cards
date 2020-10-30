@@ -53,6 +53,9 @@ export const packsReducer = (state: PacksStateType = initialState, action: Actio
     }
 }
 
+
+// actions
+
 export const changePageAC = (page: number) => {
     return {type: ACTION_TYPES.CHANGE_PAGE, payload: {page}} as const
 }
@@ -75,6 +78,9 @@ export const setPageStatus = (pageStatus: StatusType) => {
     return {type: ACTION_TYPES.SET_IS_LOADING, payload: {pageStatus}} as const
 }
 
+
+// thunks
+
 export const getPacksTC = (selectedPage?: number) => async (dispatch: Dispatch, getState: () => RootStateType) => {
     const {page, pageCount, searchParams: {packName, min, max}} = getState().packs
     dispatch(setPageStatus("loading"))
@@ -95,8 +101,6 @@ export const getPacksTC = (selectedPage?: number) => async (dispatch: Dispatch, 
 
     }
 }
-
-//dispatch hasn't types
 export const deletePackTC = (id: string) => async (dispatch: ThunkDispatch<RootStateType, {}, ActionsType>) => {
     dispatch(setPageStatus("loading"))
     try {
@@ -106,7 +110,6 @@ export const deletePackTC = (id: string) => async (dispatch: ThunkDispatch<RootS
         alert(e.response.data.error)
     }
 }
-//dispatch hasn't types
 export const createPackTC = (name: string) => async (dispatch: ThunkDispatch<RootStateType, {}, ActionsType>) => {
     dispatch(setPageStatus("loading"))
     try {
@@ -118,7 +121,6 @@ export const createPackTC = (name: string) => async (dispatch: ThunkDispatch<Roo
     }
 }
 //under construction
-//dispatch hasn't types
 export const updatePackTC = (name: string, _id: string) => async (dispatch: ThunkDispatch<RootStateType, {}, ActionsType>) => {
     dispatch(setPageStatus("loading"))
     try {

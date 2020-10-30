@@ -7,6 +7,8 @@ import {Search} from "../../../n1-main/m1-ui/common/Search/Search";
 import { TableButton } from '../../../n1-main/m1-ui/common/Table/TableButton/TableButton';
 import { CardsSearchParamsType } from '../../../n1-main/m2-bll/reducers/cards-reducer';
 import {CardType} from "../../../n1-main/m3-dal/cards-api";
+import {Paginator} from "../../../n1-main/m1-ui/common/Paginator/Paginator";
+import {ColumnSorting} from "../../../n1-main/m1-ui/common/ColumnSorting/ColumnSorting";
 
 type PropsType = {
     cards: Array<CardType> | null
@@ -70,7 +72,10 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
 
         },
         {
-            title: (i: number) => (<th style={{width: "15%", padding: "10px 0"}} key={i}>Grade</th>),
+            title: (i: number) => (<th style={{width: "15%", padding: "10px 0", display: "flex", alignItems: "center"}} key={i}>
+                <div>Grade</div>
+                <ColumnSorting onClick={()=>console.log("sort")}/>
+            </th>),
             render: (d: CardType, i: number) => (
                 <td style={{width: "15%", padding: "10px 0"}} key={i}>{d.grade}</td>)
         },
@@ -109,11 +114,14 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
                            model={testModel}
                            pageStatus={pageStatus}/>
                 </div>
-
-                <div>{cardsTotalCount}</div>
-                <button onClick={() => changePage(page + 1)}>next page</button>
-                <button onClick={() => changePage(page - 1)}>prev page</button>
-
+                <div>
+                    <Paginator currentPage={page}
+                               itemsTotalCount={cardsTotalCount}
+                               pageCount={pageCount}
+                               changePage={changePage}
+                               changePageCount={changePageCount}
+                               itemsName={"cards"} />
+                </div>
             </div>
         </div>
     );

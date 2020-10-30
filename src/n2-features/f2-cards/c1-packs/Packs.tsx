@@ -8,6 +8,7 @@ import {Search} from "../../../n1-main/m1-ui/common/Search/Search";
 import { TableButton } from '../../../n1-main/m1-ui/common/Table/TableButton/TableButton';
 import {SearchParamsType} from "../../../n1-main/m2-bll/reducers/packs-reducer";
 import CardsContainer from "../c2-cards/CardsContainer";
+import {Paginator} from "../../../n1-main/m1-ui/common/Paginator/Paginator";
 
 type PropsType = {
     packs: Array<CardPackType> | null
@@ -113,10 +114,14 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
                            model={testModel}
                            pageStatus={pageStatus}/>
                 </div>
-
-                <div>{cardPacksTotalCount}</div>
-                <button onClick={() => changePage(page + 1)}>next page</button>
-                <button onClick={() => changePage(page - 1)}>prev page</button>
+                <div>
+                    <Paginator currentPage={page}
+                               itemsTotalCount={cardPacksTotalCount}
+                               pageCount={pageCount}
+                               changePage={changePage}
+                               changePageCount={changePageCount}
+                               itemsName={"packs"} />
+                </div>
             </div>
 
         </div>

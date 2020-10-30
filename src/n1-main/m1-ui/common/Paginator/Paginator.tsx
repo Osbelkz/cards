@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from "react";
+import React, {ChangeEvent} from "react";
 import classes from "./Paginator.module.scss";
 import {Button} from "../Button/Button";
 import {Input} from "../Input/Input";

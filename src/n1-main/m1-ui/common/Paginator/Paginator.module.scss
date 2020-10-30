@@ -2,12 +2,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 20px;
-
+  position: relative;
+  font-weight: 600;
   .leftBlock {
 
     select {
-      font-size: 20px;
+      font-weight: inherit;
       height: 25px;
       width: 60px;
       box-sizing: border-box;

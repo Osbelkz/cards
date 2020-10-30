@@ -38,11 +38,11 @@ export const cardsReducer = (state: CardsStateType = initialState, action: Actio
     switch (action.type) {
         case ACTION_TYPES.CHANGE_PAGE:
         case ACTION_TYPES.CHANGE_PAGE_COUNT:
-        case ACTION_TYPES.SET_CARDS:
         case ACTION_TYPES.SET_IS_LOADING:
         case ACTION_TYPES.SET_PACK_ID:
+        case ACTION_TYPES.SET_CARDS:
             return {
-                ...state, ...action.payload
+                ...state, ...action.payload,
             }
         case ACTION_TYPES.SET_SEARCH_NAME:
             return {
@@ -56,6 +56,9 @@ export const cardsReducer = (state: CardsStateType = initialState, action: Actio
             return state
     }
 }
+
+
+// actions
 
 export const changeCardsPageAC = (page: number) => {
     return {type: ACTION_TYPES.CHANGE_PAGE, payload: {page}} as const
@@ -80,6 +83,9 @@ export const setPackAC = (cardsPack_id: string, cardsOwner: string) => {
 }
 
 
+
+// thunks
+
 export const getCardsTC = (selectedPage?: number ) => async (dispatch: Dispatch, getState: () => RootStateType) => {
     const {cardsPack_id, page, pageCount, searchParams: {cardQuestion, min, max}} = getState().cards
     dispatch(setCardsPageStatus("loading"))
@@ -102,7 +108,6 @@ export const getCardsTC = (selectedPage?: number ) => async (dispatch: Dispatch,
     }
 }
 
-//dispatch hasn't types
 export const deleteCardTC = (cardId: string) =>
     async (dispatch: ThunkDispatch<RootStateType, {}, ActionsType>) => {
     dispatch(setCardsPageStatus("loading"))
@@ -113,7 +118,6 @@ export const deleteCardTC = (cardId: string) =>
         alert(e.response.data.error)
     }
 }
-//dispatch hasn't types
 export const createCardTC = (card: CreateCardType) =>
     async (dispatch: ThunkDispatch<RootStateType, {}, ActionsType>, getState: () => RootStateType) => {
     dispatch(setCardsPageStatus("loading"))
@@ -127,7 +131,6 @@ export const createCardTC = (card: CreateCardType) =>
     }
 }
 //under construction
-//dispatch hasn't types
 export const updateCardTC = (card: { question: string, _id: string }) =>
     async (dispatch: ThunkDispatch<RootStateType, {}, ActionsType>) => {
     dispatch(setCardsPageStatus("loading"))
