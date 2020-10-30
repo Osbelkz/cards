@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from "react";
+import React, {ChangeEvent} from "react";
 import classes from "./Slider.module.scss";
 
 type SliderPropsType = {
@@ -29,25 +29,31 @@ export const Slider = (props: SliderPropsType) => {
         }
     }
 
+    let leftMin = props.min / (props.maxValue/100) - 2.5
+    let leftMax = props.max / (props.maxValue/100) - 2.5
+
     return <div className={classes.doubleRange}>
-        <div
-            className={classes.rangeNum}
-            style={{left: `${props.min/0.17}%`}}
-        >
-            {props.min}
+        <div>
+            <div
+                className={classes.rangeNum}
+                style={{left: `${leftMin}%`}}
+            >
+                {props.min}
+            </div>
+            <input
+                type={"range"}
+                min={props.minValue}
+                max={props.maxValue}
+                step={props.stepValue}
+                value={props.min}
+                className={classes.range}
+                onChange={rangeHandler1}
+            />
         </div>
-        <input
-            type={"range"}
-            min={props.minValue}
-            max={props.maxValue}
-            step={props.stepValue}
-            value={props.min}
-            className={classes.range}
-            onChange={rangeHandler1}
-        />
+
         <div
             className={classes.rangeNum}
-            style={{left: `${props.max/0.17}%`}}
+            style={{left: `${leftMax}%`}}
         >
             {props.max}
         </div>
