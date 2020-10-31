@@ -120,6 +120,7 @@ export const deleteCardTC = (cardId: string) =>
         dispatch(getCardsTC())
     } catch (e) {
         alert(e.response.data.error)
+        dispatch(setCardsPageStatus("failed"))
     }
 }
 export const createCardTC = (card: CreateCardType) =>
@@ -132,6 +133,7 @@ export const createCardTC = (card: CreateCardType) =>
     } catch (e) {
         // console.log("create tc")
         alert(e.response.data.error)
+        dispatch(setCardsPageStatus("failed"))
     }
 }
 //under construction
@@ -143,10 +145,11 @@ export const updateCardTC = (card: { question: string, _id: string }) =>
         dispatch(getCardsTC(1))
     } catch (e) {
         alert(e.response.data.error)
+        dispatch(setCardsPageStatus("failed"))
     }
 }
 
-type CardsStateType = typeof initialState
+export type CardsStateType = typeof initialState
 export type CardsSearchParamsType = typeof initialState.searchParams
 
 

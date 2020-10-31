@@ -3,6 +3,7 @@ import {Dispatch} from "redux";
 import {RootStateType} from "../store";
 import { StatusType } from "./app-reducer";
 import { ThunkDispatch } from "redux-thunk";
+import {setCardsPageStatus} from "./cards-reducer";
 
 enum ACTION_TYPES {
     CHANGE_PAGE = "packs/CHANGE_PAGE",
@@ -112,6 +113,7 @@ export const deletePackTC = (id: string) => async (dispatch: ThunkDispatch<RootS
         dispatch(getPacksTC())
     } catch (e) {
         alert(e.response.data.error)
+        dispatch(setPageStatusAC("failed"))
     }
 }
 export const createPackTC = (name: string) => async (dispatch: ThunkDispatch<RootStateType, {}, ActionsType>) => {
@@ -122,6 +124,7 @@ export const createPackTC = (name: string) => async (dispatch: ThunkDispatch<Roo
     } catch (e) {
         console.log("create tc")
         alert(e.response.data.error)
+        dispatch(setPageStatusAC("failed"))
     }
 }
 //under construction
@@ -132,10 +135,11 @@ export const updatePackTC = (name: string, _id: string) => async (dispatch: Thun
         dispatch(getPacksTC(1))
     } catch (e) {
         alert(e.response.data.error)
+        dispatch(setPageStatusAC("failed"))
     }
 }
 
-type PacksStateType = typeof initialState
+export type PacksStateType = typeof initialState
 export type SearchParamsType = typeof initialState.searchParams
 
 

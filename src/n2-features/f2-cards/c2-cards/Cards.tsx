@@ -48,7 +48,7 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
                 <td style={{width: "30%", padding: "10px 10px 10px 20px"}} key={i}>
                     {
                         owner
-                            ? <EditableTableCell text={d.question} changeText={(text) => updateCard(text, d._id)}/>
+                            ? <EditableTableCell text={d.question} changeText={(text) => updateCard(d._id, text)}/>
                             : <span>{d.question}</span>
                     }
                 </td>)
