@@ -8,7 +8,7 @@ type PropsType = {
     changeText: (text: string) => void
 }
 
-const EditableTableCell: React.FC<PropsType> = ({text, changeText}) => {
+const EditableTableCell: React.FC<PropsType> = React.memo(({text, changeText}) => {
 
     const [edit, setEdit] = useState(false)
     const [editableText, setEditableText] = useState(text)
@@ -39,6 +39,6 @@ const EditableTableCell: React.FC<PropsType> = ({text, changeText}) => {
 
         </div>
     );
-};
+})
 
 export default EditableTableCell;

@@ -7,7 +7,6 @@ import EditableTableCell from '../../../n1-main/m1-ui/common/Table/EditableTable
 import {Search} from "../../../n1-main/m1-ui/common/Search/Search";
 import { TableButton } from '../../../n1-main/m1-ui/common/Table/TableButton/TableButton';
 import {SearchParamsType} from "../../../n1-main/m2-bll/reducers/packs-reducer";
-import CardsContainer from "../c2-cards/CardsContainer";
 import {Paginator} from "../../../n1-main/m1-ui/common/Paginator/Paginator";
 import {ColumnSorting} from "../../../n1-main/m1-ui/common/ColumnSorting/ColumnSorting";
 

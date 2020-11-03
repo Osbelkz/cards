@@ -6,6 +6,7 @@ import {setNewPasswordTC} from "../../../n1-main/m2-bll/reducers/newPassword-red
 import { Redirect } from 'react-router-dom';
 
 const NewPasswordContainer = () => {
+
     const dispatch = useDispatch()
     const isSetNewPassword = useSelector<RootStateType, boolean>(state => state.newPassword.isSetNewPassword)
     const error = useSelector<RootStateType, string>(state => state.newPassword.error)

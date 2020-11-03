@@ -1,10 +1,11 @@
 import React from 'react';
 import {Input} from '../../../n1-main/m1-ui/common/Input/Input';
-import classes from "./Register.module.css";
+import classes from "./Register.module.scss";
 import {Button} from "../../../n1-main/m1-ui/common/Button/Button";
 import {useFormik} from "formik";
 import {RequestRegisterType} from "../../../n1-main/m3-dal/auth-api";
 import { StatusType } from '../../../n1-main/m2-bll/reducers/app-reducer';
+import NavItem from "../../../n1-main/m1-ui/common/NavItem/NavItem";
 
 type PropsType = {
     onSubmit: (data: RequestRegisterType) => void
@@ -18,7 +19,7 @@ type FormikErrorType = {
     password2?: string
 }
 
-const Register: React.FC<PropsType> = React.memo((props) => {
+const Register: React.FC<PropsType> = React.memo(({status, error, onSubmit}) => {
 
     const formik = useFormik({
         initialValues: {
@@ -43,7 +44,7 @@ const Register: React.FC<PropsType> = React.memo((props) => {
         },
 
         onSubmit: (values) => {
-            props.onSubmit({email: values.email, password: values.password})
+            onSubmit({email: values.email, password: values.password})
         },
     });
 
@@ -75,11 +76,12 @@ const Register: React.FC<PropsType> = React.memo((props) => {
                     </div>
                     <div className={classes.register__buttons}>
                         <Button btnName={"Join"} btnType={"green"} type={"submit"}
-                                disabled={!formik.isValid || (props.status === "loading")}/>
+                                disabled={!formik.isValid || (status === "loading") || !formik.values.email}/>
                         <Button btnName={"Reset"} type={"reset"} onClick={() => formik.resetForm()}/>
                     </div>
-                    {props.error && <div className={classes.register__error}>{props.error}</div>}
-                    {props.status === "loading" && <div className={classes.register__loading}>...Loading</div>}
+                    <NavItem path={"/login"} title={"Login"}/>
+                    {error && <div className={classes.register__error}>{error}</div>}
+                    {status === "loading" && <div className={classes.register__loading}>...Loading</div>}
                 </form>
             </div>
         </div>
