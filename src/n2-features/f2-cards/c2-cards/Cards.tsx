@@ -1,5 +1,5 @@
 import classes from './Cards.module.scss';
-import React, {useMemo} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import Table, {ITableModel} from '../../../n1-main/m1-ui/common/Table/Table';
 import {StatusType} from "../../../n1-main/m2-bll/reducers/app-reducer";
 import EditableTableCell from '../../../n1-main/m1-ui/common/Table/EditableTableCell/EditableTableCell';
@@ -20,7 +20,7 @@ type PropsType = {
     cardsTotalCount: number
     searchParams: CardsSearchParamsType
     deleteCard: (id: string) => void
-    createCard: (question: string) => void
+    createCard: (question: string) => void 
     updateCard: (cardId: string, question: string) => void
     changePage: (page: number) => void
     changePageCount: (page: number) => void
@@ -37,7 +37,9 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
         changePageCount, setSearchParams, pageStatus,
         min, max, searchParams: {cardQuestion}
     } = props
-    // console.log("packs")
+    // console.log("cards")
+
+    const sortGrade = useCallback((sort: number)=>setSortColumn(sort+"grade"),[])
 
     const testModel: ITableModel[] = useMemo(() => ([
         {
@@ -77,7 +79,7 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
             title: (i: number) => (
                 <th style={{width: "15%", padding: "10px 0", display: "flex", alignItems: "center"}} key={i}>
                     <div>Grade</div>
-                    <ColumnSorting onClick={(sort)=>setSortColumn(sort + "grade")}/>
+                    <ColumnSorting onClick={sortGrade}/>
                 </th>),
             render: (d: CardType, i: number) => (
                 <td style={{width: "15%", padding: "10px 0"}} key={i}>{d.grade}</td>)
@@ -116,8 +118,6 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
                     <Table data={cards}
                            model={testModel}
                            pageStatus={pageStatus}/>
-                </div>
-                <div>
                     <Paginator currentPage={page}
                                itemsTotalCount={cardsTotalCount}
                                pageCount={pageCount}

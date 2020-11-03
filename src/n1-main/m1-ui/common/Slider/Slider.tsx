@@ -11,7 +11,7 @@ type SliderPropsType = {
     stepValue: number
 }
 
-export const Slider = (props: SliderPropsType) => {
+export const Slider: React.FC<SliderPropsType> = React.memo((props) => {
 
     const rangeHandler1 = (e: ChangeEvent<HTMLInputElement>) => {
         let value = +e.currentTarget.value
@@ -67,4 +67,4 @@ export const Slider = (props: SliderPropsType) => {
             onChange={rangeHandler2}
         />
     </div>
-}
+})

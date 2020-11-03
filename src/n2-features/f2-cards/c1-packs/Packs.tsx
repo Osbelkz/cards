@@ -1,5 +1,5 @@
 import classes from './Packs.module.scss';
-import React, {useMemo} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {CardPackType} from "../../../n1-main/m3-dal/packs-api";
 import Table, {ITableModel} from '../../../n1-main/m1-ui/common/Table/Table';
 import {StatusType} from "../../../n1-main/m2-bll/reducers/app-reducer";
@@ -39,6 +39,8 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
     } = props
     // console.log("packs")
 
+    const sortCardsCount = useCallback((sort: number)=>setPacksSortColumn(sort+"cardsCount"),[])
+
     const testModel: ITableModel[] = useMemo(() => ([
         {
             title: (i: number) => (<th style={{width: "30%", padding: "10px 0 10px 20px"}} key={i}>
@@ -71,7 +73,7 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
         {
             title: (i: number) => (<th style={{width: "10%", padding: "10px 0", display: "flex", alignItems: "center"}} key={i}>
                 <div>Cards count</div>
-                <ColumnSorting onClick={(sort)=>setPacksSortColumn(sort+"cardsCount")}/>
+                <ColumnSorting onClick={sortCardsCount}/>
             </th>),
             render: (d: CardPackType, i: number) => (
                 <td style={{width: "10%", padding: "10px 0"}} key={i}>{d.cardsCount}</td>)
@@ -117,8 +119,6 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
                     <Table data={packs}
                            model={testModel}
                            pageStatus={pageStatus}/>
-                </div>
-                <div>
                     <Paginator currentPage={page}
                                itemsTotalCount={cardPacksTotalCount}
                                pageCount={pageCount}

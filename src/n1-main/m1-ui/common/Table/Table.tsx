@@ -1,4 +1,4 @@
-import React, {ReactNode} from 'react';
+import React from 'react';
 import classes from "./Table.module.scss";
 import {StatusType} from "../../../m2-bll/reducers/app-reducer";
 

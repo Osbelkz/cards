@@ -6,12 +6,13 @@ type ColumnSortingPropsType = {
     onClick: (value: number) => void
 }
 
-export const ColumnSorting = (props: ColumnSortingPropsType) => {
+export const ColumnSorting: React.FC<ColumnSortingPropsType> = React.memo(({onClick}) => {
+
     const upChangeHandler = () => {
-        props.onClick(1)
+        onClick(1)
     }
     const downChangeHandler = () => {
-        props.onClick(0)
+        onClick(0)
     }
 
     return <div className={classes.container}>
@@ -26,4 +27,4 @@ export const ColumnSorting = (props: ColumnSortingPropsType) => {
             onClick={downChangeHandler}
         />
     </div>
-}
+})

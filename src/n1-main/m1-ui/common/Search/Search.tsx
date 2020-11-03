@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from "react";
+import React, {ChangeEvent, useCallback, useState} from "react";
 import classes from "./Search.module.scss";
 import {Input} from "../Input/Input";
 import {Button} from "../Button/Button";
@@ -13,20 +13,22 @@ type SearchPropsType = {
     setSearchParams: (searchName?: string, min?: number, max?: number) => void
 }
 
-export const Search = (props: SearchPropsType) => {
+export const Search: React.FC<SearchPropsType> =
+    React.memo(({name, minValue, maxValue, label, stepValue, setSearchParams}) => {
 
-    const [name, setName] = useState(props.name)
-    const [min, setMin] = useState(props.minValue)
-    const [max, setMax] = useState(props.maxValue)
-    const inputOnChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setName(e.currentTarget.value)
-    }
+    const [searchValue, setSearchValue] = useState(name)
+    const [min, setMin] = useState(minValue)
+    const [max, setMax] = useState(maxValue)
+
+    const inputOnChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+        setSearchValue(e.currentTarget.value)
+    }, [])
 
 
     return <div className={classes.uniSearch}>
-        <h3>{props.label}</h3>
+        <h3>{label}</h3>
         <Input
-            value={name}
+            value={searchValue}
             onChange={inputOnChangeHandler}
         />
         <div className={classes.slider}>
@@ -35,16 +37,16 @@ export const Search = (props: SearchPropsType) => {
                 setMax={setMax}
                 min={min}
                 max={max}
-                minValue={props.minValue}
-                maxValue={props.maxValue}
-                stepValue={props.stepValue}
+                minValue={minValue}
+                maxValue={maxValue}
+                stepValue={stepValue}
             />
         </div>
             <Button
                 btnName={"Search"}
                 onClick={() => {
-                    props.setSearchParams(name, min, max)
+                    setSearchParams(searchValue, min, max)
                 }}
             />
     </div>
-}
+})
