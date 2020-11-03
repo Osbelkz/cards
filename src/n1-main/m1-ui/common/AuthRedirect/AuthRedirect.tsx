@@ -6,6 +6,7 @@ import {RootStateType} from "../../../m2-bll/store";
 import {authMeTC, StatusType} from "../../../m2-bll/reducers/app-reducer";
 
 const AuthRedirect: React.FC = (props) => {
+
     const dispatch = useDispatch();
     const initApp = useSelector<RootStateType, StatusType>(state => state.app.initApp)
     const isLoggedSuccess = useSelector<RootStateType, boolean>(state => state.login.isLoggedSuccess)

@@ -11,7 +11,7 @@ type SliderPropsType = {
     stepValue: number
 }
 
-export const Slider = (props: SliderPropsType) => {
+export const Slider: React.FC<SliderPropsType> = React.memo((props) => {
 
     const rangeHandler1 = (e: ChangeEvent<HTMLInputElement>) => {
         let value = +e.currentTarget.value
@@ -34,10 +34,8 @@ export const Slider = (props: SliderPropsType) => {
 
     return <div className={classes.doubleRange}>
         <div>
-            <div
-                className={classes.rangeNum}
-                style={{left: `${leftMin}%`}}
-            >
+            <div className={classes.rangeNum}
+                style={{left: `${leftMin}%`}}>
                 {props.min}
             </div>
             <input
@@ -47,14 +45,11 @@ export const Slider = (props: SliderPropsType) => {
                 step={props.stepValue}
                 value={props.min}
                 className={classes.range}
-                onChange={rangeHandler1}
-            />
+                onChange={rangeHandler1}/>
         </div>
 
-        <div
-            className={classes.rangeNum}
-            style={{left: `${leftMax}%`}}
-        >
+        <div className={classes.rangeNum}
+            style={{left: `${leftMax}%`}}>
             {props.max}
         </div>
         <input
@@ -64,7 +59,6 @@ export const Slider = (props: SliderPropsType) => {
             step={props.stepValue}
             value={props.max}
             className={classes.range}
-            onChange={rangeHandler2}
-        />
+            onChange={rangeHandler2}/>
     </div>
-}
+})

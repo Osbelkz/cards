@@ -22,9 +22,8 @@ const PacksContainer = React.memo(() => {
     // console.log("packs container")
     const history = useHistory()
     const dispatch = useDispatch()
-    const {
-        packs, min, max, page, pageCount, cardPacksTotalCount, pageStatus, searchParams
-        } = useSelector<RootStateType, PacksStateType>(state => state.packs)
+    const {packs, min, max, page, pageCount, cardPacksTotalCount, pageStatus, searchParams} =
+        useSelector<RootStateType, PacksStateType>(state => state.packs)
     const userId = useSelector<RootStateType, string | undefined>(state => state.profile.userData?._id)
 
 

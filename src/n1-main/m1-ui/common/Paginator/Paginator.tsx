@@ -12,16 +12,17 @@ type PaginatorPropsType = {
     itemsName: string
 }
 
-export const Paginator = (props: PaginatorPropsType) => {
-    const [pageNumber, setPageNumber] = useState(props.currentPage)
-    let pageAmount = Math.ceil(props.itemsTotalCount / props.pageCount)
+export const Paginator: React.FC<PaginatorPropsType> =
+    React.memo(({currentPage, pageCount, changePageCount, changePage, itemsName, itemsTotalCount}) => {
+    const [pageNumber, setPageNumber] = useState(currentPage)
+    let pageAmount = Math.ceil(itemsTotalCount / pageCount)
 
     const pageCountChangeHandler = (e: ChangeEvent<HTMLSelectElement>) => {
         let value = +e.currentTarget.value
-        props.changePageCount(value)
+        changePageCount(value)
     }
     const onePreviousPage = () => {
-        props.changePage(pageNumber - 1)
+        changePage(pageNumber - 1)
         setPageNumber(pageNumber - 1)
     }
     const pageChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -29,24 +30,24 @@ export const Paginator = (props: PaginatorPropsType) => {
     }
     const pageSetHandler = () => {
         if (pageNumber < 1) {
-            props.changePage(1)
+            changePage(1)
             setPageNumber(1)
         } else if (pageNumber > pageAmount) {
-            props.changePage(pageAmount)
+            changePage(pageAmount)
             setPageNumber(pageAmount)
         } else {
-            props.changePage(pageNumber)
+            changePage(pageNumber)
         }
     }
     const oneNextPage = () => {
-        props.changePage(pageNumber + 1)
+        changePage(pageNumber + 1)
         setPageNumber(pageNumber + 1)
     }
 
     return <div className={classes.paginator}>
         <div className={classes.leftBlock}>
-            {`Total ${props.itemsName}: ${props.itemsTotalCount}. ${props.itemsName} per page:`}
-            <select onChange={pageCountChangeHandler} value={props.pageCount}>
+            {`Total ${itemsName}: ${itemsTotalCount}. ${itemsName} per page:`}
+            <select onChange={pageCountChangeHandler} value={pageCount}>
                 <option>10</option>
                 <option>20</option>
                 <option>50</option>
@@ -57,7 +58,7 @@ export const Paginator = (props: PaginatorPropsType) => {
             <Button
                 btnName={`Prev`}
                 onClick={onePreviousPage}
-                disabled={props.currentPage < 2}
+                disabled={currentPage < 2}
             />
             {`Page: `}
             {pageNumber < 1}
@@ -72,8 +73,8 @@ export const Paginator = (props: PaginatorPropsType) => {
             <Button
                 btnName={`Next`}
                 onClick={oneNextPage}
-                disabled={props.currentPage === pageAmount}
+                disabled={currentPage === pageAmount}
             />
         </div>
     </div>
-}
+})

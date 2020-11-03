@@ -1,5 +1,5 @@
 import classes from './Cards.module.scss';
-import React, {useMemo} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import Table, {ITableModel} from '../../../n1-main/m1-ui/common/Table/Table';
 import {StatusType} from "../../../n1-main/m2-bll/reducers/app-reducer";
 import EditableTableCell from '../../../n1-main/m1-ui/common/Table/EditableTableCell/EditableTableCell';
@@ -37,15 +37,17 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
         changePageCount, setSearchParams, pageStatus,
         min, max, searchParams: {cardQuestion}
     } = props
-    // console.log("packs")
+    // console.log("cards")
+
+    const sortGrade = useCallback((sort: number)=>setSortColumn(sort+"grade"),[])
 
     const testModel: ITableModel[] = useMemo(() => ([
         {
-            title: (i: number) => (<th style={{width: "30%", padding: "10px 0 10px 20px"}} key={i}>
+            title: (i: number) => (<th style={{width: "30%", paddingLeft: "20px"}} key={i}>
                 <span>Question</span>
             </th>),
             render: (d: CardType, i: number) => (
-                <td style={{width: "30%", padding: "10px 10px 10px 20px"}} key={i}>
+                <td style={{width: "30%", paddingLeft: "20px"}} key={i}>
                     {
                         owner
                             ? <EditableTableCell text={d.question} changeText={(text) => updateCard(d._id, text)}/>
@@ -54,12 +56,12 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
                 </td>)
         },
         {
-            title: (i: number) => (<th style={{width: "30%", padding: "10px 0"}} key={i}>Answer</th>),
+            title: (i: number) => (<th style={{width: "30%"}} key={i}>Answer</th>),
             render: (d: CardType, i: number) => (
-                <td style={{width: "30%", padding: "10px 0"}} key={i}>{d.answer}</td>)
+                <td style={{width: "30%"}} key={i}>{d.answer}</td>)
         },
         {
-            title: (i: number) => (<th style={{width: "15%", padding: "10px 0"}} key={i}>
+            title: (i: number) => (<th style={{width: "15%"}} key={i}>
                 <span>Added</span>
             </th>),
             render: (d: CardType, i: number) => {
@@ -69,28 +71,28 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
                 let month = dm.getMonth() < 10 ? "0" + dm.getMonth() : dm.getMonth()
                 let day = dm.getDay() < 10 ? "0" + dm.getDay() : dm.getDay()
 
-                return <td style={{width: "15%", padding: "10px 0"}} key={i}>{`${year}-${month}-${day}`}</td>
+                return <td style={{width: "15%"}} key={i}>{`${year}-${month}-${day}`}</td>
             }
 
         },
         {
             title: (i: number) => (
-                <th style={{width: "15%", padding: "10px 0", display: "flex", alignItems: "center"}} key={i}>
+                <th style={{width: "15%", display: "flex", alignItems: "center"}} key={i}>
                     <div>Grade</div>
-                    <ColumnSorting onClick={(sort)=>setSortColumn(sort + "grade")}/>
+                    <ColumnSorting onClick={sortGrade}/>
                 </th>),
             render: (d: CardType, i: number) => (
-                <td style={{width: "15%", padding: "10px 0"}} key={i}>{d.grade}</td>)
+                <td style={{width: "15%"}} key={i}>{d.grade}</td>)
         },
         {
             title: (i: number) => (
-                <th style={{width: "10%", padding: "10px 20px 10px 0", textAlign: "right"}} key={i}>
+                <th style={{width: "10%", paddingRight: "20px", textAlign: "right"}} key={i}>
                     <TableButton btnName={"+"} btnType={"green"} onClick={() => createCard("new card")}
                                  disabled={!owner || pageStatus === "loading"}/>
                 </th>
             ),
             render: (d: CardType, i: number) => {
-                return <td style={{width: "10%", padding: "10px 20px 10px 0", textAlign: "right"}} key={i}>
+                return <td style={{width: "10%", paddingRight: "20px", textAlign: "right"}} key={i}>
                     <TableButton btnName={"x"} btnType={"red"} onClick={() => deleteCard(d._id)}
                                  disabled={!owner || pageStatus === "loading"}/>
                 </td>
@@ -116,8 +118,6 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
                     <Table data={cards}
                            model={testModel}
                            pageStatus={pageStatus}/>
-                </div>
-                <div>
                     <Paginator currentPage={page}
                                itemsTotalCount={cardsTotalCount}
                                pageCount={pageCount}
