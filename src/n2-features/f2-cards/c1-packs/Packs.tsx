@@ -43,11 +43,11 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
 
     const testModel: ITableModel[] = useMemo(() => ([
         {
-            title: (i: number) => (<th style={{width: "30%", padding: "10px 0 10px 20px"}} key={i}>
+            title: (i: number) => (<th style={{width: "30%", paddingLeft: "20px"}} key={i}>
                 <div>Name</div>
             </th>),
             render: (d: CardPackType, i: number) => (
-                <td style={{width: "30%", padding: "10px 10px 10px 20px"}} key={i}>
+                <td style={{width: "30%", paddingLeft: "20px"}} key={i}>
                     {
                         userId === d.user_id
                             ? <EditableTableCell text={d.name} changeText={(text) => updatePack(text, d._id)}/>
@@ -56,7 +56,7 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
                 </td>)
         },
         {
-            title: (i: number) => (<th style={{width: "15%", padding: "10px 0"}} key={i}>
+            title: (i: number) => (<th style={{width: "15%"}} key={i}>
                 <div>Added</div>
             </th>),
             render: (d: CardPackType, i: number) => {
@@ -66,32 +66,32 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
                 let month = dm.getMonth() < 10 ? "0" + dm.getMonth() : dm.getMonth()
                 let day = dm.getDay() < 10 ? "0" + dm.getDay() : dm.getDay()
 
-                return <td style={{width: "15%", padding: "10px 0"}} key={i}>{`${year}-${month}-${day}`}</td>
+                return <td style={{width: "15%"}} key={i}>{`${year}-${month}-${day}`}</td>
             }
 
         },
         {
-            title: (i: number) => (<th style={{width: "10%", padding: "10px 0", display: "flex", alignItems: "center"}} key={i}>
+            title: (i: number) => (<th style={{width: "10%", display: "flex", alignItems: "center"}} key={i}>
                 <div>Cards count</div>
                 <ColumnSorting onClick={sortCardsCount}/>
             </th>),
             render: (d: CardPackType, i: number) => (
-                <td style={{width: "10%", padding: "10px 0"}} key={i}>{d.cardsCount}</td>)
+                <td style={{width: "10%"}} key={i}>{d.cardsCount}</td>)
         },
         {
-            title: (i: number) => (<th style={{width: "25%", padding: "10px 0"}} key={i}>Owner</th>),
+            title: (i: number) => (<th style={{width: "25%"}} key={i}>Owner</th>),
             render: (d: CardPackType, i: number) => (
-                <td style={{width: "25%", padding: "10px 0"}} key={i}>{d.user_name}</td>)
+                <td style={{width: "25%"}} key={i}>{d.user_name}</td>)
         },
         {
             title: (i: number) => (
-                <th style={{width: "15%", padding: "10px 20px 10px 0", textAlign: "right"}} key={i}>
+                <th style={{width: "15%", paddingRight: "20px", textAlign: "right"}} key={i}>
                     <TableButton btnName={"+"} btnType={"green"} onClick={() => createPack("new pack")}
                                  disabled={pageStatus === "loading"}/>
                 </th>
             ),
             render: (d: CardPackType, i: number) => {
-                return <td style={{width: "15%", padding: "10px 20px 10px 0", textAlign: "right"}} key={i}>
+                return <td style={{width: "15%", paddingRight: "20px", textAlign: "right"}} key={i}>
                     <TableButton btnName={"open"}  onClick={() => choosePack(d._id, d.user_id)}
                                  disabled={pageStatus === "loading"}/>
                     <TableButton btnName={"x"} btnType={"red"}  onClick={() => deletePack(d._id)}

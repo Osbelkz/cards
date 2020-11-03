@@ -34,10 +34,8 @@ export const Slider: React.FC<SliderPropsType> = React.memo((props) => {
 
     return <div className={classes.doubleRange}>
         <div>
-            <div
-                className={classes.rangeNum}
-                style={{left: `${leftMin}%`}}
-            >
+            <div className={classes.rangeNum}
+                style={{left: `${leftMin}%`}}>
                 {props.min}
             </div>
             <input
@@ -47,14 +45,11 @@ export const Slider: React.FC<SliderPropsType> = React.memo((props) => {
                 step={props.stepValue}
                 value={props.min}
                 className={classes.range}
-                onChange={rangeHandler1}
-            />
+                onChange={rangeHandler1}/>
         </div>
 
-        <div
-            className={classes.rangeNum}
-            style={{left: `${leftMax}%`}}
-        >
+        <div className={classes.rangeNum}
+            style={{left: `${leftMax}%`}}>
             {props.max}
         </div>
         <input
@@ -64,7 +59,6 @@ export const Slider: React.FC<SliderPropsType> = React.memo((props) => {
             step={props.stepValue}
             value={props.max}
             className={classes.range}
-            onChange={rangeHandler2}
-        />
+            onChange={rangeHandler2}/>
     </div>
 })

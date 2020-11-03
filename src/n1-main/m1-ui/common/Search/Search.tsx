@@ -24,6 +24,9 @@ export const Search: React.FC<SearchPropsType> =
         setSearchValue(e.currentTarget.value)
     }, [])
 
+    const onSearchClick = useCallback(() => {
+        setSearchParams(searchValue, min, max)
+    }, [])
 
     return <div className={classes.uniSearch}>
         <h3>{label}</h3>
@@ -44,9 +47,7 @@ export const Search: React.FC<SearchPropsType> =
         </div>
             <Button
                 btnName={"Search"}
-                onClick={() => {
-                    setSearchParams(searchValue, min, max)
-                }}
+                onClick={onSearchClick}
             />
     </div>
 })

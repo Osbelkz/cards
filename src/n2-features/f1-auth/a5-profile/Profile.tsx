@@ -2,7 +2,6 @@ import React from 'react';
 import classes from "./Profile.module.css";
 import {Button} from "../../../n1-main/m1-ui/common/Button/Button";
 import { UserDataType } from '../../../n1-main/m3-dal/auth-api';
-import {Paginator} from "../../../n1-main/m1-ui/common/Paginator/Paginator";
 
 type PropsType = {
     userData: UserDataType
@@ -53,4 +52,4 @@ const Profile: React.FC<PropsType> = ({userData, logout}) => {
     );
 };
 
-export default Profile;
+export default React.memo(Profile);
