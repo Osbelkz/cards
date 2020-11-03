@@ -1,4 +1,4 @@
-import {applyMiddleware, combineReducers, createStore} from "redux";
+import {combineReducers} from "redux";
 import thunk from "redux-thunk";
 import {loginReducer} from "./reducers/login-reducer";
 import {newPasswordReducer} from "./reducers/newPassword-reducer";
@@ -19,7 +19,7 @@ export const rootReducer = combineReducers({
     profile: profileReducer,
     packs: packsReducer,
     cards: cardsReducer,
-    app: appReducer
+    app: appReducer,
 })
 
 
