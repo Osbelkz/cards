@@ -28,6 +28,7 @@ export const Paginator: React.FC<PaginatorPropsType> =
     const pageChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setPageNumber(+e.currentTarget.value)
     }
+
     const pageSetHandler = () => {
         if (pageNumber < 1) {
             changePage(1)
@@ -42,6 +43,12 @@ export const Paginator: React.FC<PaginatorPropsType> =
     const oneNextPage = () => {
         changePage(pageNumber + 1)
         setPageNumber(pageNumber + 1)
+    }
+
+    const onKeyPressHandler = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        if (e.key === 'Enter') {
+            pageSetHandler()
+        }
     }
 
     return <div className={classes.paginator}>
@@ -68,6 +75,7 @@ export const Paginator: React.FC<PaginatorPropsType> =
                    max={pageAmount}
                    onChange={pageChangeHandler}
                    onBlur={pageSetHandler}
+                   onKeyPress={onKeyPressHandler}
             />
             of {pageAmount}
             <Button
