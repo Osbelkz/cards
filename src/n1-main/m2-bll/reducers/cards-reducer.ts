@@ -11,15 +11,15 @@ enum ACTION_TYPES {
     SET_SEARCH_NAME = "cards/SET_SEARCH_NAME",
     SET_SEARCH_PARAMS = "cards/SET_SEARCH_PARAMS",
     SET_IS_LOADING = "cards/SET_IS_LOADING",
-    SET_PACK_ID =  "cards/SET_PACK_ID",
-    SET_SORT_COLUMN =  "cards/SET_SORT_COLUMN",
+    SET_PACK_ID = "cards/SET_PACK_ID",
+    SET_SORT_COLUMN = "cards/SET_SORT_COLUMN",
 }
 
 
 const initialState = {
     cardsPack_id: "" as string,
     cardsOwner: "",
-    cards: null as Array<CardType> | null,
+    cards: [] as Array<CardType>,
     cardsTotalCount: 0,
     page: 1,
     pageCount: 10,
@@ -90,12 +90,20 @@ export const setCardsSortColumnParamsAC = (sortCards: string) => {
 
 // thunks
 
-export const getCardsTC = (selectedPage?: number ) => async (dispatch: Dispatch, getState: () => RootStateType) => {
+export const getCardsTC = (selectedPage?: number, pageCountLearn?: number) => async (dispatch: Dispatch, getState: () => RootStateType) => {
     const {cardsPack_id, page, pageCount, searchParams: {cardQuestion, min, max, sortCards}} = getState().cards
     dispatch(setCardsPageStatus("loading"))
     try {
-        const response = await cardsApi.getPack({cardsPack_id, page: selectedPage || page, pageCount, cardQuestion, min, max, sortCards})
-        // console.log(response.data)
+        const response = await cardsApi.getPack({
+            cardsPack_id,
+            page: selectedPage || page,
+            pageCount: pageCountLearn || pageCount,
+            cardQuestion,
+            min,
+            max,
+            sortCards
+        })
+        console.log(response.data)
         dispatch(setCardsAC(response.data.cards,
             response.data.cardsTotalCount,
             response.data.minGrade,

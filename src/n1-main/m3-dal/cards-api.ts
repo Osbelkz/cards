@@ -53,7 +53,7 @@ export type CardType = {
     grade: number // средняя оценка карточек
     shots: number // количество попыток
     rating: number // лайки
-    "type": "card"
+    type: "card"
     created: string
     updated: string
     __v: number

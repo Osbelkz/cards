@@ -11,7 +11,7 @@ import {Paginator} from "../../../n1-main/m1-ui/common/Paginator/Paginator";
 import {ColumnSorting} from "../../../n1-main/m1-ui/common/ColumnSorting/ColumnSorting";
 
 type PropsType = {
-    cards: Array<CardType> | null
+    cards: Array<CardType>
     owner: boolean
     page: number
     pageCount: number

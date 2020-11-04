@@ -52,6 +52,10 @@ const PacksContainer = React.memo(() => {
         dispatch(setPackAC(packId, cardsOwner))
         history.push(`/cards/${packId}`)
     }, [])
+    const startLearnHandler = useCallback((packId: string, cardsOwner: string) => {
+        dispatch(setPackAC(packId, cardsOwner))
+        history.push(`/learn/${packId}`)
+    }, [])
 
     useEffect(() => {
         dispatch(getPacksTC())
@@ -75,6 +79,7 @@ const PacksContainer = React.memo(() => {
                updatePack={updatePackHandler}
                changePage={changePageHandler}
                choosePack={choosePackHandler}
+               startLearn={startLearnHandler}
                setPacksSortColumn={setPacksSortColumnHandler}
                changePageCount={changePageCountHandler}
                setSearchParams={setSearchParamsHandler}
