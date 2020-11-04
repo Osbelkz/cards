@@ -8,6 +8,7 @@ type PropsType = {
 }
 
 const NavItem: React.FC<PropsType> = ({path, title}) => {
+
     return (
             <NavLink to={path} className={classes.navItem} activeClassName={classes.active}>{title}</NavLink>
     );

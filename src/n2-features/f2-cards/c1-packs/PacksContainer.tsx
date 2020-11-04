@@ -8,29 +8,24 @@ import {
     changePageCountAC,
     createPackTC,
     deletePackTC,
-    getPacksTC, SearchParamsType, setSearchParamsAC,
+    getPacksTC, PacksStateType, SearchParamsType, setPacksSortColumnAC, setSearchParamsAC,
     updatePackTC
 } from "../../../n1-main/m2-bll/reducers/packs-reducer";
 import {Preloader} from "../../../n1-main/m1-ui/common/Preloader/Preloader";
 import {StatusType} from "../../../n1-main/m2-bll/reducers/app-reducer";
 import {setPackAC} from "../../../n1-main/m2-bll/reducers/cards-reducer";
-import {useHistory, useParams } from 'react-router-dom';
+import {useHistory, useParams} from 'react-router-dom';
 
 
 const PacksContainer = React.memo(() => {
 
-    console.log("packs container")
+    // console.log("packs container")
     const history = useHistory()
     const dispatch = useDispatch()
-    const packs = useSelector<RootStateType, Array<CardPackType> | null>(state => state.packs.packs)
-    const page = useSelector<RootStateType, number>(state => state.packs.page)
-    const pageCount = useSelector<RootStateType, number>(state => state.packs.pageCount)
-    const cardPacksTotalCount = useSelector<RootStateType, number>(state => state.packs.cardPacksTotalCount)
-    const min = useSelector<RootStateType, number | undefined>(state => state.packs.min)
-    const max = useSelector<RootStateType, number | undefined>(state => state.packs.max)
+    const {packs, min, max, page, pageCount, cardPacksTotalCount, pageStatus, searchParams} =
+        useSelector<RootStateType, PacksStateType>(state => state.packs)
     const userId = useSelector<RootStateType, string | undefined>(state => state.profile.userData?._id)
-    const pageStatus = useSelector<RootStateType, StatusType>(state => state.packs.pageStatus)
-    const searchParams  = useSelector<RootStateType, SearchParamsType>(state => state.packs.searchParams)
+
 
     const deletePackHandler = useCallback((id: string) => {
         dispatch(deletePackTC(id))
@@ -50,6 +45,9 @@ const PacksContainer = React.memo(() => {
     const setSearchParamsHandler = useCallback((searchName?: string, min?: number, max?: number) => {
         dispatch(setSearchParamsAC(searchName, min, max))
     }, [])
+    const setPacksSortColumnHandler = useCallback((sortPacks: string) => {
+        dispatch(setPacksSortColumnAC(sortPacks))
+    }, [])
     const choosePackHandler = useCallback((packId: string, cardsOwner: string) => {
         dispatch(setPackAC(packId, cardsOwner))
         history.push(`/cards/${packId}`)
@@ -59,7 +57,7 @@ const PacksContainer = React.memo(() => {
         dispatch(getPacksTC())
     }, [page, pageCount, searchParams])
 
-    if (!packs || pageStatus==="idle") {
+    if (!packs || pageStatus === "idle") {
         return <Preloader/>
     }
 
@@ -77,6 +75,7 @@ const PacksContainer = React.memo(() => {
                updatePack={updatePackHandler}
                changePage={changePageHandler}
                choosePack={choosePackHandler}
+               setPacksSortColumn={setPacksSortColumnHandler}
                changePageCount={changePageCountHandler}
                setSearchParams={setSearchParamsHandler}
                pageStatus={pageStatus}

@@ -3,6 +3,7 @@ import {Dispatch} from "redux";
 import {RootStateType} from "../store";
 import { StatusType } from "./app-reducer";
 import { ThunkDispatch } from "redux-thunk";
+import {setCardsPageStatus} from "./cards-reducer";
 
 enum ACTION_TYPES {
     CHANGE_PAGE = "packs/CHANGE_PAGE",
@@ -11,7 +12,8 @@ enum ACTION_TYPES {
     SET_PACKS = "packs/SET_PACKS",
     SET_SEARCH_NAME = "packs/SET_SEARCH_NAME",
     SET_SEARCH_PARAMS = "packs/SET_SEARCH_PARAMS",
-    SET_IS_LOADING = "packs/SET_IS_LOADING"
+    SET_IS_LOADING = "packs/SET_IS_LOADING",
+    SET_SORT_PACKS = "packs/SET_SORT_PACKS"
 }
 
 
@@ -25,6 +27,7 @@ const initialState = {
     pageStatus: "idle" as StatusType,
     searchParams: {
         packName: "" as string | undefined,
+        sortPacks: "" as string | undefined,
         min: undefined as undefined | number,
         max: undefined as undefined | number,
     }
@@ -44,9 +47,10 @@ export const packsReducer = (state: PacksStateType = initialState, action: Actio
             return {
                 ...state, searchParams: {...state.searchParams, packName: action.payload.packName}
             }
+        case ACTION_TYPES.SET_SORT_PACKS:
         case ACTION_TYPES.SET_SEARCH_PARAMS:
             return {
-                ...state, searchParams: {...action.payload}
+                ...state, searchParams: {...state.searchParams,...action.payload}
             }
         default:
             return state
@@ -74,19 +78,21 @@ export const setSearchNameAC = (packName: string) => {
 export const setSearchParamsAC = (packName?: string, min?: number, max?: number) => {
     return {type: ACTION_TYPES.SET_SEARCH_PARAMS, payload: {packName, min, max}} as const
 }
-export const setPageStatus = (pageStatus: StatusType) => {
+export const setPageStatusAC = (pageStatus: StatusType) => {
     return {type: ACTION_TYPES.SET_IS_LOADING, payload: {pageStatus}} as const
+}
+export const setPacksSortColumnAC = (sortPacks: string) => {
+    return {type: ACTION_TYPES.SET_SORT_PACKS, payload: {sortPacks}} as const
 }
 
 
 // thunks
 
 export const getPacksTC = (selectedPage?: number) => async (dispatch: Dispatch, getState: () => RootStateType) => {
-    const {page, pageCount, searchParams: {packName, min, max}} = getState().packs
-    dispatch(setPageStatus("loading"))
+    const {page, pageCount, searchParams: {packName, min, max, sortPacks}} = getState().packs
+    dispatch(setPageStatusAC("loading"))
     try {
-        const response = await packsApi.getPacks({page: selectedPage || page, pageCount, packName, min, max})
-        console.log(response.data)
+        const response = await packsApi.getPacks({page: selectedPage || page, pageCount, packName, min, max, sortPacks})
         dispatch(setPacksAC(response.data.cardPacks,
             response.data.cardPacksTotalCount,
             response.data.minCardsCount,
@@ -94,44 +100,46 @@ export const getPacksTC = (selectedPage?: number) => async (dispatch: Dispatch, 
             "succeeded"))
         selectedPage && dispatch(changePageAC(selectedPage))
     } catch (e) {
-        console.log("get packs tc")
         alert(e.response.data.error)
-        dispatch(setPageStatus("failed"))
+        dispatch(setPageStatusAC("failed"))
     } finally {
 
     }
 }
 export const deletePackTC = (id: string) => async (dispatch: ThunkDispatch<RootStateType, {}, ActionsType>) => {
-    dispatch(setPageStatus("loading"))
+    dispatch(setPageStatusAC("loading"))
     try {
         const response = await packsApi.deletePack(id)
         dispatch(getPacksTC())
     } catch (e) {
         alert(e.response.data.error)
+        dispatch(setPageStatusAC("failed"))
     }
 }
 export const createPackTC = (name: string) => async (dispatch: ThunkDispatch<RootStateType, {}, ActionsType>) => {
-    dispatch(setPageStatus("loading"))
+    dispatch(setPageStatusAC("loading"))
     try {
         const response = await packsApi.createPack({name})
         dispatch(getPacksTC(1))
     } catch (e) {
         console.log("create tc")
         alert(e.response.data.error)
+        dispatch(setPageStatusAC("failed"))
     }
 }
 //under construction
 export const updatePackTC = (name: string, _id: string) => async (dispatch: ThunkDispatch<RootStateType, {}, ActionsType>) => {
-    dispatch(setPageStatus("loading"))
+    dispatch(setPageStatusAC("loading"))
     try {
         const response = await packsApi.updatePack({name, _id})
         dispatch(getPacksTC(1))
     } catch (e) {
         alert(e.response.data.error)
+        dispatch(setPageStatusAC("failed"))
     }
 }
 
-type PacksStateType = typeof initialState
+export type PacksStateType = typeof initialState
 export type SearchParamsType = typeof initialState.searchParams
 
 
@@ -141,4 +149,5 @@ type ActionsType = ReturnType<typeof changePageAC>
     | ReturnType<typeof setPacksAC>
     | ReturnType<typeof setSearchNameAC>
     | ReturnType<typeof setSearchParamsAC>
-    | ReturnType<typeof setPageStatus>
+    | ReturnType<typeof setPageStatusAC>
+    | ReturnType<typeof setPacksSortColumnAC>

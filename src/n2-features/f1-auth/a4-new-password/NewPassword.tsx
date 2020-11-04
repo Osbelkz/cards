@@ -1,5 +1,5 @@
 import React from "react";
-import classes from "./NewPassword.module.css";
+import classes from "./NewPassword.module.scss";
 import {Input} from "../../../n1-main/m1-ui/common/Input/Input";
 import {Button} from "../../../n1-main/m1-ui/common/Button/Button";
 import NavItem from "../../../n1-main/m1-ui/common/NavItem/NavItem";
@@ -20,9 +20,9 @@ type FormikErrorType = {
 }
 
 
-const NewPassword = React.memo((props: NewPasswordPropsType) => {
-    console.log(props.isSetNewPassword, props.isOk)
-    const {token}  = useParams<{token: string}>()
+const NewPassword: React.FC<NewPasswordPropsType> = React.memo(({isLoading, handleOnSubmit, error, isOk, isSetNewPassword}) => {
+
+    const {token} = useParams<{ token: string }>()
 
     const formik = useFormik({
         initialValues: {
@@ -46,49 +46,54 @@ const NewPassword = React.memo((props: NewPasswordPropsType) => {
             return errors
         },
         onSubmit: values => {
-            props.handleOnSubmit(values.password1, token)
+            handleOnSubmit(values.password1, token)
         }
     })
 
     return (
         <div className={classes.newPassword}>
-            <form onSubmit={formik.handleSubmit}>
-                <h3>New password page</h3>
-                <Input
-                    label={"Password"}
-                    placeholder={"Please, put new password"}
-                    errorCondition={!!formik.errors.password1 && formik.touched.password1}
-                    errorText={formik.errors.password1}
-                    {...formik.getFieldProps("password1")}
+            <div className={classes.newPassword__container}>
+                <form className={classes.newPassword__form} onSubmit={formik.handleSubmit}>
+                    <div className={classes.newPassword__title}>
+                        <h3>New password page</h3>
+                    </div>
+                    <div className={classes.newPassword__inputs}>
+                        <Input
+                            label={"New password"}
+                            placeholder={"Please, put new password"}
+                            errorCondition={!!formik.errors.password1 && formik.touched.password1}
+                            errorText={formik.errors.password1}
+                            {...formik.getFieldProps("password1")}
 
-                />
-                <Input
-                    label={"Password"}
-                    placeholder={"Put new password again"}
-                    errorCondition={!!formik.errors.password2 && formik.touched.password2}
-                    errorText={formik.errors.password2}
-                    {...formik.getFieldProps("password2")}
-                />
-                <div className={classes.btn}>
-                    <Button
-                        type={"submit"}
-                        btnName={"Set new password"}
-                        disabled={props.isLoading}
-                        btnType={"green"}
-                    />
-                    <Button btnName={"Reset"} onClick={() => formik.resetForm()}/>
-                </div>
-                <NavItem path={"/login"} title={"Login"}/>
-            </form>
-            {!props.isSetNewPassword && props.error
-                ? <div className={classes.infoTextRed}>{props.error}</div>
-                : ""
-            }
-            {props.isSetNewPassword && props.isOk
-                ? <div className={classes.infoTextGreen}>{props.isOk}</div>
-                : ""
-            }
-            {props.isLoading && <div className={classes.loading}>...Loading</div>}
+                        />
+                        <Input
+                            label={"Repeat new password"}
+                            placeholder={"Put new password again"}
+                            errorCondition={!!formik.errors.password2 && formik.touched.password2}
+                            errorText={formik.errors.password2}
+                            {...formik.getFieldProps("password2")}
+                        />
+                    </div>
+                    <div className={classes.newPassword__buttons}>
+                        <Button
+                            type={"submit"}
+                            btnName={"Set new password"}
+                            disabled={!formik.isValid || (isLoading)}
+                            btnType={"green"}/>
+                        <Button btnName={"Reset"} type={"reset"} onClick={() => formik.resetForm()}/>
+                    </div>
+                    <NavItem path={"/login"} title={"Login"}/>
+                </form>
+                {!isSetNewPassword && error
+                    ? <div className={classes.infoTextRed}>{error}</div>
+                    : ""
+                }
+                {isSetNewPassword && isOk
+                    ? <div className={classes.infoTextGreen}>{isOk}</div>
+                    : ""
+                }
+                {isLoading && <div className={classes.loading}>...Loading</div>}
+            </div>
         </div>
     );
 });

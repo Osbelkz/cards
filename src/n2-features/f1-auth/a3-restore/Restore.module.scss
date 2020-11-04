@@ -1,0 +1,63 @@
+.restore {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  min-height: calc(100vh - 61px);
+
+  &__container {
+    display: flex;
+    justify-content: center;
+    width: 1000px;
+    height: inherit;
+    padding: 0 15px;
+
+  }
+
+  &__form {
+    min-width: 40%;
+    margin-top: 20px;
+    text-align: center;
+
+    .restore__title {
+    }
+
+    .restore__inputs {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+
+    .restore__buttons {
+      margin: 25px 0;
+
+      > button {
+        margin-left: 10px;
+      }
+    }
+  }
+}
+
+
+.infoTextGreen {
+  font-family: "Open Sans", sans-serif;
+  margin-top: 10px;
+  padding: 10px 20px;
+  transition: border 0.3s ease;
+  color: #00b300;
+  border: #00b300 solid 2px;
+  border-radius: 999px;
+}
+
+.infoTextRed {
+  font-family: "Open Sans", sans-serif;
+  margin-top: 10px;
+  padding: 10px 20px;
+  transition: border 0.3s ease;
+  color: #ff4d4d;
+  border: #ff4d4d solid 2px;
+  border-radius: 999px;
+}
+
+.loading {
+  color: darkorange;
+}

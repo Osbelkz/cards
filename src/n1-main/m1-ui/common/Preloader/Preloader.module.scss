@@ -1,4 +1,11 @@
 // loading animation
+
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
 .ldsFacebook {
   display: inline-block;
   position: relative;

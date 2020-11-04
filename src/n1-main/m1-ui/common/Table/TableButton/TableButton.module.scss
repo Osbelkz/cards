@@ -1,14 +1,13 @@
 .button {
   font-family: "Open Sans", sans-serif;
-  font-size: 18px;
-  font-weight: 800;
+  font-size: 16px;
+  font-weight: 600;
   line-height: 18px;
-  width: 30px;
-  height: 30px;
+  padding: 3px 7px;
   transition: border-color 0.4s ease, background-color 0.4s ease;
   color: cornflowerblue;
   border: cornflowerblue 2px solid;
-  border-radius: 50%;
+  border-radius: 999px;
   outline: none;
   background-color: #fff;
 

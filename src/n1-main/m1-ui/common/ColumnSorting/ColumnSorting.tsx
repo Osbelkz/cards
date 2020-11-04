@@ -3,15 +3,16 @@ import classes from "./ColumnSorting.module.scss";
 import {Button} from "../Button/Button";
 
 type ColumnSortingPropsType = {
-    onClick: (value: string) => void
+    onClick: (value: number) => void
 }
 
-export const ColumnSorting = (props: ColumnSortingPropsType) => {
+export const ColumnSorting: React.FC<ColumnSortingPropsType> = React.memo(({onClick}) => {
+
     const upChangeHandler = () => {
-        props.onClick("up")
+        onClick(1)
     }
     const downChangeHandler = () => {
-        props.onClick("down")
+        onClick(0)
     }
 
     return <div className={classes.container}>
@@ -26,4 +27,4 @@ export const ColumnSorting = (props: ColumnSortingPropsType) => {
             onClick={downChangeHandler}
         />
     </div>
-}
+})

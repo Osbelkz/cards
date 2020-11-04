@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import Profile from "./Profile";
 import {useDispatch, useSelector} from "react-redux";
 import {RootStateType} from "../../../n1-main/m2-bll/store";
@@ -11,11 +11,9 @@ const ProfileContainer = () => {
     const dispatch = useDispatch();
     const userData = useSelector<RootStateType, UserDataType | null>(state => state.profile.userData)
 
-
-
-    const logoutHandler = () => {
+    const logoutHandler = useCallback(() => {
         dispatch(logoutUserInAppTC())
-    }
+    }, [])
 
     if(!userData) return <div></div>
 
