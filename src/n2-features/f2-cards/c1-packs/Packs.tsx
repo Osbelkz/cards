@@ -1,5 +1,5 @@
 import classes from './Packs.module.scss';
-import React, {useCallback, useMemo} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {CardPackType} from "../../../n1-main/m3-dal/packs-api";
 import Table, {ITableModel} from '../../../n1-main/m1-ui/common/Table/Table';
 import {StatusType} from "../../../n1-main/m2-bll/reducers/app-reducer";
@@ -9,6 +9,7 @@ import { TableButton } from '../../../n1-main/m1-ui/common/Table/TableButton/Tab
 import {SearchParamsType} from "../../../n1-main/m2-bll/reducers/packs-reducer";
 import {Paginator} from "../../../n1-main/m1-ui/common/Paginator/Paginator";
 import {ColumnSorting} from "../../../n1-main/m1-ui/common/ColumnSorting/ColumnSorting";
+import {QuestionModalContainer} from "../../../n1-main/m1-ui/common/ModalWindows/QuestionModal/QuestionModalContainer";
 
 type PropsType = {
     packs: Array<CardPackType>
@@ -41,6 +42,7 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
     // console.log("packs")
 
     const sortCardsCount = useCallback((sort: number)=>setPacksSortColumn(sort+"cardsCount"),[])
+    const [showDeleteModal, setShowDeleteModal] = useState(false)
 
     const testModel: ITableModel[] = useMemo(() => ([
         {
@@ -74,7 +76,7 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
         {
             title: (i: number) => (<th style={{width: "10%", display: "flex", alignItems: "center"}} key={i}>
                 <div>Cards count</div>
-                <ColumnSorting onClick={sortCardsCount}/>
+                <ColumnSorting onClick={sortCardsCount} pageStatus={pageStatus}/>
             </th>),
             render: (d: CardPackType, i: number) => (
                 <td style={{width: "10%"}} key={i}>{d.cardsCount}</td>)
@@ -99,11 +101,16 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
                                  disabled={pageStatus === "loading" || d.cardsCount === 0}/>
                     <TableButton btnName={"x"} btnType={"red"}  onClick={() => deletePack(d._id)}
                             disabled={userId !== d.user_id || pageStatus === "loading"}/>
+                    <QuestionModalContainer text={"Delete this pack?"}
+                                            activate={showDeleteModal}
+                                            setActivate={setShowDeleteModal}
+                                            setAnswerY={() => deletePack(d._id)}
+                                            setAnswerN={() => {}} />
                 </td>
             }
         },
 
-    ]), [pageStatus]);
+    ]), [pageStatus, showDeleteModal]);
 
     return (
         <div className={classes.packs}>
@@ -118,6 +125,7 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
                             minValue={min?min:0}
                             maxValue={max?max:0}
                             stepValue={1}
+                            pageStatus={pageStatus}
                             setSearchParams={setSearchParams}/>
                     <Table data={packs}
                            model={testModel}
@@ -127,6 +135,7 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
                                pageCount={pageCount}
                                changePage={changePage}
                                changePageCount={changePageCount}
+                               pageStatus={pageStatus}
                                itemsName={"packs"} />
                 </div>
             </div>

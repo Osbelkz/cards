@@ -4,6 +4,7 @@ import {CardModal} from "./CardModal";
 type CardModalContainerPropsType = {
     question: string
     answer: string
+    activate: boolean
 }
 
 export const CardModalContainer: React.FC<CardModalContainerPropsType> = ({question, answer}) => {

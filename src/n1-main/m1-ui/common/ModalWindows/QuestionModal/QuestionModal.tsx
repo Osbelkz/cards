@@ -5,19 +5,19 @@ import {Modal} from "../Modal";
 
 type QuestionModalPropsType = {
     text: string
-    answer: string
-    setAnswer: (value: string) => void
+    setAnswerY: (value: boolean) => void
+    setAnswerN: (value: boolean) => void
     active: boolean
     setActive: (value: boolean) => void
 }
 
-export const QuestionModal: React.FC<QuestionModalPropsType> = ({text, answer, setAnswer, active, setActive}) => {
+export const QuestionModal: React.FC<QuestionModalPropsType> = ({text, setAnswerY, setAnswerN, active, setActive}) => {
     const onYesClickHandler = () => {
-        setAnswer("Yes")
+        setAnswerY(true)
         setActive(false)
     }
     const onNoClickHandler = () => {
-        setAnswer("No")
+        setAnswerN(false)
         setActive(false)
     }
 

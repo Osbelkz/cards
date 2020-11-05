@@ -26,18 +26,18 @@ export const InputModal: React.FC<InputModalType> = ({text, active, setActive, h
 
     return <div>
         <Modal active={active} setActive={setActive}>
+            <Button
+                btnName={"X"}
+                onClick={() => setActive(false)}
+                style={{position: "absolute",
+                    width: "30px",
+                    height: "30px",
+                    padding: "5px 5px",
+                    right: "10px",
+                    top: "10px"
+                }}
+            />
             <form onSubmit={formik.handleSubmit} className={classes.inputModal}>
-                <Button
-                    btnName={"X"}
-                    onClick={() => setActive(false)}
-                    style={{position: "absolute",
-                        width: "30px",
-                        height: "30px",
-                        padding: "5px 5px",
-                        right: "10px",
-                        top: "10px"
-                    }}
-                />
                 <h3>{text}</h3>
                 <textarea placeholder={"question"} {...formik.getFieldProps("question")}>
                     Question

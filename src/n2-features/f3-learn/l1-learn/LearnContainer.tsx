@@ -1,10 +1,10 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import Learn from "./Learn";
 import {useParams} from "react-router-dom";
 import {CardsStateType, getCardsTC, setPackAC} from "../../../n1-main/m2-bll/reducers/cards-reducer";
 import {RootStateType} from "../../../n1-main/m2-bll/store";
 import {CardType} from "../../../n1-main/m3-dal/cards-api";
+import Learn from './Learn';
 
 
 const getCard = (cards: CardType[]) => {
@@ -53,7 +53,7 @@ const LearnContainer: React.FC = React.memo(() => {
 
 
     return (
-        <Learn card={card} onNext={onNext}/>
+        <Learn card={card} onNext={onNext} />
     );
 });
 

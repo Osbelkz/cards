@@ -1,23 +1,23 @@
-import React, {useState} from "react";
+import React from "react";
 import {QuestionModal} from "./QuestionModal";
 
 type QuestionModalContainerPropsType = {
     text: string
+    activate: boolean
+    setActivate: (value: boolean) => void
+    setAnswerY: (value: boolean) => void
+    setAnswerN: (value: boolean) => void
 }
 
-export const QuestionModalContainer: React.FC<QuestionModalContainerPropsType> = ({text}) => {
-    const [active, setActive] = useState(false)
-    const [answer, setAnswer] = useState("")
+export const QuestionModalContainer: React.FC<QuestionModalContainerPropsType> = ({text, setAnswerY, setAnswerN, activate, setActivate}) => {
 
     return <>
-        <button onClick={() => setActive(true)}>Question modal</button>
-        {answer}
         <QuestionModal
             text={text}
-            answer={answer}
-            setAnswer={setAnswer}
-            active={active}
-            setActive={setActive}
+            setAnswerY={setAnswerY}
+            setAnswerN={setAnswerN}
+            active={activate}
+            setActive={setActivate}
         />
     </>
 }

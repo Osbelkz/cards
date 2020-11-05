@@ -1,21 +1,20 @@
-import React, {useState} from "react";
+import React from "react";
 import {InputModal} from "./InputModal";
 
 type InputModalContainerType = {
     text: string
+    setActive: (value: boolean) => void
+    active: boolean
+    createCard: (question: string, answer: string) => void
 }
 
-export const InputModalContainer: React.FC<InputModalContainerType> = ({text}) => {
-    const [active, setActive] = useState(false)
+export const InputModalContainer: React.FC<InputModalContainerType> = ({text, setActive, active, createCard}) => {
 
     return <>
-        <button onClick={() => setActive(true)}>Input modal</button>
-        {/*{`question: ${question}, answer: ${answer}, comment: ${comment}`}*/}
         <InputModal
             text={text}
             active={active}
             setActive={setActive}
-            handleOnSubmit={(question, answer, comment) => alert(question + answer + comment)}
-        />
+            handleOnSubmit={(question, answer, comment) => createCard(question, answer)}/>
     </>
 }

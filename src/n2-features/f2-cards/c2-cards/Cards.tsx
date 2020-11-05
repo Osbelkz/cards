@@ -1,5 +1,5 @@
 import classes from './Cards.module.scss';
-import React, {useCallback, useMemo} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import Table, {ITableModel} from '../../../n1-main/m1-ui/common/Table/Table';
 import {StatusType} from "../../../n1-main/m2-bll/reducers/app-reducer";
 import EditableTableCell from '../../../n1-main/m1-ui/common/Table/EditableTableCell/EditableTableCell';
@@ -9,6 +9,8 @@ import {CardsSearchParamsType} from '../../../n1-main/m2-bll/reducers/cards-redu
 import {CardType} from "../../../n1-main/m3-dal/cards-api";
 import {Paginator} from "../../../n1-main/m1-ui/common/Paginator/Paginator";
 import {ColumnSorting} from "../../../n1-main/m1-ui/common/ColumnSorting/ColumnSorting";
+import {InputModalContainer} from "../../../n1-main/m1-ui/common/ModalWindows/InputModal/InputModalContainer";
+import {QuestionModalContainer} from "../../../n1-main/m1-ui/common/ModalWindows/QuestionModal/QuestionModalContainer";
 
 type PropsType = {
     cards: Array<CardType>
@@ -20,7 +22,7 @@ type PropsType = {
     cardsTotalCount: number
     searchParams: CardsSearchParamsType
     deleteCard: (id: string) => void
-    createCard: (question: string) => void
+    createCard: (question: string, answer: string) => void
     updateCard: (cardId: string, question: string) => void
     changePage: (page: number) => void
     changePageCount: (page: number) => void
@@ -38,7 +40,8 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
         min, max, searchParams: {cardQuestion}
     } = props
     // console.log("cards")
-
+    const [showCreateModal, setShowCreateModal] = useState(false)
+    const [showDeleteModal, setShowDeleteModal] = useState(false)
     const sortGrade = useCallback((sort: number)=>setSortColumn(sort+"grade"),[])
 
     const testModel: ITableModel[] = useMemo(() => ([
@@ -79,7 +82,7 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
             title: (i: number) => (
                 <th style={{width: "15%", display: "flex", alignItems: "center"}} key={i}>
                     <div>Grade</div>
-                    <ColumnSorting onClick={sortGrade}/>
+                    <ColumnSorting onClick={sortGrade} pageStatus={pageStatus}/>
                 </th>),
             render: (d: CardType, i: number) => (
                 <td style={{width: "15%"}} key={i}>{d.grade}</td>)
@@ -87,19 +90,25 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
         {
             title: (i: number) => (
                 <th style={{width: "10%", paddingRight: "20px", textAlign: "right"}} key={i}>
-                    <TableButton btnName={"+"} btnType={"green"} onClick={() => createCard("new card")}
+                    <TableButton btnName={"+"} btnType={"green"} onClick={()=>setShowCreateModal(true)}
                                  disabled={!owner || pageStatus === "loading"}/>
                 </th>
             ),
             render: (d: CardType, i: number) => {
+
                 return <td style={{width: "10%", paddingRight: "20px", textAlign: "right"}} key={i}>
-                    <TableButton btnName={"x"} btnType={"red"} onClick={() => deleteCard(d._id)}
+                    <TableButton btnName={"x"} btnType={"red"} onClick={() => setShowDeleteModal(true)}
                                  disabled={!owner || pageStatus === "loading"}/>
+                    <QuestionModalContainer text={"Delete this card?"}
+                                            activate={showDeleteModal}
+                                            setActivate={setShowDeleteModal}
+                                            setAnswerY={() => deleteCard(d._id)}
+                                            setAnswerN={() => {}} />
                 </td>
             }
         },
 
-    ]), [pageStatus, owner]);
+    ]), [pageStatus, owner, showDeleteModal]);
 
     return (
         <div className={classes.packs}>
@@ -114,6 +123,7 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
                             minValue={min ? min : 0}
                             maxValue={max ? max : 0}
                             stepValue={1}
+                            pageStatus={pageStatus}
                             setSearchParams={setSearchParams}/>
                     <Table data={cards}
                            model={testModel}
@@ -123,8 +133,14 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
                                pageCount={pageCount}
                                changePage={changePage}
                                changePageCount={changePageCount}
+                               pageStatus={pageStatus}
                                itemsName={"cards"}/>
                 </div>
+                <InputModalContainer text={"ss"}
+                                     createCard={createCard}
+                                     setActive={setShowCreateModal}
+                                     active={showCreateModal}/>
+
             </div>
         </div>
     );
