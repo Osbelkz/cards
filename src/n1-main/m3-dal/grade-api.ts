@@ -9,7 +9,7 @@ const instance = axios.create({
     withCredentials: true,
 })
 
-export const cardsApi = {
+export const gradeApi = {
     updateCard(grade: GradeType) {
         return instance.put<{ updatedGrade: UpdateGrade }>("/cards/grade", {grade})
     }
