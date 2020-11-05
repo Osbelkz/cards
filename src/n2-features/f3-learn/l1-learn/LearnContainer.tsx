@@ -55,6 +55,6 @@ const LearnContainer: React.FC = React.memo(() => {
     return (
         <Learn card={card} onNext={onNext}/>
     );
-};
+});
 
 export default LearnContainer;

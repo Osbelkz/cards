@@ -13,7 +13,7 @@ type PropsType = {
     onNext: () => void
 }
 
-const Learn: React.FC<PropsType> = ({card}) => {
+const Learn: React.FC<PropsType> = ({card, onNext}) => {
 
     const [isChecked, setIsChecked] = useState<boolean>(false);
 
@@ -23,10 +23,6 @@ const Learn: React.FC<PropsType> = ({card}) => {
     }
 
     return (
-        <div>
-            LearnPage
-
-    return (
         <div className={classes.learn}>
             <div className={classes.learn__container}>
                 <div className={classes.card}>
@@ -34,24 +30,23 @@ const Learn: React.FC<PropsType> = ({card}) => {
                         <div className={classes.card__front}
                              onClick={() => setIsChecked(true)}>
                             <p>{card.question}</p>
-            </div>
+                        </div>
                         <div className={classes.card__back}>
                             <p>{card.answer}</p>
-                <>
-                    <div>{card.answer}</div>
+                                <div>{card.answer}</div>
 
-                    {grades.map((g, i) => (
-                                <Button key={'grade-' + i}
-                                        btnName={g}
-                    ))}
+                                {grades.map((g, i) => (
+                                    <Button key={'grade-' + i}
+                                            btnName={g}/>
+                                ))}
 
-                            <div><div className={classes.card__next_btn} onClick={onNextHandler}>next</div></div>
+                                <div className={classes.card__next_btn} onClick={onNextHandler}>next</div>
                         </div>
                     </div>
-        </div>
+                </div>
             </div>
         </div>
-    );
-})
+);
+}
 
 export default Learn;
