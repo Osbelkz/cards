@@ -1,0 +1,28 @@
+.inputModal {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+
+  textarea {
+    font-family: "Open Sans", sans-serif;
+    box-sizing: border-box;
+    min-width: 100%;
+    margin: 10px 0;
+    padding: 10px 20px;
+    transition: border 0.3s ease;
+    border: #BBC1E1 solid 2px;
+    border-radius: 999px;
+    outline: none;
+
+    :focus {
+      border-color: cornflowerblue;
+    }
+
+    ::placeholder {
+      font-family: "Open Sans", sans-serif;
+      color: #BBC1E1;
+    }
+  }
+
+}
