@@ -32,10 +32,12 @@ const CardsContainer = React.memo(() => {
         dispatch(deleteCardTC(cardId))
     }, [])
     const createCardHandler = useCallback((question: string, answer: string) => {
+        debugger
         dispatch(createCardTC({question, answer}))
     }, [])
-    const updateCardHandler = useCallback((cardId: string, question: string) => {
-        dispatch(updateCardTC({question, _id: cardId}))
+    const updateCardHandler = useCallback((cardId: string, question: string, answer: string) => {
+        debugger
+        dispatch(updateCardTC({question, _id: cardId, answer}))
     }, [])
     const changePageHandler = useCallback((page: number) => {
         dispatch(changeCardsPageAC(page))

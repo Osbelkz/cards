@@ -2,15 +2,15 @@ import classes from './Cards.module.scss';
 import React, {useCallback, useMemo, useState} from 'react';
 import Table, {ITableModel} from '../../../n1-main/m1-ui/common/Table/Table';
 import {StatusType} from "../../../n1-main/m2-bll/reducers/app-reducer";
-import EditableTableCell from '../../../n1-main/m1-ui/common/Table/EditableTableCell/EditableTableCell';
 import {Search} from "../../../n1-main/m1-ui/common/Search/Search";
 import {TableButton} from '../../../n1-main/m1-ui/common/Table/TableButton/TableButton';
 import {CardsSearchParamsType} from '../../../n1-main/m2-bll/reducers/cards-reducer';
 import {CardType} from "../../../n1-main/m3-dal/cards-api";
 import {Paginator} from "../../../n1-main/m1-ui/common/Paginator/Paginator";
 import {ColumnSorting} from "../../../n1-main/m1-ui/common/ColumnSorting/ColumnSorting";
-import {InputModalContainer} from "../../../n1-main/m1-ui/common/ModalWindows/InputModal/InputModalContainer";
 import {QuestionModalContainer} from "../../../n1-main/m1-ui/common/ModalWindows/QuestionModal/QuestionModalContainer";
+import {ThreeInputModalContainer} from "../../../n1-main/m1-ui/common/ModalWindows/ThreeInputModal/ThreeInputModalContainer";
+
 
 type PropsType = {
     cards: Array<CardType>
@@ -23,7 +23,7 @@ type PropsType = {
     searchParams: CardsSearchParamsType
     deleteCard: (id: string) => void
     createCard: (question: string, answer: string) => void
-    updateCard: (cardId: string, question: string) => void
+    updateCard: (cardId: string, question: string, answer: string) => void
     changePage: (page: number) => void
     changePageCount: (page: number) => void
     setSearchParams: (searchName?: string, min?: number, max?: number) => void
@@ -42,7 +42,8 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
     // console.log("cards")
     const [showCreateModal, setShowCreateModal] = useState(false)
     const [showDeleteModal, setShowDeleteModal] = useState(false)
-    const sortGrade = useCallback((sort: number)=>setSortColumn(sort+"grade"),[])
+    const [showEditModal, setShowEditModal] = useState(false)
+    const sortGrade = useCallback((sort: number) => setSortColumn(sort + "grade"), [])
 
     const testModel: ITableModel[] = useMemo(() => ([
         {
@@ -51,11 +52,18 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
             </th>),
             render: (d: CardType, i: number) => (
                 <td style={{width: "30%", paddingLeft: "20px"}} key={i}>
+                    {d.question}
                     {
-                        owner
-                            ? <EditableTableCell text={d.question} changeText={(text) => updateCard(d._id, text)}/>
-                            : <span>{d.question}</span>
+                        owner && <TableButton btnName={"edit"} btnType={"green"} onClick={() => setShowEditModal(true)}
+                                           disabled={!owner || pageStatus === "loading"}/>
                     }
+                    <ThreeInputModalContainer title={"ss"}
+                                              handleOnSubmit={(question, answer, comment) => updateCard(d._id, question, answer)}
+                                              setActive={setShowEditModal}
+                                              firstInputValue={d.question}
+                                              secondInputValue={d.answer}
+                                              thirdInputValue={d.comments}
+                                              active={showEditModal}/>
                 </td>)
         },
         {
@@ -90,7 +98,7 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
         {
             title: (i: number) => (
                 <th style={{width: "10%", paddingRight: "20px", textAlign: "right"}} key={i}>
-                    <TableButton btnName={"+"} btnType={"green"} onClick={()=>setShowCreateModal(true)}
+                    <TableButton btnName={"+"} btnType={"green"} onClick={() => setShowCreateModal(true)}
                                  disabled={!owner || pageStatus === "loading"}/>
                 </th>
             ),
@@ -103,12 +111,13 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
                                             activate={showDeleteModal}
                                             setActivate={setShowDeleteModal}
                                             setAnswerY={() => deleteCard(d._id)}
-                                            setAnswerN={() => {}} />
+                                            setAnswerN={() => {
+                                            }}/>
                 </td>
             }
         },
 
-    ]), [pageStatus, owner, showDeleteModal]);
+    ]), [pageStatus, owner, showDeleteModal, showEditModal]);
 
     return (
         <div className={classes.packs}>
@@ -136,11 +145,10 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
                                pageStatus={pageStatus}
                                itemsName={"cards"}/>
                 </div>
-                <InputModalContainer text={"ss"}
-                                     createCard={createCard}
-                                     setActive={setShowCreateModal}
-                                     active={showCreateModal}/>
-
+                <ThreeInputModalContainer title={"ss"}
+                                          handleOnSubmit={createCard}
+                                          setActive={setShowCreateModal}
+                                          active={showCreateModal}/>
             </div>
         </div>
     );

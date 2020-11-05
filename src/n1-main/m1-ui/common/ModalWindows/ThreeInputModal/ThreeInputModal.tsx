@@ -17,14 +17,18 @@ type InputModalType = {
 export const ThreeInputModal: React.FC<InputModalType> = ({title, firstInputValue,
                                                               secondInputValue, thirdInputValue,
                                                               active, setActive, handleOnSubmit}) => {
+
+    console.log(firstInputValue, secondInputValue, thirdInputValue)
+    
     const formik = useFormik({
         initialValues: {
-            firstInput: firstInputValue ? firstInputValue : "",
-            secondInput: secondInputValue ? secondInputValue : "",
-            thirdInput: thirdInputValue ? thirdInputValue : ""
+            question: firstInputValue || "",
+            answer: secondInputValue || "",
+            comment: thirdInputValue || ""
         },
-        onSubmit: values => {
-            handleOnSubmit(values.firstInput, values.secondInput, values.thirdInput)
+        onSubmit: (values, {resetForm}) => {
+            handleOnSubmit(values.question, values.answer, values.comment)
+            resetForm()
             setActive(false)
         }
     })
@@ -43,15 +47,9 @@ export const ThreeInputModal: React.FC<InputModalType> = ({title, firstInputValu
             />
             <form onSubmit={formik.handleSubmit} className={classes.inputModal}>
                 <h3>{title}</h3>
-                <textarea placeholder={"question"} {...formik.getFieldProps("question")} value={firstInputValue ? firstInputValue : ""}>
-                    Question
-                </textarea>
-                <textarea  placeholder={"answer"} {...formik.getFieldProps("answer")} value={secondInputValue ? secondInputValue : ""}>
-                    Answer
-                </textarea>
-                <textarea  placeholder={"comment"} {...formik.getFieldProps("comment")} value={thirdInputValue ? thirdInputValue : ""}>
-                    Comment
-                </textarea>
+                <textarea placeholder={"question"} {...formik.getFieldProps("question")} />
+                <textarea  placeholder={"answer"} {...formik.getFieldProps("answer")} />
+                <textarea  placeholder={"comment"} {...formik.getFieldProps("comment")} />
                 <div>
                     <Button
                         btnName={"Save"}
@@ -60,6 +58,7 @@ export const ThreeInputModal: React.FC<InputModalType> = ({title, firstInputValu
                     />
                     <Button
                         btnName={"Reset"}
+                        type={"reset"}
                         style={{marginLeft: "10px"}}
                         onClick={() => formik.resetForm()}
                     />

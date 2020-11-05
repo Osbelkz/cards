@@ -12,6 +12,9 @@ type InputModalContainerType = {
 }
 
 export const ThreeInputModalContainer: React.FC<InputModalContainerType> = ({title, firstInputValue, secondInputValue, thirdInputValue, active, setActive, handleOnSubmit}) => {
+
+    // console.log(firstInputValue, secondInputValue, thirdInputValue)
+
     return <ThreeInputModal
             title={title}
             firstInputValue={firstInputValue}

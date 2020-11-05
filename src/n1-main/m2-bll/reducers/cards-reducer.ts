@@ -1,7 +1,7 @@
 import {Dispatch} from "redux";
 import {RootStateType} from "../store";
 import { StatusType } from "./app-reducer";
-import {cardsApi, CardType, CreateCardType} from "../../m3-dal/cards-api";
+import {cardsApi, CardType, CreateCardType, UpdateCardType} from "../../m3-dal/cards-api";
 import {ThunkDispatch} from "redux-thunk";
 
 enum ACTION_TYPES {
@@ -145,7 +145,7 @@ export const createCardTC = (card: CreateCardType) =>
     }
 }
 //under construction
-export const updateCardTC = (card: { question: string, _id: string }) =>
+export const updateCardTC = (card: UpdateCardType) =>
     async (dispatch: ThunkDispatch<RootStateType, {}, ActionsType>) => {
     dispatch(setCardsPageStatus("loading"))
     try {
