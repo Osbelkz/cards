@@ -18,7 +18,7 @@ enum ACTION_TYPES {
 
 
 const initialState = {
-    packs: null as Array<CardPackType> | null,
+    packs: [] as Array<CardPackType>,
     cardPacksTotalCount: 0,
     page: 1,
     pageCount: 10,

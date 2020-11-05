@@ -11,7 +11,7 @@ import {Paginator} from "../../../n1-main/m1-ui/common/Paginator/Paginator";
 import {ColumnSorting} from "../../../n1-main/m1-ui/common/ColumnSorting/ColumnSorting";
 
 type PropsType = {
-    packs: Array<CardPackType> | null
+    packs: Array<CardPackType>
     userId: string | undefined
     page: number
     pageCount: number
@@ -26,6 +26,7 @@ type PropsType = {
     changePageCount: (page: number) => void
     setSearchParams: (searchName?: string, min?: number, max?: number) => void
     choosePack: (packId: string, cardsOwner: string) => void
+    startLearn: (packId: string, cardsOwner: string) => void
     setPacksSortColumn: (sortPacks: string) => void
     pageStatus: StatusType
 }
@@ -35,7 +36,7 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
         pageCount, cardPacksTotalCount, createPack,
         deletePack, updatePack, changePage, choosePack,
         changePageCount, setSearchParams, pageStatus,
-        min, max, searchParams: {packName}
+        min, max, searchParams: {packName}, startLearn
     } = props
     // console.log("packs")
 
@@ -94,6 +95,8 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
                 return <td style={{width: "15%", paddingRight: "20px", textAlign: "right"}} key={i}>
                     <TableButton btnName={"open"}  onClick={() => choosePack(d._id, d.user_id)}
                                  disabled={pageStatus === "loading"}/>
+                    <TableButton btnName={"learn"}  onClick={() => startLearn(d._id, d.user_id)}
+                                 disabled={pageStatus === "loading" || d.cardsCount === 0}/>
                     <TableButton btnName={"x"} btnType={"red"}  onClick={() => deletePack(d._id)}
                             disabled={userId !== d.user_id || pageStatus === "loading"}/>
                 </td>

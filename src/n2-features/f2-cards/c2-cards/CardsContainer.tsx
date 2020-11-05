@@ -52,6 +52,7 @@ const CardsContainer = React.memo(() => {
 
     useEffect(() => {
         dispatch(getCardsTC())
+
     }, [page, pageCount, searchParams, cardsPack_id])
 
     if (!cardsPack_id || !cards || pageStatus === "idle") {
