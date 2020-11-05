@@ -6,13 +6,13 @@ import {useFormik} from "formik";
 
 type InputModalType = {
     placeholder: string
-    text: string
+    title: string
     active: boolean
     setActive: (value: boolean) => void
     handleOnSubmit: (itemName: string) => void
 }
 
-export const OneInputModal: React.FC<InputModalType> = ({text, placeholder, active, setActive, handleOnSubmit}) => {
+export const OneInputModal: React.FC<InputModalType> = ({title, placeholder, active, setActive, handleOnSubmit}) => {
     const formik = useFormik({
         initialValues: {
             itemName: "",
@@ -23,8 +23,7 @@ export const OneInputModal: React.FC<InputModalType> = ({text, placeholder, acti
         }
     })
 
-    return <div>
-        <Modal active={active} setActive={setActive}>
+    return <Modal active={active} setActive={setActive}>
             <Button
                 btnName={"X"}
                 onClick={() => setActive(false)}
@@ -37,7 +36,7 @@ export const OneInputModal: React.FC<InputModalType> = ({text, placeholder, acti
                 }}
             />
             <form onSubmit={formik.handleSubmit} className={classes.inputModal}>
-                <h3>{text}</h3>
+                <h3>{title}</h3>
                 <textarea placeholder={placeholder} {...formik.getFieldProps("itemsName")}/>
                 <div>
                     <Button
@@ -53,5 +52,4 @@ export const OneInputModal: React.FC<InputModalType> = ({text, placeholder, acti
                 </div>
             </form>
         </Modal>
-    </div>
 }

@@ -29,8 +29,7 @@ export const ThreeInputModal: React.FC<InputModalType> = ({title, firstInputValu
         }
     })
 
-    return <div>
-        <Modal active={active} setActive={setActive}>
+    return <Modal active={active} setActive={setActive}>
             <Button
                 btnName={"X"}
                 onClick={() => setActive(false)}
@@ -67,5 +66,4 @@ export const ThreeInputModal: React.FC<InputModalType> = ({title, firstInputValu
                 </div>
             </form>
         </Modal>
-    </div>
 }

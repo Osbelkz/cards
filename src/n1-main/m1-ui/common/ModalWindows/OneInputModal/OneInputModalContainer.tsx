@@ -3,22 +3,18 @@ import {OneInputModal} from "./OneInputModal";
 
 
 type InputModalContainerType = {
-    text: string
+    title: string
     placeholder: string
+    active: boolean
+    setActive: (value: boolean) => void
+    handleOnSubmit: (itemName: string) => void
 }
 
-export const OneInputModalContainer: React.FC<InputModalContainerType> = ({text, placeholder}) => {
-    const [active, setActive] = useState(false)
-
-    return <>
-        <button onClick={() => setActive(true)}>OneInput modal</button>
-        {/*{`question: ${question}, answer: ${answer}, comment: ${comment}`}*/}
-        <OneInputModal
-            text={text}
+export const OneInputModalContainer: React.FC<InputModalContainerType> = ({title, placeholder, active, setActive, handleOnSubmit}) => {
+    return <OneInputModal
+            title={title}
             placeholder={placeholder}
             active={active}
             setActive={setActive}
-            handleOnSubmit={(itemName) => alert(itemName)}
-        />
-    </>
+            handleOnSubmit={handleOnSubmit}/>
 }
