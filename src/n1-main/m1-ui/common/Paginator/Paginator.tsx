@@ -2,6 +2,7 @@ import React, {ChangeEvent, useState} from "react";
 import classes from "./Paginator.module.scss";
 import {Button} from "../Button/Button";
 import {Input} from "../Input/Input";
+import {StatusType} from "../../../m2-bll/reducers/app-reducer";
 
 type PaginatorPropsType = {
     currentPage: number
@@ -10,10 +11,11 @@ type PaginatorPropsType = {
     changePage: (page: number) => void
     changePageCount: (page: number) => void
     itemsName: string
+    pageStatus: StatusType
 }
 
 export const Paginator: React.FC<PaginatorPropsType> =
-    React.memo(({currentPage, pageCount, changePageCount, changePage, itemsName, itemsTotalCount}) => {
+    React.memo(({currentPage, pageCount, changePageCount, changePage, itemsName, itemsTotalCount, pageStatus}) => {
     const [pageNumber, setPageNumber] = useState(currentPage)
     let pageAmount = Math.ceil(itemsTotalCount / pageCount)
 
@@ -28,6 +30,7 @@ export const Paginator: React.FC<PaginatorPropsType> =
     const pageChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setPageNumber(+e.currentTarget.value)
     }
+
     const pageSetHandler = () => {
         if (pageNumber < 1) {
             changePage(1)
@@ -44,10 +47,16 @@ export const Paginator: React.FC<PaginatorPropsType> =
         setPageNumber(pageNumber + 1)
     }
 
+    const onKeyPressHandler = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        if (e.key === 'Enter') {
+            pageSetHandler()
+        }
+    }
+
     return <div className={classes.paginator}>
         <div className={classes.leftBlock}>
             {`Total ${itemsName}: ${itemsTotalCount}. ${itemsName} per page:`}
-            <select onChange={pageCountChangeHandler} value={pageCount}>
+            <select onChange={pageCountChangeHandler} value={pageCount} disabled={pageStatus === "loading"}>
                 <option>10</option>
                 <option>20</option>
                 <option>50</option>
@@ -58,7 +67,7 @@ export const Paginator: React.FC<PaginatorPropsType> =
             <Button
                 btnName={`Prev`}
                 onClick={onePreviousPage}
-                disabled={currentPage < 2}
+                disabled={currentPage < 2 || pageStatus === "loading"}
             />
             {`Page: `}
             {pageNumber < 1}
@@ -68,12 +77,14 @@ export const Paginator: React.FC<PaginatorPropsType> =
                    max={pageAmount}
                    onChange={pageChangeHandler}
                    onBlur={pageSetHandler}
+                   onKeyPress={onKeyPressHandler}
+                   disabled={pageStatus === "loading"}
             />
             of {pageAmount}
             <Button
                 btnName={`Next`}
                 onClick={oneNextPage}
-                disabled={currentPage === pageAmount}
+                disabled={currentPage === pageAmount || pageStatus === "loading"}
             />
         </div>
     </div>
