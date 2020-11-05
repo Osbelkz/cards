@@ -3,6 +3,7 @@ import {RootStateType} from "../store";
 import { StatusType } from "./app-reducer";
 import {cardsApi, CardType, CreateCardType} from "../../m3-dal/cards-api";
 import {ThunkDispatch} from "redux-thunk";
+import {gradeApi, GradeType} from "../../m3-dal/grade-api";
 
 enum ACTION_TYPES {
     CHANGE_PAGE = "cards/CHANGE_PAGE",
@@ -156,6 +157,18 @@ export const updateCardTC = (card: { question: string, _id: string }) =>
         dispatch(setCardsPageStatus("failed"))
     }
 }
+
+export const updateGradeTC = (grade:number, card_id: string) =>
+    async (dispatch: ThunkDispatch<RootStateType, {}, ActionsType>) => {
+        dispatch(setCardsPageStatus("loading"))
+        console.log(grade, card_id)
+        try {
+            const response = await gradeApi.updateCard(grade, card_id)
+        } catch (e) {
+            alert(e.response.data.error)
+            dispatch(setCardsPageStatus("failed"))
+        }
+    }
 
 export type CardsStateType = typeof initialState
 export type CardsSearchParamsType = typeof initialState.searchParams

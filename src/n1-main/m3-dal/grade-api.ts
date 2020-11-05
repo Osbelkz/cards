@@ -10,8 +10,8 @@ const instance = axios.create({
 })
 
 export const gradeApi = {
-    updateCard(grade: GradeType) {
-        return instance.put<{ updatedGrade: UpdateGrade }>("/cards/grade", {grade})
+    updateCard(grade:number, card_id: string) {
+        return instance.put<{ updatedGrade: UpdateGrade }>("/cards/grade", {grade, card_id})
     }
 }
 
