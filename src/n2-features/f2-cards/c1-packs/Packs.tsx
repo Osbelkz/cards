@@ -1,5 +1,5 @@
 import classes from './Packs.module.scss';
-import React, {useMemo} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {CardPackType} from "../../../n1-main/m3-dal/packs-api";
 import Table, {ITableModel} from '../../../n1-main/m1-ui/common/Table/Table';
 import {StatusType} from "../../../n1-main/m2-bll/reducers/app-reducer";
@@ -7,12 +7,12 @@ import EditableTableCell from '../../../n1-main/m1-ui/common/Table/EditableTable
 import {Search} from "../../../n1-main/m1-ui/common/Search/Search";
 import { TableButton } from '../../../n1-main/m1-ui/common/Table/TableButton/TableButton';
 import {SearchParamsType} from "../../../n1-main/m2-bll/reducers/packs-reducer";
-import CardsContainer from "../c2-cards/CardsContainer";
 import {Paginator} from "../../../n1-main/m1-ui/common/Paginator/Paginator";
 import {ColumnSorting} from "../../../n1-main/m1-ui/common/ColumnSorting/ColumnSorting";
+import {QuestionModalContainer} from "../../../n1-main/m1-ui/common/ModalWindows/QuestionModal/QuestionModalContainer";
 
 type PropsType = {
-    packs: Array<CardPackType> | null
+    packs: Array<CardPackType>
     userId: string | undefined
     page: number
     pageCount: number
@@ -27,6 +27,7 @@ type PropsType = {
     changePageCount: (page: number) => void
     setSearchParams: (searchName?: string, min?: number, max?: number) => void
     choosePack: (packId: string, cardsOwner: string) => void
+    startLearn: (packId: string, cardsOwner: string) => void
     setPacksSortColumn: (sortPacks: string) => void
     pageStatus: StatusType
 }
@@ -36,17 +37,20 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
         pageCount, cardPacksTotalCount, createPack,
         deletePack, updatePack, changePage, choosePack,
         changePageCount, setSearchParams, pageStatus,
-        min, max, searchParams: {packName}
+        min, max, searchParams: {packName}, startLearn
     } = props
     // console.log("packs")
 
+    const sortCardsCount = useCallback((sort: number)=>setPacksSortColumn(sort+"cardsCount"),[])
+    const [showDeleteModal, setShowDeleteModal] = useState(false)
+
     const testModel: ITableModel[] = useMemo(() => ([
         {
-            title: (i: number) => (<th style={{width: "30%", padding: "10px 0 10px 20px"}} key={i}>
+            title: (i: number) => (<th style={{width: "30%", paddingLeft: "20px"}} key={i}>
                 <div>Name</div>
             </th>),
             render: (d: CardPackType, i: number) => (
-                <td style={{width: "30%", padding: "10px 10px 10px 20px"}} key={i}>
+                <td style={{width: "30%", paddingLeft: "20px"}} key={i}>
                     {
                         userId === d.user_id
                             ? <EditableTableCell text={d.name} changeText={(text) => updatePack(text, d._id)}/>
@@ -55,7 +59,7 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
                 </td>)
         },
         {
-            title: (i: number) => (<th style={{width: "15%", padding: "10px 0"}} key={i}>
+            title: (i: number) => (<th style={{width: "15%"}} key={i}>
                 <div>Added</div>
             </th>),
             render: (d: CardPackType, i: number) => {
@@ -65,41 +69,48 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
                 let month = dm.getMonth() < 10 ? "0" + dm.getMonth() : dm.getMonth()
                 let day = dm.getDay() < 10 ? "0" + dm.getDay() : dm.getDay()
 
-                return <td style={{width: "15%", padding: "10px 0"}} key={i}>{`${year}-${month}-${day}`}</td>
+                return <td style={{width: "15%"}} key={i}>{`${year}-${month}-${day}`}</td>
             }
 
         },
         {
-            title: (i: number) => (<th style={{width: "10%", padding: "10px 0", display: "flex", alignItems: "center"}} key={i}>
+            title: (i: number) => (<th style={{width: "10%", display: "flex", alignItems: "center"}} key={i}>
                 <div>Cards count</div>
-                <ColumnSorting onClick={(sort)=>setPacksSortColumn(sort+"cardsCount")}/>
+                <ColumnSorting onClick={sortCardsCount} pageStatus={pageStatus}/>
             </th>),
             render: (d: CardPackType, i: number) => (
-                <td style={{width: "10%", padding: "10px 0"}} key={i}>{d.cardsCount}</td>)
+                <td style={{width: "10%"}} key={i}>{d.cardsCount}</td>)
         },
         {
-            title: (i: number) => (<th style={{width: "25%", padding: "10px 0"}} key={i}>Owner</th>),
+            title: (i: number) => (<th style={{width: "25%"}} key={i}>Owner</th>),
             render: (d: CardPackType, i: number) => (
-                <td style={{width: "25%", padding: "10px 0"}} key={i}>{d.user_name}</td>)
+                <td style={{width: "25%"}} key={i}>{d.user_name}</td>)
         },
         {
             title: (i: number) => (
-                <th style={{width: "15%", padding: "10px 20px 10px 0", textAlign: "right"}} key={i}>
+                <th style={{width: "15%", paddingRight: "20px", textAlign: "right"}} key={i}>
                     <TableButton btnName={"+"} btnType={"green"} onClick={() => createPack("new pack")}
                                  disabled={pageStatus === "loading"}/>
                 </th>
             ),
             render: (d: CardPackType, i: number) => {
-                return <td style={{width: "15%", padding: "10px 20px 10px 0", textAlign: "right"}} key={i}>
+                return <td style={{width: "15%", paddingRight: "20px", textAlign: "right"}} key={i}>
                     <TableButton btnName={"open"}  onClick={() => choosePack(d._id, d.user_id)}
                                  disabled={pageStatus === "loading"}/>
+                    <TableButton btnName={"learn"}  onClick={() => startLearn(d._id, d.user_id)}
+                                 disabled={pageStatus === "loading" || d.cardsCount === 0}/>
                     <TableButton btnName={"x"} btnType={"red"}  onClick={() => deletePack(d._id)}
                             disabled={userId !== d.user_id || pageStatus === "loading"}/>
+                    <QuestionModalContainer text={"Delete this pack?"}
+                                            activate={showDeleteModal}
+                                            setActivate={setShowDeleteModal}
+                                            setAnswerY={() => deletePack(d._id)}
+                                            setAnswerN={() => {}} />
                 </td>
             }
         },
 
-    ]), [pageStatus]);
+    ]), [pageStatus, showDeleteModal]);
 
     return (
         <div className={classes.packs}>
@@ -114,17 +125,17 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
                             minValue={min?min:0}
                             maxValue={max?max:0}
                             stepValue={1}
+                            pageStatus={pageStatus}
                             setSearchParams={setSearchParams}/>
                     <Table data={packs}
                            model={testModel}
                            pageStatus={pageStatus}/>
-                </div>
-                <div>
                     <Paginator currentPage={page}
                                itemsTotalCount={cardPacksTotalCount}
                                pageCount={pageCount}
                                changePage={changePage}
                                changePageCount={changePageCount}
+                               pageStatus={pageStatus}
                                itemsName={"packs"} />
                 </div>
             </div>

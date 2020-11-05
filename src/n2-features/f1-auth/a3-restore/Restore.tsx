@@ -1,5 +1,5 @@
 import React from "react";
-import classes from "./Restore.module.css";
+import classes from "./Restore.module.scss";
 import {Input} from "../../../n1-main/m1-ui/common/Input/Input";
 import {Button} from "../../../n1-main/m1-ui/common/Button/Button";
 import NavItem from "../../../n1-main/m1-ui/common/NavItem/NavItem";
@@ -16,7 +16,7 @@ type FormikErrorType = {
     email?: string
 }
 
-const Restore = React.memo((props: RestorePropsType) => {
+const Restore: React.FC<RestorePropsType> = React.memo(({handleOnSubmit, isLoading, isSentSuccess, textAfterRequest}) => {
 
     const formik = useFormik({
         initialValues: {
@@ -32,36 +32,42 @@ const Restore = React.memo((props: RestorePropsType) => {
             return errors
         },
         onSubmit: values => {
-            props.handleOnSubmit(values.email)
+            handleOnSubmit(values.email)
         }
     })
 
     return (
         <div className={classes.restore}>
-            <form onSubmit={formik.handleSubmit}>
-                <h3>Restore password page</h3>
-                <Input
-                    label={"Email"}
-                    placeholder={"Please, put your email"}
-                    errorCondition={!!formik.errors.email && formik.touched.email}
-                    errorText={formik.errors.email}
-                    {...formik.getFieldProps("email")}
-                />
-                <div className={classes.btn}>
-                    <Button
-                        type={"submit"}
-                        btnName={"Send email"}
-                        disabled={props.isLoading}
-                        btnType={"green"}
-                    />
-                    <Button btnName={"Reset"} onClick={() => formik.resetForm()}/>
-                </div>
-                <NavItem path={"/login"} title={"Login"}/>
-            </form>
-            {props.textAfterRequest && <div className={
-                props.isSentSuccess ? classes.infoTextGreen : classes.infoTextRed
-            }>{props.textAfterRequest}</div>}
-            {props.isLoading && <div className={classes.loading}>...Loading</div>}
+            <div className={classes.restore__container}>
+                <form className={classes.restore__form} onSubmit={formik.handleSubmit}>
+                    <div className={classes.restore__title}>
+                        <h3>Restore password</h3>
+                    </div>
+                    <div className={classes.restore__inputs}>
+                        <Input
+                            label={"Email"}
+                            placeholder={"Please, put your email"}
+                            errorCondition={!!formik.errors.email && formik.touched.email}
+                            errorText={formik.errors.email}
+                            {...formik.getFieldProps("email")}
+                        />
+                    </div>
+                    <div className={classes.restore__buttons}>
+                        <Button
+                            type={"submit"}
+                            btnName={"Send email"}
+                            disabled={!formik.isValid || (isLoading) || !formik.values.email}
+                            btnType={"green"}/>
+                        <Button btnName={"Reset"} type={"reset"} onClick={() => formik.resetForm()}/>
+                    </div>
+                    <NavItem path={"/login"} title={"Login"}/>
+                    {textAfterRequest && <div className={
+                        isSentSuccess ? classes.infoTextGreen : classes.infoTextRed
+                    }>{textAfterRequest}</div>}
+                    {isLoading && <div className={classes.loading}>...Loading</div>}
+                </form>
+
+            </div>
         </div>
     );
 });

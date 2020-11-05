@@ -1,0 +1,23 @@
+.sideQ {
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+
+  .buttons {
+    margin-bottom: 150px;
+  }
+}
+
+.sideA {
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  .gradeButtons>button {
+    margin-left: 10px;
+  }
+}

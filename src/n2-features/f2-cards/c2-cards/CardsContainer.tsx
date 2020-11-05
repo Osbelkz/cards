@@ -31,8 +31,8 @@ const CardsContainer = React.memo(() => {
     const deleteCardHandler = useCallback((cardId: string) => {
         dispatch(deleteCardTC(cardId))
     }, [])
-    const createCardHandler = useCallback((question: string) => {
-        dispatch(createCardTC({question}))
+    const createCardHandler = useCallback((question: string, answer: string) => {
+        dispatch(createCardTC({question, answer}))
     }, [])
     const updateCardHandler = useCallback((cardId: string, question: string) => {
         dispatch(updateCardTC({question, _id: cardId}))
@@ -52,6 +52,7 @@ const CardsContainer = React.memo(() => {
 
     useEffect(() => {
         dispatch(getCardsTC())
+
     }, [page, pageCount, searchParams, cardsPack_id])
 
     if (!cardsPack_id || !cards || pageStatus === "idle") {
