@@ -9,7 +9,8 @@ import {CardType} from "../../../n1-main/m3-dal/cards-api";
 import {Paginator} from "../../../n1-main/m1-ui/common/Paginator/Paginator";
 import {ColumnSorting} from "../../../n1-main/m1-ui/common/ColumnSorting/ColumnSorting";
 import {QuestionModalContainer} from "../../../n1-main/m1-ui/common/ModalWindows/QuestionModal/QuestionModalContainer";
-import {ThreeInputModalContainer} from "../../../n1-main/m1-ui/common/ModalWindows/ThreeInputModal/ThreeInputModalContainer";
+import { ThreeInputModal } from '../../../n1-main/m1-ui/common/ModalWindows/ThreeInputModal/ThreeInputModal';
+import moment from "moment";
 
 
 type PropsType = {
@@ -57,12 +58,12 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
                         owner && <TableButton btnName={"edit"} btnType={"green"} onClick={() => setShowEditModal(true)}
                                            disabled={!owner || pageStatus === "loading"}/>
                     }
-                    <ThreeInputModalContainer title={"ss"}
+                    <ThreeInputModal title={"ss"}
                                               handleOnSubmit={(question, answer, comment) => updateCard(d._id, question, answer)}
                                               setActive={setShowEditModal}
                                               firstInputValue={d.question}
                                               secondInputValue={d.answer}
-                                              thirdInputValue={d.comments}
+                                                thirdInputValue={d.comments}
                                               active={showEditModal}/>
                 </td>)
         },
@@ -76,13 +77,7 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
                 <span>Added</span>
             </th>),
             render: (d: CardType, i: number) => {
-
-                let dm = new Date(d.created)
-                let year = dm.getFullYear()
-                let month = dm.getMonth() < 10 ? "0" + dm.getMonth() : dm.getMonth()
-                let day = dm.getDay() < 10 ? "0" + dm.getDay() : dm.getDay()
-
-                return <td style={{width: "15%"}} key={i}>{`${year}-${month}-${day}`}</td>
+                return <td style={{width: "15%"}} key={i}>{moment(d.created).format('Do MMM YY')}</td>
             }
 
         },
@@ -111,8 +106,7 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
                                             activate={showDeleteModal}
                                             setActivate={setShowDeleteModal}
                                             setAnswerY={() => deleteCard(d._id)}
-                                            setAnswerN={() => {
-                                            }}/>
+                                            setAnswerN={() => {}}/>
                 </td>
             }
         },
@@ -145,7 +139,7 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
                                pageStatus={pageStatus}
                                itemsName={"cards"}/>
                 </div>
-                <ThreeInputModalContainer title={"ss"}
+                <ThreeInputModal title={"Create card"}
                                           handleOnSubmit={createCard}
                                           setActive={setShowCreateModal}
                                           active={showCreateModal}/>

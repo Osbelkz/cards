@@ -110,7 +110,7 @@ export const deletePackTC = (id: string) => async (dispatch: ThunkDispatch<RootS
     dispatch(setPageStatusAC("loading"))
     try {
         const response = await packsApi.deletePack(id)
-        dispatch(getPacksTC())
+        await dispatch(getPacksTC())
     } catch (e) {
         alert(e.response.data.error)
         dispatch(setPageStatusAC("failed"))
@@ -120,9 +120,8 @@ export const createPackTC = (name: string) => async (dispatch: ThunkDispatch<Roo
     dispatch(setPageStatusAC("loading"))
     try {
         const response = await packsApi.createPack({name})
-        dispatch(getPacksTC(1))
+        await dispatch(getPacksTC(1))
     } catch (e) {
-        console.log("create tc")
         alert(e.response.data.error)
         dispatch(setPageStatusAC("failed"))
     }
@@ -132,7 +131,7 @@ export const updatePackTC = (name: string, _id: string) => async (dispatch: Thun
     dispatch(setPageStatusAC("loading"))
     try {
         const response = await packsApi.updatePack({name, _id})
-        dispatch(getPacksTC(1))
+        await dispatch(getPacksTC(1))
     } catch (e) {
         alert(e.response.data.error)
         dispatch(setPageStatusAC("failed"))

@@ -1,9 +1,8 @@
 import {Dispatch} from "redux";
 import {RootStateType} from "../store";
 import { StatusType } from "./app-reducer";
-import {cardsApi, CardType, CreateCardType, UpdateCardType} from "../../m3-dal/cards-api";
+import {cardsApi, CardType, CreateCardType, GradeType, UpdateCardType} from "../../m3-dal/cards-api";
 import {ThunkDispatch} from "redux-thunk";
-import {gradeApi, GradeType} from "../../m3-dal/grade-api";
 
 enum ACTION_TYPES {
     CHANGE_PAGE = "cards/CHANGE_PAGE",
@@ -14,6 +13,7 @@ enum ACTION_TYPES {
     SET_IS_LOADING = "cards/SET_IS_LOADING",
     SET_PACK_ID = "cards/SET_PACK_ID",
     SET_SORT_COLUMN = "cards/SET_SORT_COLUMN",
+    SET_CARD_IS_LOADING = "cards/SET_CARD_IS_LOADING",
 }
 
 
@@ -27,6 +27,7 @@ const initialState = {
     minGrade: undefined as undefined | number,
     maxGrade: undefined as undefined | number,
     pageStatus: "idle" as StatusType,
+    cardIsLoading: false,
     searchParams: {
         cardQuestion: "" as undefined | string,
         cardAnswer: "" as undefined | string,
@@ -43,6 +44,7 @@ export const cardsReducer = (state: CardsStateType = initialState, action: Actio
         case ACTION_TYPES.SET_IS_LOADING:
         case ACTION_TYPES.SET_PACK_ID:
         case ACTION_TYPES.SET_CARDS:
+        case ACTION_TYPES.SET_CARD_IS_LOADING:
             return {
                 ...state, ...action.payload,
             }
@@ -87,7 +89,9 @@ export const setPackAC = (cardsPack_id: string, cardsOwner: string) => {
 export const setCardsSortColumnParamsAC = (sortCards: string) => {
     return {type: ACTION_TYPES.SET_SORT_COLUMN, payload: {sortCards}} as const
 }
-
+export const setCardIsLoadingAC = (cardIsLoading: boolean) => {
+    return {type: ACTION_TYPES.SET_CARD_IS_LOADING, payload: {cardIsLoading}} as const
+}
 
 // thunks
 
@@ -104,7 +108,6 @@ export const getCardsTC = (selectedPage?: number, pageCountLearn?: number) => as
             max,
             sortCards
         })
-        console.log(response.data)
         dispatch(setCardsAC(response.data.cards,
             response.data.cardsTotalCount,
             response.data.minGrade,
@@ -114,7 +117,7 @@ export const getCardsTC = (selectedPage?: number, pageCountLearn?: number) => as
         // console.log(getState().cards)
     } catch (e) {
         // console.log("get packs tc")
-        alert(e.response.data.error)
+        // alert(e.response.data.error)
         dispatch(setCardsPageStatus("failed"))
     } finally {
 
@@ -128,7 +131,7 @@ export const deleteCardTC = (cardId: string) =>
         const response = await cardsApi.deleteCard(cardId)
         dispatch(getCardsTC())
     } catch (e) {
-        alert(e.response.data.error)
+        // alert(e.response.data.error)
         dispatch(setCardsPageStatus("failed"))
     }
 }
@@ -141,7 +144,7 @@ export const createCardTC = (card: CreateCardType) =>
         dispatch(getCardsTC(1))
     } catch (e) {
         // console.log("create tc")
-        alert(e.response.data.error)
+        // alert(e.response.data.error)
         dispatch(setCardsPageStatus("failed"))
     }
 }
@@ -153,19 +156,20 @@ export const updateCardTC = (card: UpdateCardType) =>
         const response = await cardsApi.updateCard(card)
         dispatch(getCardsTC(1))
     } catch (e) {
-        alert(e.response.data.error)
+        // alert(e.response.data.error)
         dispatch(setCardsPageStatus("failed"))
     }
 }
 
-export const updateGradeTC = (grade:number, card_id: string) =>
+export const updateGradeTC = (card: GradeType) =>
     async (dispatch: ThunkDispatch<RootStateType, {}, ActionsType>) => {
-        dispatch(setCardsPageStatus("loading"))
-        console.log(grade, card_id)
+        dispatch(setCardIsLoadingAC(true))
         try {
-            const response = await gradeApi.updateCard(grade, card_id)
+            const response = await cardsApi.gradeCard(card)
+            await dispatch(getCardsTC(1, 100))
+            dispatch(setCardIsLoadingAC(false))
         } catch (e) {
-            alert(e.response.data.error)
+            // alert(e.response.data.error)
             dispatch(setCardsPageStatus("failed"))
         }
     }
@@ -182,4 +186,4 @@ type ActionsType = ReturnType<typeof changeCardsPageAC>
     | ReturnType<typeof setCardsPageStatus>
     | ReturnType<typeof setPackAC>
     | ReturnType<typeof setCardsSortColumnParamsAC>
-
+    | ReturnType<typeof setCardIsLoadingAC>

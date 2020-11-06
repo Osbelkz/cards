@@ -10,6 +10,8 @@ import {SearchParamsType} from "../../../n1-main/m2-bll/reducers/packs-reducer";
 import {Paginator} from "../../../n1-main/m1-ui/common/Paginator/Paginator";
 import {ColumnSorting} from "../../../n1-main/m1-ui/common/ColumnSorting/ColumnSorting";
 import {QuestionModalContainer} from "../../../n1-main/m1-ui/common/ModalWindows/QuestionModal/QuestionModalContainer";
+import { OneInputModal } from '../../../n1-main/m1-ui/common/ModalWindows/OneInputModal/OneInputModal';
+import moment from "moment";
 
 type PropsType = {
     packs: Array<CardPackType>
@@ -42,7 +44,8 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
     // console.log("packs")
 
     const sortCardsCount = useCallback((sort: number)=>setPacksSortColumn(sort+"cardsCount"),[])
-    const [showDeleteModal, setShowDeleteModal] = useState(false)
+    const [showDeletePackModal, setShowDeletePackModal] = useState(false)
+    const [showCreatePackModal, setShowCreatePackModal] = useState(false)
 
     const testModel: ITableModel[] = useMemo(() => ([
         {
@@ -64,12 +67,7 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
             </th>),
             render: (d: CardPackType, i: number) => {
 
-                let dm = new Date(d.created)
-                let year = dm.getFullYear()
-                let month = dm.getMonth() < 10 ? "0" + dm.getMonth() : dm.getMonth()
-                let day = dm.getDay() < 10 ? "0" + dm.getDay() : dm.getDay()
-
-                return <td style={{width: "15%"}} key={i}>{`${year}-${month}-${day}`}</td>
+                return <td style={{width: "15%"}} key={i}>{moment(d.created).format('Do MMM YY')}</td>
             }
 
         },
@@ -89,7 +87,7 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
         {
             title: (i: number) => (
                 <th style={{width: "15%", paddingRight: "20px", textAlign: "right"}} key={i}>
-                    <TableButton btnName={"+"} btnType={"green"} onClick={() => createPack("new pack")}
+                    <TableButton btnName={"+"} btnType={"green"} onClick={() => setShowCreatePackModal(true)}
                                  disabled={pageStatus === "loading"}/>
                 </th>
             ),
@@ -102,15 +100,15 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
                     <TableButton btnName={"x"} btnType={"red"}  onClick={() => deletePack(d._id)}
                             disabled={userId !== d.user_id || pageStatus === "loading"}/>
                     <QuestionModalContainer text={"Delete this pack?"}
-                                            activate={showDeleteModal}
-                                            setActivate={setShowDeleteModal}
+                                            activate={showDeletePackModal}
+                                            setActivate={setShowDeletePackModal}
                                             setAnswerY={() => deletePack(d._id)}
                                             setAnswerN={() => {}} />
                 </td>
             }
         },
 
-    ]), [pageStatus, showDeleteModal]);
+    ]), [pageStatus, showDeletePackModal, showCreatePackModal]);
 
     return (
         <div className={classes.packs}>
@@ -139,7 +137,12 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
                                itemsName={"packs"} />
                 </div>
             </div>
-
+            <OneInputModal title={"Create pack"}
+                                    placeholder={"please type a pack name"}
+                                    active={showCreatePackModal}
+                                    setActive={setShowCreatePackModal}
+                                    handleOnSubmit={createPack}
+                                    />
         </div>
     );
 })

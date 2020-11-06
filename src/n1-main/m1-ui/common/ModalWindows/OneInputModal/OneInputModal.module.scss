@@ -3,7 +3,7 @@
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-
+  width: 400px;
   textarea {
     font-family: "Open Sans", sans-serif;
     box-sizing: border-box;
@@ -12,9 +12,11 @@
     padding: 10px 20px;
     transition: border 0.3s ease;
     border: #BBC1E1 solid 2px;
-    border-radius: 999px;
+    border-radius: 10px;
     outline: none;
-
+    resize: vertical;
+    min-height: 50px;
+    max-height: 200px;
     :focus {
       border-color: cornflowerblue;
     }

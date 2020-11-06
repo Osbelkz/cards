@@ -9,6 +9,7 @@ import AuthRedirect from "../common/AuthRedirect/AuthRedirect";
 import PacksContainer from "../../../n2-features/f2-cards/c1-packs/PacksContainer";
 import CardsContainer from "../../../n2-features/f2-cards/c2-cards/CardsContainer";
 import LearnContainer from "../../../n2-features/f3-learn/l1-learn/LearnContainer";
+import {PageNotFound} from "../common/Page404/PageNotFound";
 
 const Routes = () => {
     return (
@@ -21,7 +22,8 @@ const Routes = () => {
             <Route path={"/packs"} render={() => <AuthRedirect><PacksContainer/></AuthRedirect>}/>
             <Route path={"/cards/:packId"} render={() => <AuthRedirect><CardsContainer/></AuthRedirect>}/>
             <Route path={"/learn/:packId"} render={() => <AuthRedirect><LearnContainer/></AuthRedirect>}/>
-            <Route path={"/"} render={() => <AuthRedirect><ProfileContainer/></AuthRedirect>}/>
+            <Route exact path={"/"} render={() => <AuthRedirect><ProfileContainer/></AuthRedirect>}/>
+            <Route path={"*"} render={() => <PageNotFound/>}/>
         </Switch>
     );
 };

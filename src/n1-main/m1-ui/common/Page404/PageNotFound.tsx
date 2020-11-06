@@ -1,9 +1,9 @@
 import React from "react";
 import classes from "./PageNotFound.module.css";
-import {Button} from "../../../n1-main/m1-ui/common/Button/Button";
+import {Button} from "../Button/Button";
 import {useHistory} from 'react-router-dom';
 import {useSelector} from "react-redux";
-import {RootStateType} from "../../../n1-main/m2-bll/store";
+import {RootStateType} from "../../../m2-bll/store";
 
 export const PageNotFound = () => {
 

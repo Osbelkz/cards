@@ -20,9 +20,25 @@ export const cardsApi = {
     },
     updateCard(card: UpdateCardType) {
         return instance.put<{ updatedCard: CardType }>("/cards/card", {card})
+    },
+    gradeCard(card: GradeType) {
+        return instance.put<{ updatedGrade: UpdateGrade }>("/cards/grade", card)
     }
 }
 
+export type GradeType = {
+    grade: number
+    card_id: string
+}
+
+export type UpdateGrade = {
+    _id: string
+    cardsPack_id: string
+    card_id: string
+    user_id: string
+    grade: number
+    shot: number
+}
 type QueryParamsCardsType = {
     cardsPack_id: string
     cardAnswer?: string
@@ -48,19 +64,23 @@ type ResponsePacksType = {
 
 }
 export type CardType = {
+    cardsPack_id: string,
     _id: string
     user_id: string
+    more_id: string
+    question: string,
+    questionImg: ""
+    questionVideo: ""
+    answer: string,
+    answerImg: ""
+    answerVideo: ""
     grade: number // средняя оценка карточек
     shots: number // количество попыток
     rating: number // лайки
-    type: "card"
     created: string
     updated: string
+    type: "card"
     __v: number
-    more_id: string
-    cardsPack_id: string,
-    answer: string,
-    question: string,
     comments: string,
 }
 

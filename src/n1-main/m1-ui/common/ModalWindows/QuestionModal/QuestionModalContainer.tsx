@@ -10,7 +10,6 @@ type QuestionModalContainerPropsType = {
 }
 
 export const QuestionModalContainer: React.FC<QuestionModalContainerPropsType> = ({text, setAnswerY, setAnswerN, activate, setActivate}) => {
-
     return <>
         <QuestionModal
             text={text}

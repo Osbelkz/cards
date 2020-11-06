@@ -15,10 +15,10 @@ type InputModalType = {
 export const OneInputModal: React.FC<InputModalType> = ({title, placeholder, active, setActive, handleOnSubmit}) => {
     const formik = useFormik({
         initialValues: {
-            itemName: "",
+            itemsName: "",
         },
         onSubmit: values => {
-            handleOnSubmit(values.itemName)
+            handleOnSubmit(values.itemsName)
             setActive(false)
         }
     })
