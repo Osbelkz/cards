@@ -17,9 +17,6 @@ const initialState = {
 export const appReducer = (state: AppStateType = initialState, action: ActionsType): AppStateType => {
     switch (action.type) {
         case ACTION_TYPE.SET_APP_ERROR:
-            return {
-                ...state, ...action.payload
-            }
         case ACTION_TYPE.SET_INIT_APP:
             return {
                 ...state, ...action.payload
@@ -50,7 +47,7 @@ export const authMeTC = () => async (dispatch: Dispatch, getState: () => RootSta
         dispatch(setValueIsLoggedSuccess(true))
         dispatch(setInitAppAC("succeeded"))
     } catch (e) {
-        dispatch(setAppErrorAC(e.response ? e.response.data.error : "unknown error"))
+        // dispatch(setAppErrorAC(e.response ? e.response.data.error : "unknown error"))
         dispatch(setInitAppAC("failed"))
         dispatch(setErrorText(e.response ? e.response.data.error : "unknown error"))
     }

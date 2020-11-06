@@ -3,6 +3,7 @@ import {Dispatch} from "redux";
 import {RootStateType} from "../store";
 import { StatusType } from "./app-reducer";
 import { ThunkDispatch } from "redux-thunk";
+import {setCardsPageStatus} from "./cards-reducer";
 
 enum ACTION_TYPES {
     CHANGE_PAGE = "packs/CHANGE_PAGE",
@@ -17,7 +18,7 @@ enum ACTION_TYPES {
 
 
 const initialState = {
-    packs: null as Array<CardPackType> | null,
+    packs: [] as Array<CardPackType>,
     cardPacksTotalCount: 0,
     page: 1,
     pageCount: 10,
@@ -109,19 +110,20 @@ export const deletePackTC = (id: string) => async (dispatch: ThunkDispatch<RootS
     dispatch(setPageStatusAC("loading"))
     try {
         const response = await packsApi.deletePack(id)
-        dispatch(getPacksTC())
+        await dispatch(getPacksTC())
     } catch (e) {
         alert(e.response.data.error)
+        dispatch(setPageStatusAC("failed"))
     }
 }
 export const createPackTC = (name: string) => async (dispatch: ThunkDispatch<RootStateType, {}, ActionsType>) => {
     dispatch(setPageStatusAC("loading"))
     try {
         const response = await packsApi.createPack({name})
-        dispatch(getPacksTC(1))
+        await dispatch(getPacksTC(1))
     } catch (e) {
-        console.log("create tc")
         alert(e.response.data.error)
+        dispatch(setPageStatusAC("failed"))
     }
 }
 //under construction
@@ -129,13 +131,14 @@ export const updatePackTC = (name: string, _id: string) => async (dispatch: Thun
     dispatch(setPageStatusAC("loading"))
     try {
         const response = await packsApi.updatePack({name, _id})
-        dispatch(getPacksTC(1))
+        await dispatch(getPacksTC(1))
     } catch (e) {
         alert(e.response.data.error)
+        dispatch(setPageStatusAC("failed"))
     }
 }
 
-type PacksStateType = typeof initialState
+export type PacksStateType = typeof initialState
 export type SearchParamsType = typeof initialState.searchParams
 
 
