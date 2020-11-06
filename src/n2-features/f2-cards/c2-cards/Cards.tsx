@@ -12,7 +12,6 @@ import { ThreeInputModal } from '../../../n1-main/m1-ui/common/ModalWindows/Thre
 import moment from "moment";
 import RemoveBTN from "../../../n1-main/m1-ui/common/Table/RemoveBTN/RemoveBTN";
 import { TableButton } from '../../../n1-main/m1-ui/common/Table/TableButton/TableButton';
-import OpenBTN from "../../../n1-main/m1-ui/common/Table/OpenBTN/OpenBTN";
 import EditBTN from "../../../n1-main/m1-ui/common/Table/EditBTN/EditBTN";
 
 
@@ -80,7 +79,7 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
                     <ColumnSorting onClick={sortGrade} pageStatus={pageStatus}/>
                 </th>),
             render: (d: CardType, i: number) => (
-                <td style={{width: "15%"}} key={i}>{d.grade}</td>)
+                <td style={{width: "15%"}} key={i}>{d.grade.toFixed(2)}</td>)
         },
         {
             title: (i: number) => (
