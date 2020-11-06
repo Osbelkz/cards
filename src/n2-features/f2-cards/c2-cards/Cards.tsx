@@ -3,7 +3,6 @@ import React, {useCallback, useMemo, useState} from 'react';
 import Table, {ITableModel} from '../../../n1-main/m1-ui/common/Table/Table';
 import {StatusType} from "../../../n1-main/m2-bll/reducers/app-reducer";
 import {Search} from "../../../n1-main/m1-ui/common/Search/Search";
-import {TableButton} from '../../../n1-main/m1-ui/common/Table/TableButton/TableButton';
 import {CardsSearchParamsType} from '../../../n1-main/m2-bll/reducers/cards-reducer';
 import {CardType} from "../../../n1-main/m3-dal/cards-api";
 import {Paginator} from "../../../n1-main/m1-ui/common/Paginator/Paginator";
@@ -11,6 +10,8 @@ import {ColumnSorting} from "../../../n1-main/m1-ui/common/ColumnSorting/ColumnS
 import {QuestionModalContainer} from "../../../n1-main/m1-ui/common/ModalWindows/QuestionModal/QuestionModalContainer";
 import { ThreeInputModal } from '../../../n1-main/m1-ui/common/ModalWindows/ThreeInputModal/ThreeInputModal';
 import moment from "moment";
+import RemoveBTN from "../../../n1-main/m1-ui/common/Table/RemoveBTN/RemoveBTN";
+import { TableButton } from '../../../n1-main/m1-ui/common/Table/TableButton/TableButton';
 
 
 type PropsType = {
@@ -99,8 +100,8 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
             ),
             render: (d: CardType, i: number) => {
 
-                return <td style={{width: "10%", paddingRight: "20px", textAlign: "right"}} key={i}>
-                    <TableButton btnName={"x"} btnType={"red"} onClick={() => setShowDeleteModal(true)}
+                return <td style={{width: "15%", textAlign: "right"}} key={i}>
+                    <RemoveBTN btnName={""} onClick={() => setShowDeleteModal(true)}
                                  disabled={!owner || pageStatus === "loading"}/>
                     <QuestionModalContainer text={"Delete this card?"}
                                             activate={showDeleteModal}

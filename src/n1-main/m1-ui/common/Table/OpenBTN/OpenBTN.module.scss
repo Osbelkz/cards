@@ -1,0 +1,21 @@
+.btn_open {
+  min-height: 50px;
+  border: none;
+  outline: none;
+  background-color: #BBC1E1;
+  cursor: pointer;
+
+  > img {
+    height: 40px;
+  }
+
+  &:hover {
+    color: white;
+    background-color: cornflowerblue;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    background-color: #B2B2B2;
+  }
+}

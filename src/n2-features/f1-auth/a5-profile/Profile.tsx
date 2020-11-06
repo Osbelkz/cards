@@ -2,6 +2,7 @@ import React from 'react';
 import classes from "./Profile.module.css";
 import {Button} from "../../../n1-main/m1-ui/common/Button/Button";
 import { UserDataType } from '../../../n1-main/m3-dal/auth-api';
+import RemoveBTN from '../../../n1-main/m1-ui/common/Table/RemoveBTN/RemoveBTN';
 
 type PropsType = {
     userData: UserDataType

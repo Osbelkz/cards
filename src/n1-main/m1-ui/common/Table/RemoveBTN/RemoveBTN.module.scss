@@ -1,0 +1,20 @@
+.btn_remove {
+  min-height: 100%;
+  border: none;
+  outline: none;
+  background-color: #ffb3b3;
+  cursor: pointer;
+  > img {
+    height: 40px;
+  }
+
+  &:hover {
+    color: white;
+    background-color: #ff4d4d;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    background-color: #B2B2B2;
+  }
+}

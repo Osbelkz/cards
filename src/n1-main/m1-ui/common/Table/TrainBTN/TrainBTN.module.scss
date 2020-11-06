@@ -1,0 +1,21 @@
+.btn_train {
+  min-height: 100%;
+  border: none;
+  outline: none;
+  background-color: #8fb38f;
+  cursor: pointer;
+  > img {
+    padding: 5px;
+    height: 35px;
+  }
+
+  &:hover {
+    color: white;
+    background-color: #00b300;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    background-color: #B2B2B2;
+  }
+}

@@ -12,6 +12,9 @@ import {ColumnSorting} from "../../../n1-main/m1-ui/common/ColumnSorting/ColumnS
 import {QuestionModalContainer} from "../../../n1-main/m1-ui/common/ModalWindows/QuestionModal/QuestionModalContainer";
 import { OneInputModal } from '../../../n1-main/m1-ui/common/ModalWindows/OneInputModal/OneInputModal';
 import moment from "moment";
+import RemoveBTN from "../../../n1-main/m1-ui/common/Table/RemoveBTN/RemoveBTN";
+import OpenBTN from "../../../n1-main/m1-ui/common/Table/OpenBTN/OpenBTN";
+import TrainBTN from "../../../n1-main/m1-ui/common/Table/TrainBTN/TrainBTN";
 
 type PropsType = {
     packs: Array<CardPackType>
@@ -92,13 +95,14 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
                 </th>
             ),
             render: (d: CardPackType, i: number) => {
-                return <td style={{width: "15%", paddingRight: "20px", textAlign: "right"}} key={i}>
-                    <TableButton btnName={"open"}  onClick={() => choosePack(d._id, d.user_id)}
+                return <td style={{width: "15%", textAlign: "right", minHeight: "100%", display: "flex"}} key={i}>
+                    <OpenBTN btnName={""}  onClick={() => choosePack(d._id, d.user_id)}
                                  disabled={pageStatus === "loading"}/>
-                    <TableButton btnName={"learn"}  onClick={() => startLearn(d._id, d.user_id)}
+                    <TrainBTN btnName={""}  onClick={() => startLearn(d._id, d.user_id)}
                                  disabled={pageStatus === "loading" || d.cardsCount === 0}/>
-                    <TableButton btnName={"x"} btnType={"red"}  onClick={() => deletePack(d._id)}
-                            disabled={userId !== d.user_id || pageStatus === "loading"}/>
+                    <RemoveBTN btnName={""}
+                               onClick={() => deletePack(d._id)}
+                               disabled={userId !== d.user_id || pageStatus === "loading"}/>
                     <QuestionModalContainer text={"Delete this pack?"}
                                             activate={showDeletePackModal}
                                             setActivate={setShowDeletePackModal}
