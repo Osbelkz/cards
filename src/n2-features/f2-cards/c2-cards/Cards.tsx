@@ -12,6 +12,8 @@ import { ThreeInputModal } from '../../../n1-main/m1-ui/common/ModalWindows/Thre
 import moment from "moment";
 import RemoveBTN from "../../../n1-main/m1-ui/common/Table/RemoveBTN/RemoveBTN";
 import { TableButton } from '../../../n1-main/m1-ui/common/Table/TableButton/TableButton';
+import OpenBTN from "../../../n1-main/m1-ui/common/Table/OpenBTN/OpenBTN";
+import EditBTN from "../../../n1-main/m1-ui/common/Table/EditBTN/EditBTN";
 
 
 type PropsType = {
@@ -54,18 +56,7 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
             </th>),
             render: (d: CardType, i: number) => (
                 <td style={{width: "30%", paddingLeft: "20px"}} key={i}>
-                    {d.question}
-                    {
-                        owner && <TableButton btnName={"edit"} btnType={"green"} onClick={() => setShowEditModal(true)}
-                                           disabled={!owner || pageStatus === "loading"}/>
-                    }
-                    <ThreeInputModal title={"ss"}
-                                              handleOnSubmit={(question, answer, comment) => updateCard(d._id, question, answer)}
-                                              setActive={setShowEditModal}
-                                              firstInputValue={d.question}
-                                              secondInputValue={d.answer}
-                                                thirdInputValue={d.comments}
-                                              active={showEditModal}/>
+                    <div>{d.question}</div>
                 </td>)
         },
         {
@@ -100,7 +91,9 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
             ),
             render: (d: CardType, i: number) => {
 
-                return <td style={{width: "15%", textAlign: "right"}} key={i}>
+                return <td style={{width: "15%", textAlign: "right", minHeight: "100%", display: "flex"}} key={i}>
+                    <EditBTN btnName={"edit"} onClick={() => setShowEditModal(true)}
+                                 disabled={!owner || pageStatus === "loading"}/>
                     <RemoveBTN btnName={""} onClick={() => setShowDeleteModal(true)}
                                  disabled={!owner || pageStatus === "loading"}/>
                     <QuestionModalContainer text={"Delete this card?"}
@@ -108,6 +101,13 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
                                             setActivate={setShowDeleteModal}
                                             setAnswerY={() => deleteCard(d._id)}
                                             setAnswerN={() => {}}/>
+                    <ThreeInputModal title={"ss"}
+                                     handleOnSubmit={(question, answer, comment) => updateCard(d._id, question, answer)}
+                                     setActive={setShowEditModal}
+                                     firstInputValue={d.question}
+                                     secondInputValue={d.answer}
+                                     thirdInputValue={d.comments}
+                                     active={showEditModal}/>
                 </td>
             }
         },
