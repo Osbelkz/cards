@@ -6,12 +6,12 @@ import {Slider} from "../Slider/Slider";
 import {StatusType} from "../../../m2-bll/reducers/app-reducer";
 
 type SearchPropsType = {
-    name: string | undefined
+    name: string
     label: string
     minValue: number
     maxValue: number
     stepValue: number
-    setSearchParams: (searchName?: string, min?: number, max?: number) => void
+    setSearchParams: (searchName: string, min: number, max: number) => void
     pageStatus: StatusType
 }
 
@@ -19,12 +19,12 @@ export const Search: React.FC<SearchPropsType> =
     React.memo(({name, minValue, maxValue, label, stepValue, setSearchParams, pageStatus}) => {
 
 
-        const [searchValue, setSearchValue] = useState(name)
+        const [searchValue, setSearchValue] = useState<string>(name)
         const [min, setMin] = useState(minValue)
         const [max, setMax] = useState(maxValue)
 
         const inputOnChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-            setSearchValue(e.currentTarget.value)
+            setSearchValue(e.currentTarget.value as string)
         }, [])
 
         const onSearchClick = useCallback(() => {

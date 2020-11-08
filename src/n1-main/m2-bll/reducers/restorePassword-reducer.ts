@@ -4,9 +4,9 @@ import {authAPI} from "../../m3-dal/auth-api";
 export type RestorePasswordStateType = typeof initialState
 
 const initialState = {
-    isSentSuccess: false as boolean,
-    textAfterRequest: "" as string,
-    isLoading: false as boolean
+    isSentSuccess: false,
+    textAfterRequest: "",
+    isLoading: false
 }
 
 export const restorePasswordReducer = (state = initialState, action: ActionsType): RestorePasswordStateType => {

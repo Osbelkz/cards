@@ -25,16 +25,16 @@ const initialState = {
     cardsTotalCount: 0,
     page: 1,
     pageCount: 10,
-    minGrade: undefined as undefined | number,
-    maxGrade: undefined as undefined | number,
+    minGrade: 0,
+    maxGrade: 0,
     pageStatus: "idle" as StatusType,
     cardIsLoading: false,
     searchParams: {
-        cardQuestion: "" as undefined | string,
-        cardAnswer: "" as undefined | string,
-        sortCards: "" as undefined | string,
-        min: undefined as undefined | number,
-        max: undefined as undefined | number,
+        cardQuestion: "",
+        cardAnswer: "",
+        sortCards: "",
+        min: 0,
+        max: 0,
     }
 }
 
@@ -85,7 +85,7 @@ const setCardsAC = (cards: Array<CardType>, cardsTotalCount: number, minGrade: n
 export const setCardsSearchQuestionAC = (question: string) => {
     return {type: ACTION_TYPES.SET_SEARCH_NAME, payload: {question}} as const
 }
-export const setCardsSearchParamsAC = (cardQuestion?: string, min?: number, max?: number) => {
+export const setCardsSearchParamsAC = (cardQuestion: string, min: number, max: number) => {
     return {type: ACTION_TYPES.SET_SEARCH_PARAMS, payload: {cardQuestion, min, max}} as const
 }
 export const setCardsPageStatus = (pageStatus: StatusType) => {

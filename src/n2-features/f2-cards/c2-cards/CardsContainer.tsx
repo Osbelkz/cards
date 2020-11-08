@@ -43,7 +43,7 @@ const CardsContainer = React.memo(() => {
     const changePageCountHandler = useCallback((pageCount: number) => {
         dispatch(changeCardsPageCountAC(pageCount))
     }, [])
-    const setSearchParamsHandler = useCallback((cardQuestion?: string, min?: number, max?: number) => {
+    const setSearchParamsHandler = useCallback((cardQuestion: string, min: number, max: number) => {
         dispatch(setCardsSearchParamsAC(cardQuestion, min, max))
     }, [])
     const setSortColumnHandler = useCallback((sortCards: string) => {

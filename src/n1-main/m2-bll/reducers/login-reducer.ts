@@ -6,9 +6,9 @@ import {setInitAppAC} from "./app-reducer";
 export type LoginStateType = typeof initialState
 
 const initialState = {
-    isLoading: false as boolean,
-    isLoggedSuccess: false as boolean,
-    error: "" as string
+    isLoading: false,
+    isLoggedSuccess: false,
+    error: ""
 }
 
 export const loginReducer = (state = initialState, action: ActionsType): LoginStateType => {

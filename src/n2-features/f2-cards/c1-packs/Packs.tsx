@@ -21,8 +21,8 @@ type PropsType = {
     userId: string | undefined
     page: number
     pageCount: number
-    min: number | undefined
-    max: number | undefined
+    min: number
+    max: number
     cardPacksTotalCount: number
     searchParams: SearchParamsType
     deletePack: (id: string) => void
@@ -30,7 +30,7 @@ type PropsType = {
     updatePack: (name: string, id: string) => void
     changePage: (page: number) => void
     changePageCount: (page: number) => void
-    setSearchParams: (searchName?: string, min?: number, max?: number) => void
+    setSearchParams: (searchName: string, min: number, max: number) => void
     choosePack: (packId: string, cardsOwner: string) => void
     startLearn: (packId: string, cardsOwner: string) => void
     setPacksSortColumn: (sortPacks: string) => void

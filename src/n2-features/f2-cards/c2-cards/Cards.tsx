@@ -20,8 +20,8 @@ type PropsType = {
     owner: boolean
     page: number
     pageCount: number
-    min: number | undefined
-    max: number | undefined
+    min: number
+    max: number
     cardsTotalCount: number
     searchParams: CardsSearchParamsType
     deleteCard: (id: string) => void
@@ -29,7 +29,7 @@ type PropsType = {
     updateCard: (cardId: string, question: string, answer: string) => void
     changePage: (page: number) => void
     changePageCount: (page: number) => void
-    setSearchParams: (searchName?: string, min?: number, max?: number) => void
+    setSearchParams: (searchName: string, min: number, max: number) => void
     pageStatus: StatusType
     setSortColumn: (sortCards: string) => void
 }
@@ -123,8 +123,8 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
                 <div className={classes.packs__body}>
                     <Search name={cardQuestion}
                             label={"Search"}
-                            minValue={min ? min : 0}
-                            maxValue={max ? max : 0}
+                            minValue={min}
+                            maxValue={max}
                             stepValue={1}
                             pageStatus={pageStatus}
                             setSearchParams={setSearchParams}/>
