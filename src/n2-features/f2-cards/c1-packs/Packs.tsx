@@ -44,7 +44,6 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
         changePageCount, setSearchParams, pageStatus,
         min, max, searchParams: {packName}, startLearn
     } = props
-    // console.log("packs")
 
     const sortCardsCount = useCallback((sort: number)=>setPacksSortColumn(sort+"cardsCount"),[])
     const [showDeletePackModal, setShowDeletePackModal] = useState(false)

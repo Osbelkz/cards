@@ -60,6 +60,8 @@ const LearnContainer: React.FC = React.memo(() => {
         setIsChecked(false)
     }, [cards])
 
+    console.log(cards)
+
     return (
         <Learn card={card}
                onNext={onNext}

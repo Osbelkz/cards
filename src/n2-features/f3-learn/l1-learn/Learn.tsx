@@ -19,6 +19,8 @@ type PropsType = {
 
 const Learn: React.FC<PropsType> = React.memo(({card, onNext, gradeCard, isLoading, isChecked, flipCard}) => {
 
+    console.log(card)
+
     const onGradeButtonHandler = (grade: number) => {
         gradeCard(card._id, grade)
     }

@@ -55,7 +55,7 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
             </th>),
             render: (d: CardType, i: number) => (
                 <td style={{width: "30%", paddingLeft: "20px"}} key={i}>
-                    <div>{d.question}</div>
+                    <p>{d.question}</p>
                 </td>)
         },
         {

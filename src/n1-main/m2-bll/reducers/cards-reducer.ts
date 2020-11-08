@@ -14,6 +14,7 @@ enum ACTION_TYPES {
     SET_PACK_ID = "cards/SET_PACK_ID",
     SET_SORT_COLUMN = "cards/SET_SORT_COLUMN",
     SET_CARD_IS_LOADING = "cards/SET_CARD_IS_LOADING",
+    UPDATE_GRADE = "cards/UPDATE_GRADE",
 }
 
 
@@ -57,6 +58,13 @@ export const cardsReducer = (state: CardsStateType = initialState, action: Actio
             return {
                 ...state, searchParams: {...state.searchParams, ...action.payload}
             }
+        case ACTION_TYPES.UPDATE_GRADE:
+            return {
+                ...state,
+                cards: state.cards.map(
+                    card => card._id === action.payload.card_id ? {...card, ...action.payload} : card
+                )
+            }
         default:
             return state
     }
@@ -92,6 +100,10 @@ export const setCardsSortColumnParamsAC = (sortCards: string) => {
 export const setCardIsLoadingAC = (cardIsLoading: boolean) => {
     return {type: ACTION_TYPES.SET_CARD_IS_LOADING, payload: {cardIsLoading}} as const
 }
+export const updateCardGradeAC = (card_id: string, grade: number, shots: number) => {
+    return {type: ACTION_TYPES.UPDATE_GRADE, payload: {card_id, grade, shots}} as const
+}
+
 
 // thunks
 
@@ -135,6 +147,7 @@ export const deleteCardTC = (cardId: string) =>
         dispatch(setCardsPageStatus("failed"))
     }
 }
+
 export const createCardTC = (card: CreateCardType) =>
     async (dispatch: ThunkDispatch<RootStateType, {}, ActionsType>, getState: () => RootStateType) => {
     dispatch(setCardsPageStatus("loading"))
@@ -166,11 +179,11 @@ export const updateGradeTC = (card: GradeType) =>
         dispatch(setCardIsLoadingAC(true))
         try {
             const response = await cardsApi.gradeCard(card)
-            await dispatch(getCardsTC(1, 100))
+            let {data: {updatedGrade: {card_id, grade, shots}}} = response
+            dispatch(updateCardGradeAC(card_id, grade, shots))
             dispatch(setCardIsLoadingAC(false))
         } catch (e) {
-            // alert(e.response.data.error)
-            dispatch(setCardsPageStatus("failed"))
+
         }
     }
 
@@ -187,3 +200,4 @@ type ActionsType = ReturnType<typeof changeCardsPageAC>
     | ReturnType<typeof setPackAC>
     | ReturnType<typeof setCardsSortColumnParamsAC>
     | ReturnType<typeof setCardIsLoadingAC>
+    | ReturnType<typeof updateCardGradeAC>
