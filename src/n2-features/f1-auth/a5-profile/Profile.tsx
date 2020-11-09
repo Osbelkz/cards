@@ -1,15 +1,14 @@
 import React from 'react';
 import classes from "./Profile.module.css";
-import {Button} from "../../../n1-main/m1-ui/common/Button/Button";
 import { UserDataType } from '../../../n1-main/m3-dal/auth-api';
-import RemoveBTN from '../../../n1-main/m1-ui/common/Table/RemoveBTN/RemoveBTN';
+import NavItem from "../../../n1-main/m1-ui/common/NavItem/NavItem";
+
 
 type PropsType = {
     userData: UserDataType
-    logout: () => void
 }
 
-const Profile: React.FC<PropsType> = ({userData, logout}) => {
+const Profile: React.FC<PropsType> = ({userData}) => {
 
     return (
         <div className={classes.profile}>
@@ -42,12 +41,9 @@ const Profile: React.FC<PropsType> = ({userData, logout}) => {
                             <td>{userData.publicCardPacksCount}</td>
                         </tr>
                         </tbody>
-
                     </table>
                 </div>
-                <div className={classes.profile__buttons}>
-                    <Button onClick={logout} btnName={"Logout"} btnType={"red"}/>
-                </div>
+                <h4>Would you like change your password? Go here <NavItem path={"/restore"} title={"Restore password"}/></h4>
             </div>
         </div>
     );

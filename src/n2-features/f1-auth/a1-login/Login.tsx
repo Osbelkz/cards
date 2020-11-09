@@ -3,6 +3,7 @@ import classes from "./Login.module.scss";
 import {Input} from "../../../n1-main/m1-ui/common/Input/Input";
 import {Button} from "../../../n1-main/m1-ui/common/Button/Button";
 import {useFormik} from "formik";
+import NavItem from "../../../n1-main/m1-ui/common/NavItem/NavItem";
 
 type RestorePropsType = {
     isLoggedSuccess: boolean,
@@ -84,6 +85,7 @@ const Login: React.FC<RestorePropsType> = React.memo(({error, isLoading, handleO
                     />
                     <Button btnName={"Reset"} type={"reset"} onClick={() => formik.resetForm()}/>
                 </div>
+                <NavItem path={"/restore"} title={"Forgot your password?"}/>
                 {error && <div className={classes.infoTextRed}>{error}</div>}
                 {isLoading && <div className={classes.loading}>...Loading</div>}
             </form>
