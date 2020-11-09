@@ -35,5 +35,5 @@ const Table: React.FC<ITableProps> = React.memo(({model, data, pageStatus}) => {
         </table>
     );
 })
-
+// just a init commit
 export default Table;
