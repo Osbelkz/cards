@@ -13,8 +13,6 @@ enum ACTION_TYPES {
     SET_IS_LOADING = "cards/SET_IS_LOADING",
     SET_PACK_ID = "cards/SET_PACK_ID",
     SET_SORT_COLUMN = "cards/SET_SORT_COLUMN",
-    SET_CARD_IS_LOADING = "cards/SET_CARD_IS_LOADING",
-    UPDATE_GRADE = "cards/UPDATE_GRADE",
 }
 
 
@@ -28,7 +26,6 @@ const initialState = {
     minGrade: 0,
     maxGrade: 0,
     pageStatus: "idle" as StatusType,
-    cardIsLoading: false,
     searchParams: {
         cardQuestion: "",
         cardAnswer: "",
@@ -45,7 +42,6 @@ export const cardsReducer = (state: CardsStateType = initialState, action: Actio
         case ACTION_TYPES.SET_IS_LOADING:
         case ACTION_TYPES.SET_PACK_ID:
         case ACTION_TYPES.SET_CARDS:
-        case ACTION_TYPES.SET_CARD_IS_LOADING:
             return {
                 ...state, ...action.payload,
             }
@@ -57,13 +53,6 @@ export const cardsReducer = (state: CardsStateType = initialState, action: Actio
         case ACTION_TYPES.SET_SORT_COLUMN:
             return {
                 ...state, searchParams: {...state.searchParams, ...action.payload}
-            }
-        case ACTION_TYPES.UPDATE_GRADE:
-            return {
-                ...state,
-                cards: state.cards.map(
-                    card => card._id === action.payload.card_id ? {...card, ...action.payload} : card
-                )
             }
         default:
             return state
@@ -97,24 +86,17 @@ export const setPackAC = (cardsPack_id: string, cardsOwner: string) => {
 export const setCardsSortColumnParamsAC = (sortCards: string) => {
     return {type: ACTION_TYPES.SET_SORT_COLUMN, payload: {sortCards}} as const
 }
-export const setCardIsLoadingAC = (cardIsLoading: boolean) => {
-    return {type: ACTION_TYPES.SET_CARD_IS_LOADING, payload: {cardIsLoading}} as const
-}
-export const updateCardGradeAC = (card_id: string, grade: number, shots: number) => {
-    return {type: ACTION_TYPES.UPDATE_GRADE, payload: {card_id, grade, shots}} as const
-}
-
 
 // thunks
 
-export const getCardsTC = (selectedPage?: number, pageCountLearn?: number) => async (dispatch: Dispatch, getState: () => RootStateType) => {
+export const getCardsTC = (selectedPage?: number) => async (dispatch: Dispatch, getState: () => RootStateType) => {
     const {cardsPack_id, page, pageCount, searchParams: {cardQuestion, min, max, sortCards}} = getState().cards
     dispatch(setCardsPageStatus("loading"))
     try {
         const response = await cardsApi.getPack({
             cardsPack_id,
             page: selectedPage || page,
-            pageCount: pageCountLearn || pageCount,
+            pageCount,
             cardQuestion,
             min,
             max,
@@ -174,18 +156,6 @@ export const updateCardTC = (card: UpdateCardType) =>
     }
 }
 
-export const updateGradeTC = (card: GradeType) =>
-    async (dispatch: ThunkDispatch<RootStateType, {}, ActionsType>) => {
-        dispatch(setCardIsLoadingAC(true))
-        try {
-            const response = await cardsApi.gradeCard(card)
-            let {data: {updatedGrade: {card_id, grade, shots}}} = response
-            dispatch(updateCardGradeAC(card_id, grade, shots))
-            dispatch(setCardIsLoadingAC(false))
-        } catch (e) {
-
-        }
-    }
 
 export type CardsStateType = typeof initialState
 export type CardsSearchParamsType = typeof initialState.searchParams
@@ -199,5 +169,3 @@ type ActionsType = ReturnType<typeof changeCardsPageAC>
     | ReturnType<typeof setCardsPageStatus>
     | ReturnType<typeof setPackAC>
     | ReturnType<typeof setCardsSortColumnParamsAC>
-    | ReturnType<typeof setCardIsLoadingAC>
-    | ReturnType<typeof updateCardGradeAC>

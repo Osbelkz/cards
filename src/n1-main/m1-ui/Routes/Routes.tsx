@@ -8,8 +8,8 @@ import NewPasswordContainer from "../../../n2-features/f1-auth/a4-new-password/N
 import AuthRedirect from "../common/AuthRedirect/AuthRedirect";
 import PacksContainer from "../../../n2-features/f2-cards/c1-packs/PacksContainer";
 import CardsContainer from "../../../n2-features/f2-cards/c2-cards/CardsContainer";
-import LearnContainer from "../../../n2-features/f3-learn/l1-learn/LearnContainer";
 import {PageNotFound} from "../common/Page404/PageNotFound";
+import PracticeContainer from "../../../n2-features/f3-learn/l1-practice/PracticeContainer";
 
 const Routes = () => {
     return (
@@ -21,7 +21,7 @@ const Routes = () => {
             <Route path={"/newPassword/:token"} render={() => <NewPasswordContainer/>}/>
             <Route path={"/packs"} render={() => <AuthRedirect><PacksContainer/></AuthRedirect>}/>
             <Route path={"/cards/:packId"} render={() => <AuthRedirect><CardsContainer/></AuthRedirect>}/>
-            <Route path={"/learn/:packId"} render={() => <AuthRedirect><LearnContainer/></AuthRedirect>}/>
+            <Route path={"/learn/:packId"} render={() => <AuthRedirect><PracticeContainer/></AuthRedirect>}/>
             <Route exact path={"/"} render={() => <AuthRedirect><ProfileContainer/></AuthRedirect>}/>
             <Route path={"*"} render={() => <PageNotFound/>}/>
         </Switch>
