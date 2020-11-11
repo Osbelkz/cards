@@ -60,7 +60,7 @@ export const ThreeInputModal: React.FC<InputModalType> = ({title, firstInputValu
                         btnName={"Reset"}
                         type={"reset"}
                         style={{marginLeft: "10px"}}
-                        onClick={() => formik.resetForm()}
+                        onClick={() => formik.setValues({question: "", answer: "", comment: ""})}
                     />
                 </div>
             </form>
