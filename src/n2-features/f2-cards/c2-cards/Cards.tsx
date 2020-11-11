@@ -7,12 +7,9 @@ import {CardsSearchParamsType} from '../../../n1-main/m2-bll/reducers/cards-redu
 import {CardType} from "../../../n1-main/m3-dal/cards-api";
 import {Paginator} from "../../../n1-main/m1-ui/common/Paginator/Paginator";
 import {ColumnSorting} from "../../../n1-main/m1-ui/common/ColumnSorting/ColumnSorting";
-import {QuestionModalContainer} from "../../../n1-main/m1-ui/common/ModalWindows/QuestionModal/QuestionModalContainer";
-import { ThreeInputModal } from '../../../n1-main/m1-ui/common/ModalWindows/ThreeInputModal/ThreeInputModal';
 import moment from "moment";
-import RemoveBTN from "../../../n1-main/m1-ui/common/Table/RemoveBTN/RemoveBTN";
-import { TableButton } from '../../../n1-main/m1-ui/common/Table/TableButton/TableButton';
-import EditBTN from "../../../n1-main/m1-ui/common/Table/EditBTN/EditBTN";
+import {CardButtonsBlock} from "../../../n1-main/m1-ui/common/Table/CardButtonsBlock";
+import {AddCardBlock} from "../../../n1-main/m1-ui/common/Table/AddCardBlock";
 
 
 type PropsType = {
@@ -42,10 +39,7 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
         changePageCount, setSearchParams, pageStatus,
         min, max, searchParams: {cardQuestion}
     } = props
-    // console.log("cards")
-    const [showCreateModal, setShowCreateModal] = useState(false)
-    const [showDeleteModal, setShowDeleteModal] = useState(false)
-    const [showEditModal, setShowEditModal] = useState(false)
+
     const sortGrade = useCallback((sort: number) => setSortColumn(sort + "grade"), [])
 
     const testModel: ITableModel[] = useMemo(() => ([
@@ -84,39 +78,27 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
         {
             title: (i: number) => (
                 <th style={{width: "10%", paddingRight: "20px", textAlign: "right"}} key={i}>
-                    <TableButton btnName={"+"} btnType={"green"} onClick={() => setShowCreateModal(true)}
-                                 disabled={!owner || pageStatus === "loading"}/>
+                    <AddCardBlock createCard={createCard} pageStatus={pageStatus} owner={owner}/>
                 </th>
             ),
             render: (d: CardType, i: number) => {
 
                 return <td style={{width: "15%", textAlign: "right", minHeight: "100%", display: "flex"}} key={i}>
-                    <EditBTN btnName={"edit"} onClick={() => setShowEditModal(true)}
-                                 disabled={!owner || pageStatus === "loading"}/>
-                    <RemoveBTN btnName={""} onClick={() => setShowDeleteModal(true)}
-                                 disabled={!owner || pageStatus === "loading"}/>
-                    <QuestionModalContainer text={"Delete this card?"}
-                                            activate={showDeleteModal}
-                                            setActivate={setShowDeleteModal}
-                                            setAnswerY={() => deleteCard(d._id)}
-                                            setAnswerN={() => {}}/>
-                    <ThreeInputModal title={"ss"}
-                                     handleOnSubmit={(question, answer, comment) => updateCard(d._id, question, answer)}
-                                     setActive={setShowEditModal}
-                                     firstInputValue={d.question}
-                                     secondInputValue={d.answer}
-                                     thirdInputValue={d.comments}
-                                     active={showEditModal}/>
+                    <CardButtonsBlock
+                        deleteCard={deleteCard}
+                        updateCard={updateCard}
+                        owner={owner}
+                        pageStatus={pageStatus}
+                        card={d}/>
                 </td>
             }
         },
 
-    ]), [pageStatus, owner, showDeleteModal, showEditModal]);
+    ]), [pageStatus, owner])
 
     return (
         <div className={classes.packs}>
             <div className={classes.packs__container}>
-
                 <div className={classes.packs__title}>
                     <h3>Cards</h3>
                 </div>
@@ -139,13 +121,9 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
                                pageStatus={pageStatus}
                                itemsName={"cards"}/>
                 </div>
-                <ThreeInputModal title={"Create card"}
-                                          handleOnSubmit={createCard}
-                                          setActive={setShowCreateModal}
-                                          active={showCreateModal}/>
             </div>
         </div>
-    );
+    )
 })
 
-export default Cards;
+export default Cards
