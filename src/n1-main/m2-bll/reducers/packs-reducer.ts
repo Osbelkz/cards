@@ -22,14 +22,14 @@ const initialState = {
     cardPacksTotalCount: 0,
     page: 1,
     pageCount: 10,
-    min: undefined as undefined | number,
-    max: undefined as undefined | number,
+    min: 0,
+    max: 0,
     pageStatus: "idle" as StatusType,
     searchParams: {
-        packName: "" as string | undefined,
-        sortPacks: "" as string | undefined,
-        min: undefined as undefined | number,
-        max: undefined as undefined | number,
+        packName: "",
+        sortPacks: "",
+        min: 0,
+        max: 0,
     }
 }
 
@@ -75,7 +75,7 @@ const setPacksAC = (packs: Array<CardPackType>, cardPacksTotalCount: number, min
 export const setSearchNameAC = (packName: string) => {
     return {type: ACTION_TYPES.SET_SEARCH_NAME, payload: {packName}} as const
 }
-export const setSearchParamsAC = (packName?: string, min?: number, max?: number) => {
+export const setSearchParamsAC = (packName: string, min: number, max: number) => {
     return {type: ACTION_TYPES.SET_SEARCH_PARAMS, payload: {packName, min, max}} as const
 }
 export const setPageStatusAC = (pageStatus: StatusType) => {

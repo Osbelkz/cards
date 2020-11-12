@@ -4,10 +4,10 @@ import {authAPI} from "../../m3-dal/auth-api";
 export type NewPasswordStateType = typeof initialState
 
 const initialState = {
-    isSetNewPassword: false as boolean,
-    error: "" as string,
-    isOk: "" as string,
-    isLoading: false as boolean
+    isSetNewPassword: false,
+    error: "" ,
+    isOk: "",
+    isLoading: false
 }
 
 export const newPasswordReducer = (state = initialState, action: ActionsType): NewPasswordStateType => {

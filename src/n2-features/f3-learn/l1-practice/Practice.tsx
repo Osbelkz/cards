@@ -1,8 +1,8 @@
-import React from "react";
+import React, {useState} from "react";
 
 import {CardType} from "../../../n1-main/m3-dal/cards-api";
 import {Button} from "../../../n1-main/m1-ui/common/Button/Button";
-import classes from "./Learn.module.scss";
+import classes from "./Practice.module.scss";
 
 
 
@@ -10,37 +10,39 @@ const grades = ["1", "2", "3", "4", "5"];
 
 type PropsType = {
     card: CardType
-    onNext: () => void
-    flipCard: (value: boolean) => void
     gradeCard: (cardId: string, grade: number) => void
     isLoading: boolean
-    isChecked: boolean
+    onNext: () => void
 }
 
-const Learn: React.FC<PropsType> = React.memo(({card, onNext, gradeCard, isLoading, isChecked, flipCard}) => {
+const Practice: React.FC<PropsType> = React.memo(({card, isLoading, gradeCard, onNext}) => {
 
-    const onGradeButtonHandler = (grade: number) => {
-        gradeCard(card._id, grade)
+    const [isChecked, setIsChecked] = useState(false)
+
+    const onGradeButtonHandler = async (grade: number) => {
+        await gradeCard(card._id, grade)
+        setIsChecked(false)
     }
 
     const onNextHandler = () => {
         onNext()
+        setIsChecked(false)
     }
 
     return (
-        <div className={classes.learn}>
-            <div className={classes.learn__container}>
+        <div className={classes.practice}>
+            <div className={classes.practice__container}>
                 <div className={classes.card}>
                     <div style={isChecked ? {transform: "rotateX(180deg)"} : {}} className={classes.card__inner}>
                         <div className={classes.card__front}
-                             onClick={() => flipCard(true)}>
+                             onClick={() => setIsChecked(true)}>
                             <div className={classes.card__text}>
                                 <p>{card.question}</p>
                             </div>
 
                         </div>
                         <div className={classes.card__back}>
-                            <div className={classes.card__text}>
+                            <div className={classes.card__text} onClick={()=>setIsChecked(false)}>
                                 <p>{card.answer}</p>
                             </div>
 
@@ -63,4 +65,4 @@ const Learn: React.FC<PropsType> = React.memo(({card, onNext, gradeCard, isLoadi
 );
 })
 
-export default Learn;
+export default Practice;

@@ -3,26 +3,23 @@ import React, {useCallback, useMemo, useState} from 'react';
 import {CardPackType} from "../../../n1-main/m3-dal/packs-api";
 import Table, {ITableModel} from '../../../n1-main/m1-ui/common/Table/Table';
 import {StatusType} from "../../../n1-main/m2-bll/reducers/app-reducer";
-import EditableTableCell from '../../../n1-main/m1-ui/common/Table/EditableTableCell/EditableTableCell';
 import {Search} from "../../../n1-main/m1-ui/common/Search/Search";
 import { TableButton } from '../../../n1-main/m1-ui/common/Table/TableButton/TableButton';
 import {SearchParamsType} from "../../../n1-main/m2-bll/reducers/packs-reducer";
 import {Paginator} from "../../../n1-main/m1-ui/common/Paginator/Paginator";
 import {ColumnSorting} from "../../../n1-main/m1-ui/common/ColumnSorting/ColumnSorting";
-import {QuestionModalContainer} from "../../../n1-main/m1-ui/common/ModalWindows/QuestionModal/QuestionModalContainer";
 import { OneInputModal } from '../../../n1-main/m1-ui/common/ModalWindows/OneInputModal/OneInputModal';
 import moment from "moment";
-import RemoveBTN from "../../../n1-main/m1-ui/common/Table/RemoveBTN/RemoveBTN";
-import OpenBTN from "../../../n1-main/m1-ui/common/Table/OpenBTN/OpenBTN";
-import TrainBTN from "../../../n1-main/m1-ui/common/Table/TrainBTN/TrainBTN";
+import {PackButtonsBlock} from "../../../n1-main/m1-ui/common/Table/PackButtonsBlock";
+import {AddPackBlock} from "../../../n1-main/m1-ui/common/Table/AddPackBlock";
 
 type PropsType = {
     packs: Array<CardPackType>
     userId: string | undefined
     page: number
     pageCount: number
-    min: number | undefined
-    max: number | undefined
+    min: number
+    max: number
     cardPacksTotalCount: number
     searchParams: SearchParamsType
     deletePack: (id: string) => void
@@ -30,7 +27,7 @@ type PropsType = {
     updatePack: (name: string, id: string) => void
     changePage: (page: number) => void
     changePageCount: (page: number) => void
-    setSearchParams: (searchName?: string, min?: number, max?: number) => void
+    setSearchParams: (searchName: string, min: number, max: number) => void
     choosePack: (packId: string, cardsOwner: string) => void
     startLearn: (packId: string, cardsOwner: string) => void
     setPacksSortColumn: (sortPacks: string) => void
@@ -44,11 +41,8 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
         changePageCount, setSearchParams, pageStatus,
         min, max, searchParams: {packName}, startLearn
     } = props
-    // console.log("packs")
 
     const sortCardsCount = useCallback((sort: number)=>setPacksSortColumn(sort+"cardsCount"),[])
-    const [showDeletePackModal, setShowDeletePackModal] = useState(false)
-    const [showCreatePackModal, setShowCreatePackModal] = useState(false)
 
     const testModel: ITableModel[] = useMemo(() => ([
         {
@@ -57,11 +51,7 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
             </th>),
             render: (d: CardPackType, i: number) => (
                 <td style={{width: "30%", paddingLeft: "20px"}} key={i}>
-                    {
-                        userId === d.user_id
-                            ? <EditableTableCell text={d.name} changeText={(text) => updatePack(text, d._id)}/>
-                            : <span>{d.name}</span>
-                    }
+                    {d.name}
                 </td>)
         },
         {
@@ -69,7 +59,6 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
                 <div>Added</div>
             </th>),
             render: (d: CardPackType, i: number) => {
-
                 return <td style={{width: "15%"}} key={i}>{moment(d.created).format('Do MMM YY')}</td>
             }
 
@@ -90,29 +79,22 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
         {
             title: (i: number) => (
                 <th style={{width: "15%", paddingRight: "20px", textAlign: "right"}} key={i}>
-                    <TableButton btnName={"+"} btnType={"green"} onClick={() => setShowCreatePackModal(true)}
-                                 disabled={pageStatus === "loading"}/>
+                    <AddPackBlock createPack={createPack} pageStatus={pageStatus} />
                 </th>
             ),
             render: (d: CardPackType, i: number) => {
                 return <td style={{width: "15%", textAlign: "right", minHeight: "100%", display: "flex"}} key={i}>
-                    <OpenBTN btnName={""}  onClick={() => choosePack(d._id, d.user_id)}
-                                 disabled={pageStatus === "loading"}/>
-                    <TrainBTN btnName={""}  onClick={() => startLearn(d._id, d.user_id)}
-                                 disabled={pageStatus === "loading" || d.cardsCount === 0}/>
-                    <RemoveBTN btnName={""}
-                               onClick={() => deletePack(d._id)}
-                               disabled={userId !== d.user_id || pageStatus === "loading"}/>
-                    <QuestionModalContainer text={"Delete this pack?"}
-                                            activate={showDeletePackModal}
-                                            setActivate={setShowDeletePackModal}
-                                            setAnswerY={() => deletePack(d._id)}
-                                            setAnswerN={() => {}} />
+                    <PackButtonsBlock updatePack={updatePack}
+                                      choosePack={choosePack}
+                                      startLearn={startLearn}
+                                      deletePack={deletePack}
+                                      owner={userId===d.user_id} pack={d}
+                                      pageStatus={pageStatus}/>
                 </td>
             }
         },
 
-    ]), [pageStatus, showDeletePackModal, showCreatePackModal]);
+    ]), [pageStatus]);
 
     return (
         <div className={classes.packs}>
@@ -141,12 +123,6 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
                                itemsName={"packs"} />
                 </div>
             </div>
-            <OneInputModal title={"Create pack"}
-                                    placeholder={"please type a pack name"}
-                                    active={showCreatePackModal}
-                                    setActive={setShowCreatePackModal}
-                                    handleOnSubmit={createPack}
-                                    />
         </div>
     );
 })

@@ -37,7 +37,7 @@ export type UpdateGrade = {
     card_id: string
     user_id: string
     grade: number
-    shot: number
+    shots: number
 }
 type QueryParamsCardsType = {
     cardsPack_id: string

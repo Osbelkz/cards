@@ -1,4 +1,4 @@
-.learn {
+.practice {
   position: relative;
   display: flex;
   justify-content: center;
@@ -27,7 +27,7 @@
   height: 340px;
   width: 100%;
   background-color: transparent;
-  perspective: 1000px;
+  perspective: 3000px;
 
   &__inner {
     position: relative;

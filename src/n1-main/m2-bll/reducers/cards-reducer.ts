@@ -13,7 +13,6 @@ enum ACTION_TYPES {
     SET_IS_LOADING = "cards/SET_IS_LOADING",
     SET_PACK_ID = "cards/SET_PACK_ID",
     SET_SORT_COLUMN = "cards/SET_SORT_COLUMN",
-    SET_CARD_IS_LOADING = "cards/SET_CARD_IS_LOADING",
 }
 
 
@@ -24,16 +23,15 @@ const initialState = {
     cardsTotalCount: 0,
     page: 1,
     pageCount: 10,
-    minGrade: undefined as undefined | number,
-    maxGrade: undefined as undefined | number,
+    minGrade: 0,
+    maxGrade: 0,
     pageStatus: "idle" as StatusType,
-    cardIsLoading: false,
     searchParams: {
-        cardQuestion: "" as undefined | string,
-        cardAnswer: "" as undefined | string,
-        sortCards: "" as undefined | string,
-        min: undefined as undefined | number,
-        max: undefined as undefined | number,
+        cardQuestion: "",
+        cardAnswer: "",
+        sortCards: "",
+        min: 0,
+        max: 0,
     }
 }
 
@@ -44,7 +42,6 @@ export const cardsReducer = (state: CardsStateType = initialState, action: Actio
         case ACTION_TYPES.SET_IS_LOADING:
         case ACTION_TYPES.SET_PACK_ID:
         case ACTION_TYPES.SET_CARDS:
-        case ACTION_TYPES.SET_CARD_IS_LOADING:
             return {
                 ...state, ...action.payload,
             }
@@ -77,7 +74,7 @@ const setCardsAC = (cards: Array<CardType>, cardsTotalCount: number, minGrade: n
 export const setCardsSearchQuestionAC = (question: string) => {
     return {type: ACTION_TYPES.SET_SEARCH_NAME, payload: {question}} as const
 }
-export const setCardsSearchParamsAC = (cardQuestion?: string, min?: number, max?: number) => {
+export const setCardsSearchParamsAC = (cardQuestion: string, min: number, max: number) => {
     return {type: ACTION_TYPES.SET_SEARCH_PARAMS, payload: {cardQuestion, min, max}} as const
 }
 export const setCardsPageStatus = (pageStatus: StatusType) => {
@@ -89,20 +86,17 @@ export const setPackAC = (cardsPack_id: string, cardsOwner: string) => {
 export const setCardsSortColumnParamsAC = (sortCards: string) => {
     return {type: ACTION_TYPES.SET_SORT_COLUMN, payload: {sortCards}} as const
 }
-export const setCardIsLoadingAC = (cardIsLoading: boolean) => {
-    return {type: ACTION_TYPES.SET_CARD_IS_LOADING, payload: {cardIsLoading}} as const
-}
 
 // thunks
 
-export const getCardsTC = (selectedPage?: number, pageCountLearn?: number) => async (dispatch: Dispatch, getState: () => RootStateType) => {
+export const getCardsTC = (selectedPage?: number) => async (dispatch: Dispatch, getState: () => RootStateType) => {
     const {cardsPack_id, page, pageCount, searchParams: {cardQuestion, min, max, sortCards}} = getState().cards
     dispatch(setCardsPageStatus("loading"))
     try {
         const response = await cardsApi.getPack({
             cardsPack_id,
             page: selectedPage || page,
-            pageCount: pageCountLearn || pageCount,
+            pageCount,
             cardQuestion,
             min,
             max,
@@ -135,6 +129,7 @@ export const deleteCardTC = (cardId: string) =>
         dispatch(setCardsPageStatus("failed"))
     }
 }
+
 export const createCardTC = (card: CreateCardType) =>
     async (dispatch: ThunkDispatch<RootStateType, {}, ActionsType>, getState: () => RootStateType) => {
     dispatch(setCardsPageStatus("loading"))
@@ -161,18 +156,6 @@ export const updateCardTC = (card: UpdateCardType) =>
     }
 }
 
-export const updateGradeTC = (card: GradeType) =>
-    async (dispatch: ThunkDispatch<RootStateType, {}, ActionsType>) => {
-        dispatch(setCardIsLoadingAC(true))
-        try {
-            const response = await cardsApi.gradeCard(card)
-            await dispatch(getCardsTC(1, 100))
-            dispatch(setCardIsLoadingAC(false))
-        } catch (e) {
-            // alert(e.response.data.error)
-            dispatch(setCardsPageStatus("failed"))
-        }
-    }
 
 export type CardsStateType = typeof initialState
 export type CardsSearchParamsType = typeof initialState.searchParams
@@ -186,4 +169,3 @@ type ActionsType = ReturnType<typeof changeCardsPageAC>
     | ReturnType<typeof setCardsPageStatus>
     | ReturnType<typeof setPackAC>
     | ReturnType<typeof setCardsSortColumnParamsAC>
-    | ReturnType<typeof setCardIsLoadingAC>

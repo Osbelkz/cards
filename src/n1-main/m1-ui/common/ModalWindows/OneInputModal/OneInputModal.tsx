@@ -5,6 +5,7 @@ import {Button} from "../../Button/Button";
 import {useFormik} from "formik";
 
 type InputModalType = {
+    value?: string
     placeholder: string
     title: string
     active: boolean
@@ -12,10 +13,11 @@ type InputModalType = {
     handleOnSubmit: (itemName: string) => void
 }
 
-export const OneInputModal: React.FC<InputModalType> = ({title, placeholder, active, setActive, handleOnSubmit}) => {
+export const OneInputModal: React.FC<InputModalType> = ({title, placeholder, value, active, setActive, handleOnSubmit}) => {
+
     const formik = useFormik({
         initialValues: {
-            itemsName: "",
+            itemsName: value || "",
         },
         onSubmit: values => {
             handleOnSubmit(values.itemsName)
@@ -45,9 +47,10 @@ export const OneInputModal: React.FC<InputModalType> = ({title, placeholder, act
                         type={"submit"}
                     />
                     <Button
+                        type={"reset"}
                         btnName={"Reset"}
                         style={{marginLeft: "10px"}}
-                        onClick={() => formik.resetForm()}
+                        onClick={() => formik.setValues({itemsName: ""})}
                     />
                 </div>
             </form>
