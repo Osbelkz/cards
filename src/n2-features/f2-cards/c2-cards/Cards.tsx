@@ -49,13 +49,15 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
             </th>),
             render: (d: CardType, i: number) => (
                 <td style={{width: "30%", paddingLeft: "20px"}} key={i}>
-                    <p>{d.question}</p>
+                    <div style={{whiteSpace: "pre-wrap"}}>{d.question}</div>
                 </td>)
         },
         {
             title: (i: number) => (<th style={{width: "30%"}} key={i}>Answer</th>),
             render: (d: CardType, i: number) => (
-                <td style={{width: "30%"}} key={i}>{d.answer}</td>)
+                <td style={{width: "30%"}} key={i}>
+                    <div style={{whiteSpace: "pre-wrap"}}>{d.answer}</div>
+                </td>)
         },
         {
             title: (i: number) => (<th style={{width: "15%"}} key={i}>

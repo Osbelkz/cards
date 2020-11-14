@@ -47,7 +47,7 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
     const testModel: ITableModel[] = useMemo(() => ([
         {
             title: (i: number) => (<th style={{width: "30%", paddingLeft: "20px"}} key={i}>
-                <div>Name</div>
+                <div style={{whiteSpace: "pre"}}>Name</div>
             </th>),
             render: (d: CardPackType, i: number) => (
                 <td style={{width: "30%", paddingLeft: "20px"}} key={i}>

@@ -37,13 +37,13 @@ const Practice: React.FC<PropsType> = React.memo(({card, isLoading, gradeCard, o
                         <div className={classes.card__front}
                              onClick={() => setIsChecked(true)}>
                             <div className={classes.card__text}>
-                                <p>{card.question}</p>
+                                <div>{card.question}</div>
                             </div>
 
                         </div>
                         <div className={classes.card__back}>
                             <div className={classes.card__text} onClick={()=>setIsChecked(false)}>
-                                <p>{card.answer}</p>
+                                <div>{card.answer}</div>
                             </div>
 
                             <div className={classes.card__back_bottom}>
