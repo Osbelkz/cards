@@ -15,6 +15,7 @@ import moment from "moment";
 import RemoveBTN from "../../../n1-main/m1-ui/common/Table/RemoveBTN/RemoveBTN";
 import OpenBTN from "../../../n1-main/m1-ui/common/Table/OpenBTN/OpenBTN";
 import TrainBTN from "../../../n1-main/m1-ui/common/Table/TrainBTN/TrainBTN";
+import {Checkbox} from "../../../n1-main/m1-ui/common/Checkbox/Checkbox";
 
 type PropsType = {
     packs: Array<CardPackType>
@@ -35,6 +36,7 @@ type PropsType = {
     startLearn: (packId: string, cardsOwner: string) => void
     setPacksSortColumn: (sortPacks: string) => void
     pageStatus: StatusType
+    setGettingMyPacks: (checkboxValue: boolean) => void
 }
 
 const Packs: React.FC<PropsType> = React.memo((props) => {
@@ -42,7 +44,7 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
         pageCount, cardPacksTotalCount, createPack,
         deletePack, updatePack, changePage, choosePack,
         changePageCount, setSearchParams, pageStatus,
-        min, max, searchParams: {packName}, startLearn
+        min, max, searchParams: {packName, user_id}, startLearn, setGettingMyPacks
     } = props
 
     const sortCardsCount = useCallback((sort: number)=>setPacksSortColumn(sort+"cardsCount"),[])
@@ -121,6 +123,11 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
                     <h3>Packs</h3>
                 </div>
                 <div className={classes.packs__body}>
+                    <Checkbox
+                                     onChange={setGettingMyPacks}
+                                     title={"view just own packs"}
+                                     checked={!!user_id}
+                                     disabled={pageStatus=== "loading"}/>
                     <Search name={packName}
                             label={"Search"}
                             minValue={min?min:0}
