@@ -3,7 +3,6 @@ import {Dispatch} from "redux";
 import {RootStateType} from "../store";
 import { StatusType } from "./app-reducer";
 import { ThunkDispatch } from "redux-thunk";
-import {setCardsPageStatus} from "./cards-reducer";
 
 enum ACTION_TYPES {
     CHANGE_PAGE = "packs/CHANGE_PAGE",
@@ -13,12 +12,15 @@ enum ACTION_TYPES {
     SET_SEARCH_NAME = "packs/SET_SEARCH_NAME",
     SET_SEARCH_PARAMS = "packs/SET_SEARCH_PARAMS",
     SET_IS_LOADING = "packs/SET_IS_LOADING",
-    SET_SORT_PACKS = "packs/SET_SORT_PACKS"
+    SET_SORT_PACKS = "packs/SET_SORT_PACKS",
+    SET_GETTING_MY_PACKS = "packs/SET_GETTING_MY_PACKS",
+    SET_USER_ID = "packs/SET_USER_ID"
 }
 
 
 const initialState = {
     packs: [] as Array<CardPackType>,
+    getMyPacks: false,
     cardPacksTotalCount: 0,
     page: 1,
     pageCount: 10,
@@ -30,6 +32,7 @@ const initialState = {
         sortPacks: "",
         min: 0,
         max: 0,
+        user_id: ""
     }
 }
 
@@ -51,6 +54,10 @@ export const packsReducer = (state: PacksStateType = initialState, action: Actio
         case ACTION_TYPES.SET_SEARCH_PARAMS:
             return {
                 ...state, searchParams: {...state.searchParams,...action.payload}
+            }
+        case ACTION_TYPES.SET_USER_ID:
+            return {
+                ...state, searchParams: {...state.searchParams, user_id: action.user_id}
             }
         default:
             return state
@@ -84,15 +91,18 @@ export const setPageStatusAC = (pageStatus: StatusType) => {
 export const setPacksSortColumnAC = (sortPacks: string) => {
     return {type: ACTION_TYPES.SET_SORT_PACKS, payload: {sortPacks}} as const
 }
+export const setUserIdAC = (user_id: string) => {
+    return {type: ACTION_TYPES.SET_USER_ID, user_id} as const
+}
 
 
 // thunks
 
 export const getPacksTC = (selectedPage?: number) => async (dispatch: Dispatch, getState: () => RootStateType) => {
-    const {page, pageCount, searchParams: {packName, min, max, sortPacks}} = getState().packs
+    const {page,  pageCount, searchParams: {packName, min, max, sortPacks, user_id}} = getState().packs
     dispatch(setPageStatusAC("loading"))
     try {
-        const response = await packsApi.getPacks({page: selectedPage || page, pageCount, packName, min, max, sortPacks})
+        const response = await packsApi.getPacks({page: selectedPage || page, pageCount, packName, min, max, sortPacks, user_id})
         dispatch(setPacksAC(response.data.cardPacks,
             response.data.cardPacksTotalCount,
             response.data.minCardsCount,
@@ -150,3 +160,4 @@ type ActionsType = ReturnType<typeof changePageAC>
     | ReturnType<typeof setSearchParamsAC>
     | ReturnType<typeof setPageStatusAC>
     | ReturnType<typeof setPacksSortColumnAC>
+    | ReturnType<typeof setUserIdAC>
