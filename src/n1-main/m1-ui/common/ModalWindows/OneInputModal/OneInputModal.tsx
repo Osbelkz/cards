@@ -3,6 +3,7 @@ import classes from "./OneInputModal.module.scss";
 import {Modal} from "../Modal";
 import {Button} from "../../Button/Button";
 import {useFormik} from "formik";
+import {TableButton} from "../../Table/TableButton/TableButton";
 
 type InputModalType = {
     value?: string
@@ -26,17 +27,11 @@ export const OneInputModal: React.FC<InputModalType> = ({title, placeholder, val
     })
 
     return <Modal active={active} setActive={setActive}>
-            <Button
-                btnName={"X"}
-                onClick={() => setActive(false)}
-                style={{position: "absolute",
-                    width: "30px",
-                    height: "30px",
-                    padding: "5px 5px",
-                    right: "10px",
-                    top: "10px"
-                }}
-            />
+            <div className={classes.closeButton}>
+                <TableButton
+                    btnName={"X"}
+                    onClick={() => setActive(false)}/>
+            </div>
             <form onSubmit={formik.handleSubmit} className={classes.inputModal}>
                 <h3>{title}</h3>
                 <textarea placeholder={placeholder} {...formik.getFieldProps("itemsName")}/>

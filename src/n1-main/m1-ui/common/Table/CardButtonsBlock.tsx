@@ -33,7 +33,7 @@ export const CardButtonsBlock: React.FC<CardButtonsBlockPropsType> = React.memo(
                                     setAnswerY={() => deleteCard(_id)}
                                     setAnswerN={() => {
                                     }}/>
-            <ThreeInputModal title={"Edit card's params"}
+            <ThreeInputModal title={"Edit card"}
                              handleOnSubmit={(question, answer, comment) => updateCard(_id, question, answer)}
                              setActive={setShowEditModal}
                              firstInputValue={question}

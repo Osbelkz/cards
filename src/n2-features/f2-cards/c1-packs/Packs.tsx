@@ -35,19 +35,20 @@ type PropsType = {
 }
 
 const Packs: React.FC<PropsType> = React.memo((props) => {
-    let {packs, userId, page, setPacksSortColumn,
+    let {
+        packs, userId, page, setPacksSortColumn,
         pageCount, cardPacksTotalCount, createPack,
         deletePack, updatePack, changePage, choosePack,
         changePageCount, setSearchParams, pageStatus,
         min, max, searchParams: {packName, user_id}, startLearn, setGettingMyPacks
     } = props
 
-    const sortCardsCount = useCallback((sort: number)=>setPacksSortColumn(sort+"cardsCount"),[])
+    const sortCardsCount = useCallback((sort: number) => setPacksSortColumn(sort + "cardsCount"), [])
 
     const testModel: ITableModel[] = useMemo(() => ([
         {
             title: (i: number) => (<th style={{width: "30%", paddingLeft: "20px"}} key={i}>
-                <div>Name</div>
+                <div style={{whiteSpace: "pre"}}>Name</div>
             </th>),
             render: (d: CardPackType, i: number) => (
                 <td style={{width: "30%", paddingLeft: "20px"}} key={i}>
@@ -79,7 +80,7 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
         {
             title: (i: number) => (
                 <th style={{width: "15%", paddingRight: "20px", textAlign: "right"}} key={i}>
-                    <AddPackBlock createPack={createPack} pageStatus={pageStatus} />
+                    <AddPackBlock createPack={createPack} pageStatus={pageStatus}/>
                 </th>
             ),
             render: (d: CardPackType, i: number) => {
@@ -88,7 +89,7 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
                                       choosePack={choosePack}
                                       startLearn={startLearn}
                                       deletePack={deletePack}
-                                      owner={userId===d.user_id} pack={d}
+                                      owner={userId === d.user_id} pack={d}
                                       pageStatus={pageStatus}/>
                 </td>
             }
@@ -105,27 +106,30 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
                 </div>
                 <div className={classes.packs__body}>
                     <Checkbox
-                                     onChange={setGettingMyPacks}
-                                     title={"view just own packs"}
-                                     checked={!!user_id}
-                                     disabled={pageStatus=== "loading"}/>
-                    <Search name={packName}
-                            label={"Search"}
-                            minValue={min?min:0}
-                            maxValue={max?max:0}
-                            stepValue={1}
-                            pageStatus={pageStatus}
-                            setSearchParams={setSearchParams}/>
-                    <Table data={packs}
-                           model={testModel}
-                           pageStatus={pageStatus}/>
-                    <Paginator currentPage={page}
-                               itemsTotalCount={cardPacksTotalCount}
-                               pageCount={pageCount}
-                               changePage={changePage}
-                               changePageCount={changePageCount}
-                               pageStatus={pageStatus}
-                               itemsName={"packs"} />
+                        onChange={setGettingMyPacks}
+                        title={"show only my packs"}
+                        checked={!!user_id}
+                        disabled={pageStatus === "loading"}/>
+                    <Search
+                        name={packName}
+                        label={"Search"}
+                        minValue={min}
+                        maxValue={max}
+                        stepValue={1}
+                        disabled={props.pageStatus === "loading"}
+                        setSearchParams={setSearchParams}/>
+                    <Table
+                        data={packs}
+                        model={testModel}
+                        disabled={props.pageStatus === "loading"}/>
+                    <Paginator
+                        currentPage={page}
+                        itemsTotalCount={cardPacksTotalCount}
+                        pageCount={pageCount}
+                        changePage={changePage}
+                        changePageCount={changePageCount}
+                        disabled={props.pageStatus === "loading"}
+                        itemsName={"packs"}/>
                 </div>
             </div>
         </div>

@@ -20,6 +20,8 @@ export const NavLogIn = ({logout}: NavLogInPropsType) => {
             <NavItem path={"/profile"} title={"Profile"}/>
             <NavItem path={"/packs"} title={"Packs"} />
         </div>
-        <Button onClick={logout} btnName={"Logout"} btnType={"red"} style={{margin: "10px"}}/>
+        <div className={classes.button}>
+            <Button onClick={logout} btnName={"Logout"} btnType={"red"}/>
+        </div>
     </nav>
 }

@@ -8,9 +8,8 @@ type SortOutOwnPacksPropsType = {
     disabled: boolean
 }
 
-export const Checkbox: React.FC<SortOutOwnPacksPropsType> = React.memo(({
-                                                                                   disabled, onChange,
-                                                                            title, checked}) => {
+export const Checkbox: React.FC<SortOutOwnPacksPropsType> = React.memo(
+    ({disabled, onChange, title, checked}) => {
     const setCheckboxHandler = (e: ChangeEvent<HTMLInputElement>) => {
         onChange(e.currentTarget.checked)
     }
@@ -18,13 +17,13 @@ export const Checkbox: React.FC<SortOutOwnPacksPropsType> = React.memo(({
     return <div>
         <input
             className={classes.checkbox}
-            type={"checkbox"} id={"customCheckbox"} name={"customCheckbox"}
+            type={"checkbox"}
+            id={"customCheckbox"}
+            name={"customCheckbox"}
             onChange={setCheckboxHandler}
             disabled={disabled}
-            checked={checked}
-        />
-        <label
-            htmlFor={"customCheckbox"}>
+            checked={checked}/>
+        <label htmlFor={"customCheckbox"}>
             <h4>{title}</h4>
         </label>
     </div>

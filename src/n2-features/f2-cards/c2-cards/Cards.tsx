@@ -1,5 +1,5 @@
 import classes from './Cards.module.scss';
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import Table, {ITableModel} from '../../../n1-main/m1-ui/common/Table/Table';
 import {StatusType} from "../../../n1-main/m2-bll/reducers/app-reducer";
 import {Search} from "../../../n1-main/m1-ui/common/Search/Search";
@@ -49,13 +49,15 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
             </th>),
             render: (d: CardType, i: number) => (
                 <td style={{width: "30%", paddingLeft: "20px"}} key={i}>
-                    <p>{d.question}</p>
+                    <div style={{whiteSpace: "pre-wrap"}}>{d.question}</div>
                 </td>)
         },
         {
             title: (i: number) => (<th style={{width: "30%"}} key={i}>Answer</th>),
             render: (d: CardType, i: number) => (
-                <td style={{width: "30%"}} key={i}>{d.answer}</td>)
+                <td style={{width: "30%"}} key={i}>
+                    <div style={{whiteSpace: "pre-wrap"}}>{d.answer}</div>
+                </td>)
         },
         {
             title: (i: number) => (<th style={{width: "15%"}} key={i}>
@@ -108,17 +110,17 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
                             minValue={min}
                             maxValue={max}
                             stepValue={1}
-                            pageStatus={pageStatus}
+                            disabled={props.pageStatus === "loading"}
                             setSearchParams={setSearchParams}/>
                     <Table data={cards}
                            model={testModel}
-                           pageStatus={pageStatus}/>
+                           disabled={props.pageStatus === "loading"}/>
                     <Paginator currentPage={page}
                                itemsTotalCount={cardsTotalCount}
                                pageCount={pageCount}
                                changePage={changePage}
                                changePageCount={changePageCount}
-                               pageStatus={pageStatus}
+                               disabled={props.pageStatus === "loading"}
                                itemsName={"cards"}/>
                 </div>
             </div>

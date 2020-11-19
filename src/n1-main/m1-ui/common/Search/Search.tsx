@@ -3,7 +3,6 @@ import classes from "./Search.module.scss";
 import {Input} from "../Input/Input";
 import {Button} from "../Button/Button";
 import {Slider} from "../Slider/Slider";
-import {StatusType} from "../../../m2-bll/reducers/app-reducer";
 
 type SearchPropsType = {
     name: string
@@ -12,11 +11,11 @@ type SearchPropsType = {
     maxValue: number
     stepValue: number
     setSearchParams: (searchName: string, min: number, max: number) => void
-    pageStatus: StatusType
+    disabled: boolean
 }
 
 export const Search: React.FC<SearchPropsType> =
-    React.memo(({name, minValue, maxValue, label, stepValue, setSearchParams, pageStatus}) => {
+    React.memo(({name, minValue, maxValue, label, stepValue, setSearchParams, disabled}) => {
 
 
         const [searchValue, setSearchValue] = useState<string>(name)
@@ -40,7 +39,7 @@ export const Search: React.FC<SearchPropsType> =
             <Input
                 value={searchValue}
                 onChange={inputOnChangeHandler}
-                disabled={pageStatus === "loading"}
+                disabled={disabled}
             />
             <div className={classes.slider}>
                 <Slider
@@ -51,13 +50,13 @@ export const Search: React.FC<SearchPropsType> =
                     minValue={minValue}
                     maxValue={maxValue}
                     stepValue={stepValue}
-                    pageStatus={pageStatus}
+                    disabled={disabled}
                 />
             </div>
             <Button
                 btnName={"Search"}
                 onClick={onSearchClick}
-                disabled={pageStatus === "loading"}
+                disabled={disabled}
             />
         </div>
     })
