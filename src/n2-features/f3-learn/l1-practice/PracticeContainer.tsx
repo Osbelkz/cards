@@ -4,7 +4,7 @@ import Practice from './Practice';
 import {useDispatch, useSelector} from "react-redux";
 import {RootStateType} from "../../../n1-main/m2-bll/store";
 import {useParams} from "react-router-dom";
-import {getPracticeCardsTC, PracticeStateType, setPracticePackId, updateGradeTC} from "../../../n1-main/m2-bll/reducers/practice-reducer";
+import {getPracticeCards, PracticeStateType, setPracticePackId, updateGrade} from "../../../n1-main/m2-bll/reducers/practice-reducer";
 import {Preloader} from "../../../n1-main/m1-ui/common/Preloader/Preloader";
 
 
@@ -34,7 +34,7 @@ const PracticeContainer: React.FC = React.memo(() => {
     }
 
     const gradeCardHandler = useCallback(async (cardId: string, grade: number) => {
-        await dispatch(updateGradeTC({card_id: cardId, grade}))
+        await dispatch(updateGrade({card_id: cardId, grade}))
     }, [])
 
     const onNextHandler = useCallback(() => {
@@ -43,7 +43,7 @@ const PracticeContainer: React.FC = React.memo(() => {
 
 
     useEffect(() => {
-        dispatch(getPracticeCardsTC())
+        dispatch(getPracticeCards())
         return () => setCard(null)
     }, [cardsPack_id])
 

@@ -14,7 +14,7 @@ const initialState = {
     errorText: ""
 }
 
-export const getPracticeCardsTC = createAsyncThunk<
+export const getPracticeCards = createAsyncThunk<
     { cards: CardType[], cardsTotalCount: number },
     undefined,
     { rejectValue: string, state: RootStateType }
@@ -30,7 +30,7 @@ export const getPracticeCardsTC = createAsyncThunk<
         }
     })
 
-export const updateGradeTC = createAsyncThunk<
+export const updateGrade = createAsyncThunk<
     { card_id: string, grade: number, shots: number },
     GradeType,
     { rejectValue: string }
@@ -56,25 +56,25 @@ export const practiceSlice = createSlice({
     },
     extraReducers: builder => {
         builder
-            .addCase(getPracticeCardsTC.pending, (state, action) => {
+            .addCase(getPracticeCards.pending, (state, action) => {
                 state.pageStatus = "loading"
             })
-            .addCase(getPracticeCardsTC.fulfilled, (state, action) => {
+            .addCase(getPracticeCards.fulfilled, (state, action) => {
                 state.cards = action.payload.cards
                 state.cardsTotalCount = action.payload.cardsTotalCount
                 state.pageStatus = "succeeded"
             })
-            .addCase(getPracticeCardsTC.rejected, (state, action) => {
+            .addCase(getPracticeCards.rejected, (state, action) => {
                 if (action.payload) {
                     state.pageStatus = "failed"
                     state.errorText = action.payload
                 }
             })
-            .addCase(updateGradeTC.pending, (state, action) => {
+            .addCase(updateGrade.pending, (state, action) => {
                 state.pageStatus = "loading"
                 state.cardIsLoading = true
             })
-            .addCase(updateGradeTC.fulfilled, (state, action) => {
+            .addCase(updateGrade.fulfilled, (state, action) => {
                 let card = state.cards.find(card => card._id === action.payload.card_id)
                 if (card) {
                     card = {...card, ...action.payload}
@@ -82,7 +82,7 @@ export const practiceSlice = createSlice({
                 state.pageStatus = "succeeded"
                 state.cardIsLoading = false
             })
-            .addCase(updateGradeTC.rejected, (state, action) => {
+            .addCase(updateGrade.rejected, (state, action) => {
                 if (action.payload) {
                     state.pageStatus = "failed"
                     state.errorText = action.payload
