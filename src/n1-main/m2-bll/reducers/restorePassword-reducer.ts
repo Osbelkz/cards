@@ -10,9 +10,9 @@ const initialState = {
 }
 
 export const restoreTC = createAsyncThunk<string, string, { rejectValue: string }>("restore/restoreTC",
-    async (value: string, {rejectWithValue, dispatch}) => {
+    async (email: string, {rejectWithValue}) => {
         try {
-            const response = await authAPI.getLinkForResetPassword(value)
+            const response = await authAPI.getLinkForResetPassword(email)
             return response.data.info
         } catch (e) {
             const error: { response: { data: { error: string } } } = e
