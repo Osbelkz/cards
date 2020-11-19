@@ -43,7 +43,6 @@ const Profile: React.FC<PropsType> = ({userData}) => {
                         </tbody>
                     </table>
                 </div>
-                <h4>Would you like change your password? Go here <NavItem path={"/restore"} title={"Restore password"}/></h4>
             </div>
         </div>
     );

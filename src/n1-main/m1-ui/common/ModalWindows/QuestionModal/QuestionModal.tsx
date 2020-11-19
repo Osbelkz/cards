@@ -1,7 +1,8 @@
-import React, {useState} from "react";
+import React from "react";
 import classes from "./QuestionModal.module.scss";
 import {Button} from "../../Button/Button";
 import {Modal} from "../Modal";
+import {TableButton} from "../../Table/TableButton/TableButton";
 
 type QuestionModalPropsType = {
     text: string
@@ -24,8 +25,8 @@ export const QuestionModal: React.FC<QuestionModalPropsType> = ({text, setAnswer
     return <div className={classes.questionModal}>
         <Modal active={active} setActive={setActive}>
             {text}
-            <Button btnName={"Yes"} onClick={onYesClickHandler} style={{right: "10px"}}/>
-            <Button btnName={"No"} onClick={onNoClickHandler} style={{left: "10px"}}/>
+            <TableButton btnName={"Yes"} onClick={onYesClickHandler} style={{right: "20px"}}/>
+            <TableButton btnName={"No"} onClick={onNoClickHandler} style={{left: "20px"}}/>
         </Modal>
     </div>
 }

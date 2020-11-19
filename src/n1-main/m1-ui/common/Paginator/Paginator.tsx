@@ -2,7 +2,6 @@ import React, {ChangeEvent, useState} from "react";
 import classes from "./Paginator.module.scss";
 import {Button} from "../Button/Button";
 import {Input} from "../Input/Input";
-import {StatusType} from "../../../m2-bll/reducers/app-reducer";
 
 type PaginatorPropsType = {
     currentPage: number
@@ -11,11 +10,11 @@ type PaginatorPropsType = {
     changePage: (page: number) => void
     changePageCount: (page: number) => void
     itemsName: string
-    pageStatus: StatusType
+    disabled: boolean
 }
 
 export const Paginator: React.FC<PaginatorPropsType> =
-    React.memo(({currentPage, pageCount, changePageCount, changePage, itemsName, itemsTotalCount, pageStatus}) => {
+    React.memo(({currentPage, pageCount, changePageCount, changePage, itemsName, itemsTotalCount, disabled}) => {
     const [pageNumber, setPageNumber] = useState(currentPage)
     let pageAmount = Math.ceil(itemsTotalCount / pageCount)
 
@@ -56,7 +55,7 @@ export const Paginator: React.FC<PaginatorPropsType> =
     return <div className={classes.paginator}>
         <div className={classes.leftBlock}>
             {`Total ${itemsName}: ${itemsTotalCount}. ${itemsName} per page:`}
-            <select onChange={pageCountChangeHandler} value={pageCount} disabled={pageStatus === "loading"}>
+            <select onChange={pageCountChangeHandler} value={pageCount} disabled={disabled}>
                 <option>10</option>
                 <option>20</option>
                 <option>50</option>
@@ -67,7 +66,7 @@ export const Paginator: React.FC<PaginatorPropsType> =
             <Button
                 btnName={`Prev`}
                 onClick={onePreviousPage}
-                disabled={currentPage < 2 || pageStatus === "loading"}
+                disabled={currentPage < 2 || disabled}
             />
             {`Page: `}
             {pageNumber < 1}
@@ -78,13 +77,13 @@ export const Paginator: React.FC<PaginatorPropsType> =
                    onChange={pageChangeHandler}
                    onBlur={pageSetHandler}
                    onKeyPress={onKeyPressHandler}
-                   disabled={pageStatus === "loading"}
+                   disabled={disabled}
             />
             of {pageAmount}
             <Button
                 btnName={`Next`}
                 onClick={oneNextPage}
-                disabled={currentPage === pageAmount || pageStatus === "loading"}
+                disabled={currentPage === pageAmount || disabled}
             />
         </div>
     </div>

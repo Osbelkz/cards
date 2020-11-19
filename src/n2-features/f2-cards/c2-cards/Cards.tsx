@@ -1,5 +1,5 @@
 import classes from './Cards.module.scss';
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import Table, {ITableModel} from '../../../n1-main/m1-ui/common/Table/Table';
 import {StatusType} from "../../../n1-main/m2-bll/reducers/app-reducer";
 import {Search} from "../../../n1-main/m1-ui/common/Search/Search";
@@ -110,17 +110,17 @@ const Cards: React.FC<PropsType> = React.memo((props) => {
                             minValue={min}
                             maxValue={max}
                             stepValue={1}
-                            pageStatus={pageStatus}
+                            disabled={props.pageStatus === "loading"}
                             setSearchParams={setSearchParams}/>
                     <Table data={cards}
                            model={testModel}
-                           pageStatus={pageStatus}/>
+                           disabled={props.pageStatus === "loading"}/>
                     <Paginator currentPage={page}
                                itemsTotalCount={cardsTotalCount}
                                pageCount={pageCount}
                                changePage={changePage}
                                changePageCount={changePageCount}
-                               pageStatus={pageStatus}
+                               disabled={props.pageStatus === "loading"}
                                itemsName={"cards"}/>
                 </div>
             </div>

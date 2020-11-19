@@ -1,6 +1,5 @@
 import React, {ChangeEvent} from "react";
 import classes from "./Slider.module.scss";
-import {StatusType} from "../../../m2-bll/reducers/app-reducer";
 
 type SliderPropsType = {
     setMin:(value: number) => void
@@ -10,7 +9,7 @@ type SliderPropsType = {
     minValue: number
     maxValue: number
     stepValue: number
-    pageStatus: StatusType
+    disabled: boolean
 }
 
 export const Slider: React.FC<SliderPropsType> = React.memo((props) => {
@@ -48,7 +47,7 @@ export const Slider: React.FC<SliderPropsType> = React.memo((props) => {
                 value={props.min}
                 className={classes.range}
                 onChange={rangeHandler1}
-                disabled={props.pageStatus === "loading"}
+                disabled={props.disabled}
             />
         </div>
 
@@ -64,7 +63,7 @@ export const Slider: React.FC<SliderPropsType> = React.memo((props) => {
             value={props.max}
             className={classes.range}
             onChange={rangeHandler2}
-            disabled={props.pageStatus === "loading"}
+            disabled={props.disabled}
         />
     </div>
 })

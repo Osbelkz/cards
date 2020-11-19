@@ -1,7 +1,5 @@
 import React from 'react';
 import classes from "./Table.module.scss";
-import {StatusType} from "../../../m2-bll/reducers/app-reducer";
-
 
 export interface ITableModel {
     title: (index: number) => JSX.Element;
@@ -11,15 +9,15 @@ export interface ITableModel {
 interface ITableProps {
     model: ITableModel[];
     data: any;
-    pageStatus: StatusType
+    disabled: boolean
 }
 
-const Table: React.FC<ITableProps> = React.memo(({model, data, pageStatus}) => {
+const Table: React.FC<ITableProps> = React.memo(({model, data, disabled}) => {
 
     // console.log("table")
 
     return (
-        <table className={`${classes.table} ${pageStatus==="loading" ? classes.table__loading : ""}`}>
+        <table className={`${classes.table} ${disabled ? classes.table__loading : ""}`}>
             <thead>
             <tr className={classes.table__row_header}>
                 {model.map((m: ITableModel, index: number) => m.title(index))}

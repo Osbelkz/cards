@@ -16,10 +16,9 @@ export const AddCardBlock: React.FC<AddCardBlockPropsType> = ({createCard, pageS
         <TableButton btnName={"+"} btnType={"green"}
                      onClick={() => setShowCreateModal(true)}
                      disabled={!owner || pageStatus === "loading"}/>
-        {owner && <><ThreeInputModal title={"Create card"}
+        {owner && <ThreeInputModal title={"Create card"}
                                      handleOnSubmit={createCard}
                                      setActive={setShowCreateModal}
-                                     active={showCreateModal}/>
-        </>}
+                                     active={showCreateModal}/>}
     </>
 }
