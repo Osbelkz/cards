@@ -9,7 +9,7 @@ import {appReducer} from "./reducers/app-reducer";
 import {packsReducer} from "./reducers/packs-reducer";
 import {cardsReducer} from "./reducers/cards-reducer";
 import {configureStore} from "@reduxjs/toolkit";
-import { practiceReducer } from "./reducers/practice-reducer";
+import {practiceSlice} from "./reducers/practice-reducer";
 
 
 export const rootReducer = combineReducers({
@@ -21,7 +21,7 @@ export const rootReducer = combineReducers({
     packs: packsReducer,
     cards: cardsReducer,
     app: appReducer,
-    practice: practiceReducer
+    practice: practiceSlice.reducer
 })
 
 
@@ -30,4 +30,4 @@ export const store = configureStore({
     middleware: getDefaultMiddleware => getDefaultMiddleware().prepend(thunk)
 })
 
-export type RootStateType = ReturnType<typeof rootReducer>
+export type RootStateType = ReturnType<typeof store.getState>
