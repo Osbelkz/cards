@@ -1,17 +1,16 @@
 import classes from './Packs.module.scss';
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {CardPackType} from "../../../n1-main/m3-dal/packs-api";
 import Table, {ITableModel} from '../../../n1-main/m1-ui/common/Table/Table';
 import {StatusType} from "../../../n1-main/m2-bll/reducers/app-reducer";
 import {Search} from "../../../n1-main/m1-ui/common/Search/Search";
-import { TableButton } from '../../../n1-main/m1-ui/common/Table/TableButton/TableButton';
 import {SearchParamsType} from "../../../n1-main/m2-bll/reducers/packs-reducer";
 import {Paginator} from "../../../n1-main/m1-ui/common/Paginator/Paginator";
 import {ColumnSorting} from "../../../n1-main/m1-ui/common/ColumnSorting/ColumnSorting";
-import { OneInputModal } from '../../../n1-main/m1-ui/common/ModalWindows/OneInputModal/OneInputModal';
 import moment from "moment";
 import {PackButtonsBlock} from "../../../n1-main/m1-ui/common/Table/PackButtonsBlock";
 import {AddPackBlock} from "../../../n1-main/m1-ui/common/Table/AddPackBlock";
+import {Checkbox} from "../../../n1-main/m1-ui/common/Checkbox/Checkbox";
 
 type PropsType = {
     packs: Array<CardPackType>
@@ -32,6 +31,7 @@ type PropsType = {
     startLearn: (packId: string, cardsOwner: string) => void
     setPacksSortColumn: (sortPacks: string) => void
     pageStatus: StatusType
+    setGettingMyPacks: (checkboxValue: boolean) => void
 }
 
 const Packs: React.FC<PropsType> = React.memo((props) => {
@@ -39,7 +39,7 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
         pageCount, cardPacksTotalCount, createPack,
         deletePack, updatePack, changePage, choosePack,
         changePageCount, setSearchParams, pageStatus,
-        min, max, searchParams: {packName}, startLearn
+        min, max, searchParams: {packName, user_id}, startLearn, setGettingMyPacks
     } = props
 
     const sortCardsCount = useCallback((sort: number)=>setPacksSortColumn(sort+"cardsCount"),[])
@@ -104,6 +104,11 @@ const Packs: React.FC<PropsType> = React.memo((props) => {
                     <h3>Packs</h3>
                 </div>
                 <div className={classes.packs__body}>
+                    <Checkbox
+                                     onChange={setGettingMyPacks}
+                                     title={"view just own packs"}
+                                     checked={!!user_id}
+                                     disabled={pageStatus=== "loading"}/>
                     <Search name={packName}
                             label={"Search"}
                             minValue={min?min:0}
