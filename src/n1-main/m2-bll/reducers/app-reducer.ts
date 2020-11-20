@@ -56,3 +56,4 @@ export const authMeTC = () => async (dispatch: Dispatch, getState: () => RootSta
 export type AppStateType = typeof initialState
 export type StatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 
+//init commit
