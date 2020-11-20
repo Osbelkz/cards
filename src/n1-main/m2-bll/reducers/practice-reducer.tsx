@@ -77,7 +77,8 @@ export const practiceSlice = createSlice({
             .addCase(updateGrade.fulfilled, (state, action) => {
                 let card = state.cards.find(card => card._id === action.payload.card_id)
                 if (card) {
-                    card = {...card, ...action.payload}
+                    card.grade = action.payload.grade
+                    card.shots = action.payload.shots
                 }
                 state.pageStatus = "succeeded"
                 state.cardIsLoading = false
