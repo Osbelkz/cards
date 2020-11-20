@@ -9,7 +9,7 @@ type RestorePropsType = {
     textAfterRequest: string,
     isSentSuccess: boolean,
     isLoading: boolean,
-    handleOnSubmit: (value: string) => void
+    handleOnSubmit: (email: string) => void
 }
 
 type FormikErrorType = {
