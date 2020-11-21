@@ -56,7 +56,7 @@ const PracticeContainer: React.FC = React.memo(() => {
     },[cards])
 
 
-    if (cardsPack_id !== packId || !card) {
+    if (card?.cardsPack_id !== packId) {
         return <Preloader/>
     }
 
