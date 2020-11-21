@@ -40,7 +40,7 @@ const Login: React.FC<RestorePropsType> = React.memo(({error, isLoading, handleO
             return errors
         },
         onSubmit: values => {
-            handleOnSubmit(values.email, values.password, values.rememberMe)
+            handleOnSubmit(values.email.toLowerCase().trim(), values.password, values.rememberMe)
         }
     })
 
