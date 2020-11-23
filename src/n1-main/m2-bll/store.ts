@@ -7,7 +7,7 @@ import {registerSlice} from "./reducers/register-reducer";
 import {restorePasswordSlice} from "./reducers/restorePassword-reducer";
 import {appSlice} from "./reducers/app-reducer";
 import {packsSlice} from "./reducers/packs-reducer";
-import {cardsReducer} from "./reducers/cards-reducer";
+import {cardsSlice} from "./reducers/cards-reducer";
 import {configureStore} from "@reduxjs/toolkit";
 import {practiceSlice} from "./reducers/practice-reducer";
 
@@ -19,7 +19,7 @@ export const rootReducer = combineReducers({
     newPassword: newPasswordReducer,
     profile: profileReducer,
     packs: packsSlice.reducer,
-    cards: cardsReducer,
+    cards: cardsSlice.reducer,
     app: appSlice.reducer,
     practice: practiceSlice.reducer
 })

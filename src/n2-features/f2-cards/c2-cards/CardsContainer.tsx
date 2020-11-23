@@ -5,16 +5,20 @@ import {RootStateType} from "../../../n1-main/m2-bll/store";
 import {Preloader} from "../../../n1-main/m1-ui/common/Preloader/Preloader";
 import {
     CardsStateType,
-    changeCardsPageAC, changeCardsPageCountAC, createCardTC,
+    changeCardsPage,
+    changeCardsPageCount,
+    createCardTC,
     deleteCardTC,
-    getCardsTC, setCardsSearchParamsAC, setCardsSortColumnParamsAC, setPackAC, updateCardTC
+    getCardsTC,
+    setCardsSearchParams,
+    setCardsSortColumnParams,
+    setPack,
+    updateCardTC
 } from "../../../n1-main/m2-bll/reducers/cards-reducer";
 import {useParams} from "react-router-dom";
 
 
 const CardsContainer = React.memo(() => {
-
-    // console.log("cards container")
 
     const dispatch = useDispatch()
     const {
@@ -25,9 +29,8 @@ const CardsContainer = React.memo(() => {
 
     let {packId} = useParams<{packId: string}>()
     if (cardsPack_id !== packId) {
-        dispatch(setPackAC(packId, ""))
+        dispatch(setPack({cardsPack_id: packId, cardsOwner: ""}))
     }
-    // console.log(cardsOwner, userId)
     const deleteCardHandler = useCallback((cardId: string) => {
         dispatch(deleteCardTC(cardId))
     }, [])
@@ -38,26 +41,27 @@ const CardsContainer = React.memo(() => {
         dispatch(updateCardTC({question, _id: cardId, answer}))
     }, [])
     const changePageHandler = useCallback((page: number) => {
-        dispatch(changeCardsPageAC(page))
+        dispatch(changeCardsPage({page}))
     }, [])
     const changePageCountHandler = useCallback((pageCount: number) => {
-        dispatch(changeCardsPageCountAC(pageCount))
+        dispatch(changeCardsPageCount({pageCount}))
     }, [])
     const setSearchParamsHandler = useCallback((cardQuestion: string, min: number, max: number) => {
-        dispatch(setCardsSearchParamsAC(cardQuestion, min, max))
+        dispatch(setCardsSearchParams({cardQuestion, min, max}))
     }, [])
     const setSortColumnHandler = useCallback((sortCards: string) => {
-        dispatch(setCardsSortColumnParamsAC(sortCards))
+        dispatch(setCardsSortColumnParams({sortCards}))
     }, [])
 
     useEffect(() => {
-        dispatch(getCardsTC())
+        dispatch(getCardsTC({}))
 
     }, [page, pageCount, searchParams, cardsPack_id])
 
     if (!cardsPack_id || !cards || pageStatus === "idle") {
         return <Preloader/>
     }
+
     return (
         <Cards cards={cards}
                page={page}
