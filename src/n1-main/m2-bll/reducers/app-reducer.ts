@@ -1,59 +1,58 @@
-import {Dispatch} from "redux";
-import { authAPI } from "../../m3-dal/auth-api";
-import {RootStateType} from "../store";
-import {setErrorText, setValueIsLoggedSuccess } from "./login-reducer";
+import {authAPI} from "../../m3-dal/auth-api";
+import {setValueIsLoggedSuccess } from "./login-reducer";
 import {setProfileUserDataAC} from "./profileP-reducer";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {RootStateType} from "../store";
 
-enum ACTION_TYPE {
-    SET_APP_ERROR = "App/SET_APP_ERROR",
-    SET_INIT_APP = "App/SET_INIT_APP"
-}
 
-const initialState = {
-    error: "",
-    initApp: "idle" as StatusType
-}
+export const authMe = createAsyncThunk<
+    undefined,
+    undefined,
+    {rejectValue: string, state: RootStateType}
+    >("app/authMe",
+    async (param, {dispatch,rejectWithValue}) => {
+        try {
+            const res = await authAPI.me()
+            dispatch(setProfileUserDataAC(res.data))
+            dispatch(setValueIsLoggedSuccess(true))
+        } catch (e) {
+            const error: {response: {data: {error: string}}} = e
+            return rejectWithValue(error.response ? error.response.data.error : "unknown error")
+        }
+    })
 
-export const appReducer = (state: AppStateType = initialState, action: ActionsType): AppStateType => {
-    switch (action.type) {
-        case ACTION_TYPE.SET_APP_ERROR:
-        case ACTION_TYPE.SET_INIT_APP:
-            return {
-                ...state, ...action.payload
-            }
-        default:
-            return state;
+export const appSlice = createSlice({
+    name: "app",
+    initialState: {
+        error: "",
+        initApp: "idle" as StatusType
+    },
+    reducers: {
+        setInitApp: (state, action: PayloadAction<{ initApp: StatusType }>) => {
+            state.initApp = action.payload.initApp
+        },
+        setAppError: (state, action: PayloadAction<{error: string}>) => {
+            state.error = action.payload.error
+        }
+    },
+    extraReducers: builder => {
+        builder
+            .addCase(authMe.pending, (state, action) => {
+                state.initApp = "loading"
+                state.error = ""
+            })
+            .addCase(authMe.fulfilled, (state, action) => {
+                state.initApp = "succeeded"
+            })
+            .addCase(authMe.rejected, (state, action) => {
+                if (action.payload) {
+                    state.initApp = "failed"
+                    state.error = action.payload
+                }
+            })
     }
-};
+})
 
-// actions
-export const setAppErrorAC = (error: string) => {
-    return {type: ACTION_TYPE.SET_APP_ERROR, payload: {error}}
-}
-export const setInitAppAC = (initApp: StatusType) => {
-    return {type: ACTION_TYPE.SET_INIT_APP, payload: {initApp}}
-}
+export const {setInitApp, setAppError} = appSlice.actions
 
-export type ActionsType = ReturnType<typeof setAppErrorAC> | ReturnType<typeof setInitAppAC>
-
-// thunk
-
-export const authMeTC = () => async (dispatch: Dispatch, getState: () => RootStateType) => {
-    dispatch(setInitAppAC("loading"))
-    dispatch(setAppErrorAC(""))
-    try {
-        let response = await authAPI.me()
-        dispatch(setProfileUserDataAC(response.data))
-        dispatch(setValueIsLoggedSuccess(true))
-        dispatch(setInitAppAC("succeeded"))
-    } catch (e) {
-        // dispatch(setAppErrorAC(e.response ? e.response.data.error : "unknown error"))
-        dispatch(setInitAppAC("failed"))
-        dispatch(setErrorText(e.response ? e.response.data.error : "unknown error"))
-    }
-}
-
-export type AppStateType = typeof initialState
 export type StatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
-
-//init commit
