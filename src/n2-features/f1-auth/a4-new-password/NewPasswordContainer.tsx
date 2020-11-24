@@ -13,7 +13,7 @@ const NewPasswordContainer = () => {
 
 
     const handleOnSubmit = useCallback((newPassword: string, token: string) => {
-        dispatch(setNewPasswordTC(newPassword, token))
+        dispatch(setNewPasswordTC({newPassword, token}))
     }, []
     )
 
