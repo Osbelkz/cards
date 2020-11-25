@@ -23,7 +23,7 @@ const initialState = {
     errorText: ""
 }
 
-export const getCardsTC = createAsyncThunk<
+export const getCards = createAsyncThunk<
     { cards: Array<CardType>, cardsTotalCount: number, minGrade: number, maxGrade: number, pageStatus: StatusType, page: number },
     { selectedPage?: number },
     { rejectValue: string, state: RootStateType }
@@ -53,7 +53,7 @@ export const getCardsTC = createAsyncThunk<
         }
     })
 
-export const deleteCardTC = createAsyncThunk<
+export const deleteCard = createAsyncThunk<
     undefined,
     string,
     { rejectValue: string, state: RootStateType }
@@ -61,14 +61,14 @@ export const deleteCardTC = createAsyncThunk<
     async (cardId, {rejectWithValue, dispatch}) => {
         try {
             await cardsApi.deleteCard(cardId)
-            dispatch(getCardsTC({}))
+            dispatch(getCards({}))
         } catch (e) {
             const error: { response: { data: { error: string } } } = e
             return rejectWithValue(error.response ? error.response.data.error : "unknown error")
         }
     })
 
-export const createCardTC = createAsyncThunk<
+export const createCard = createAsyncThunk<
     undefined,
     CreateCardType,
     { rejectValue: string, state: RootStateType }
@@ -77,14 +77,14 @@ export const createCardTC = createAsyncThunk<
         let {cardsPack_id} = getState().cards
         try {
             await cardsApi.createCard({...card, cardsPack_id: cardsPack_id})
-            dispatch(getCardsTC({selectedPage: 1}))
+            dispatch(getCards({selectedPage: 1}))
         } catch (e) {
             const error: { response: { data: { error: string } } } = e
             return rejectWithValue(error.response ? error.response.data.error : "unknown error")
         }
     })
 
-export const updateCardTC = createAsyncThunk<
+export const updateCard = createAsyncThunk<
     undefined,
     UpdateCardType,
     { rejectValue: string, state: RootStateType }
@@ -92,7 +92,7 @@ export const updateCardTC = createAsyncThunk<
     async (card, {rejectWithValue, dispatch}) => {
         try {
             await cardsApi.updateCard(card)
-            dispatch(getCardsTC({selectedPage: 1}))
+            dispatch(getCards({selectedPage: 1}))
         } catch (e) {
             const error: { response: { data: { error: string } } } = e
             return rejectWithValue(error.response ? error.response.data.error : "unknown error")
@@ -122,14 +122,15 @@ export const cardsSlice = createSlice({
         },
         setCardsSortColumnParams: (state, action: PayloadAction<{ sortCards: string }>) => {
             state.searchParams.sortCards = action.payload.sortCards
+            console.log(state.searchParams.sortCards)
         }
     },
     extraReducers: builder => {
         builder
-            .addCase(getCardsTC.pending, (state, action) => {
+            .addCase(getCards.pending, (state, action) => {
                 state.pageStatus = "loading"
             })
-            .addCase(getCardsTC.fulfilled, (state, action) => {
+            .addCase(getCards.fulfilled, (state, action) => {
                 state.cards = action.payload.cards
                 state.cardsTotalCount = action.payload.cardsTotalCount
                 state.minGrade = action.payload.minGrade
@@ -137,43 +138,43 @@ export const cardsSlice = createSlice({
                 state.pageStatus = action.payload.pageStatus
                 state.page = action.payload.page
             })
-            .addCase(getCardsTC.rejected, (state, action) => {
+            .addCase(getCards.rejected, (state, action) => {
                 if (action.payload) {
                     state.pageStatus = "failed"
                     state.errorText = action.payload
                 }
             })
-            .addCase(deleteCardTC.pending, (state, action) => {
+            .addCase(deleteCard.pending, (state, action) => {
                 state.pageStatus = "loading"
             })
-            .addCase(deleteCardTC.fulfilled, (state, action) => {
+            .addCase(deleteCard.fulfilled, (state, action) => {
                 state.pageStatus = "succeeded"
             })
-            .addCase(deleteCardTC.rejected, (state, action) => {
+            .addCase(deleteCard.rejected, (state, action) => {
                 if (action.payload) {
                     state.pageStatus = "failed"
                     state.errorText = action.payload
                 }
             })
-            .addCase(createCardTC.pending, (state, action) => {
+            .addCase(createCard.pending, (state, action) => {
                 state.pageStatus = "loading"
             })
-            .addCase(createCardTC.fulfilled, (state, action) => {
+            .addCase(createCard.fulfilled, (state, action) => {
                 state.pageStatus = "succeeded"
             })
-            .addCase(createCardTC.rejected, (state, action) => {
+            .addCase(createCard.rejected, (state, action) => {
                 if (action.payload) {
                     state.pageStatus = "failed"
                     state.errorText = action.payload
                 }
             })
-            .addCase(updateCardTC.pending, (state, action) => {
+            .addCase(updateCard.pending, (state, action) => {
                 state.pageStatus = "loading"
             })
-            .addCase(updateCardTC.fulfilled, (state, action) => {
+            .addCase(updateCard.fulfilled, (state, action) => {
                 state.pageStatus = "succeeded"
             })
-            .addCase(updateCardTC.rejected, (state, action) => {
+            .addCase(updateCard.rejected, (state, action) => {
                 if (action.payload) {
                     state.pageStatus = "failed"
                     state.errorText = action.payload

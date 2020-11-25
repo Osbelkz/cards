@@ -26,7 +26,7 @@ const PacksContainer = React.memo(() => {
     const dispatch = useDispatch()
     const {packs, min, max, page, pageCount, cardPacksTotalCount, pageStatus, searchParams, getMyPacks} =
         useSelector<RootStateType, PacksStateType>(state => state.packs)
-    const userId = useSelector<RootStateType, string | undefined>(state => state.profile.userData?._id)
+    const userId = useSelector<RootStateType, string | undefined>(state => state.login.userData?._id)
 
 
     const deletePackHandler = useCallback((id: string) => {

@@ -1,7 +1,7 @@
 import {authAPI} from "../../m3-dal/auth-api";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {RootStateType} from "../store";
-import {setErrorText} from "./login-reducer";
+
 
 export type NewPasswordStateType = typeof initialState
 
@@ -12,7 +12,7 @@ const initialState = {
     isLoading: false
 }
 
-export const setNewPasswordTC = createAsyncThunk<
+export const setNewPassword = createAsyncThunk<
     { isOk: string },
     { newPassword: string, token: string },
     {rejectValue: string, state: RootStateType}
@@ -25,7 +25,7 @@ export const setNewPasswordTC = createAsyncThunk<
             })
             return {isOk: response.data.info}
         } catch (e) {
-            setTimeout(dispatch, 5000, setErrorText(""))
+            setTimeout(dispatch, 5000, newPasswordSlice.actions.setErrorText({error: ""}))
             const error: { response: { data: { error: string } } } = e
             return rejectWithValue(error.response ? error.response.data.error : "unknown error")
         }
@@ -41,15 +41,15 @@ export const newPasswordSlice = createSlice({
     },
     extraReducers: builder => {
         builder
-            .addCase(setNewPasswordTC.pending, (state, action) => {
+            .addCase(setNewPassword.pending, (state, action) => {
                 state.isLoading = true
             })
-            .addCase(setNewPasswordTC.fulfilled, (state, action) => {
+            .addCase(setNewPassword.fulfilled, (state, action) => {
                 state.isSetNewPassword = true
                 state.isLoading = false
                 state.isOk = action.payload.isOk
             })
-            .addCase(setNewPasswordTC.rejected, (state, action) => {
+            .addCase(setNewPassword.rejected, (state, action) => {
                 if (action.payload) {
                     state.isLoading = false
                     state.error = action.payload
@@ -57,3 +57,5 @@ export const newPasswordSlice = createSlice({
             })
     }
 })
+
+const {} = newPasswordSlice.actions

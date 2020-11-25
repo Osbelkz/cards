@@ -1,8 +1,7 @@
 import {combineReducers} from "redux";
 import thunk from "redux-thunk";
-import {loginReducer} from "./reducers/login-reducer";
+import {loginSlice} from "./reducers/login-reducer";
 import {newPasswordSlice} from "./reducers/newPassword-reducer";
-import {profileReducer} from "./reducers/profileP-reducer";
 import {registerSlice} from "./reducers/register-reducer";
 import {restorePasswordSlice} from "./reducers/restorePassword-reducer";
 import {appSlice} from "./reducers/app-reducer";
@@ -13,11 +12,10 @@ import {practiceSlice} from "./reducers/practice-reducer";
 
 
 export const rootReducer = combineReducers({
-    login: loginReducer,
+    login: loginSlice.reducer,
     register: registerSlice.reducer,
     restorePassword: restorePasswordSlice.reducer,
     newPassword: newPasswordSlice.reducer,
-    profile: profileReducer,
     packs: packsSlice.reducer,
     cards: cardsSlice.reducer,
     app: appSlice.reducer,

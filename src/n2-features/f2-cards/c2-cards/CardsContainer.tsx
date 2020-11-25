@@ -7,13 +7,13 @@ import {
     CardsStateType,
     changeCardsPage,
     changeCardsPageCount,
-    createCardTC,
-    deleteCardTC,
-    getCardsTC,
+    createCard,
+    deleteCard,
+    getCards,
     setCardsSearchParams,
     setCardsSortColumnParams,
     setPack,
-    updateCardTC
+    updateCard
 } from "../../../n1-main/m2-bll/reducers/cards-reducer";
 import {useParams} from "react-router-dom";
 
@@ -24,7 +24,7 @@ const CardsContainer = React.memo(() => {
     const {
         cards, cardsOwner, cardsPack_id, minGrade, maxGrade, page, pageCount, cardsTotalCount, pageStatus, searchParams
         } = useSelector<RootStateType, CardsStateType>(state => state.cards)
-    const userId = useSelector<RootStateType, string | undefined>(state => state.profile.userData?._id)
+    const userId = useSelector<RootStateType, string | undefined>(state => state.login.userData?._id)
 
 
     let {packId} = useParams<{packId: string}>()
@@ -32,13 +32,13 @@ const CardsContainer = React.memo(() => {
         dispatch(setPack({cardsPack_id: packId, cardsOwner: ""}))
     }
     const deleteCardHandler = useCallback((cardId: string) => {
-        dispatch(deleteCardTC(cardId))
+        dispatch(deleteCard(cardId))
     }, [])
     const createCardHandler = useCallback((question: string, answer: string) => {
-        dispatch(createCardTC({question, answer}))
+        dispatch(createCard({question, answer}))
     }, [])
     const updateCardHandler = useCallback((cardId: string, question: string, answer: string) => {
-        dispatch(updateCardTC({question, _id: cardId, answer}))
+        dispatch(updateCard({question, _id: cardId, answer}))
     }, [])
     const changePageHandler = useCallback((page: number) => {
         dispatch(changeCardsPage({page}))
@@ -54,7 +54,7 @@ const CardsContainer = React.memo(() => {
     }, [])
 
     useEffect(() => {
-        dispatch(getCardsTC({}))
+        dispatch(getCards({}))
 
     }, [page, pageCount, searchParams, cardsPack_id])
 
