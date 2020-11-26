@@ -15,8 +15,8 @@ import {
     updatePack
 } from "../../../n1-main/m2-bll/reducers/packs-reducer";
 import {Preloader} from "../../../n1-main/m1-ui/common/Preloader/Preloader";
-import {setPackAC} from "../../../n1-main/m2-bll/reducers/cards-reducer";
 import {useHistory} from 'react-router-dom';
+import { setPack } from '../../../n1-main/m2-bll/reducers/cards-reducer';
 
 
 const PacksContainer = React.memo(() => {
@@ -26,7 +26,7 @@ const PacksContainer = React.memo(() => {
     const dispatch = useDispatch()
     const {packs, min, max, page, pageCount, cardPacksTotalCount, pageStatus, searchParams, getMyPacks} =
         useSelector<RootStateType, PacksStateType>(state => state.packs)
-    const userId = useSelector<RootStateType, string | undefined>(state => state.profile.userData?._id)
+    const userId = useSelector<RootStateType, string | undefined>(state => state.login.userData?._id)
 
 
     const deletePackHandler = useCallback((id: string) => {
@@ -51,11 +51,11 @@ const PacksContainer = React.memo(() => {
         dispatch(setPacksSortColumn({sortPacks}))
     }, [])
     const choosePackHandler = useCallback((packId: string, cardsOwner: string) => {
-        dispatch(setPackAC(packId, cardsOwner))
+        dispatch(setPack({cardsPack_id: packId, cardsOwner}))
         history.push(`/cards/${packId}`)
     }, [])
     const startLearnHandler = useCallback((packId: string, cardsOwner: string) => {
-        dispatch(setPackAC(packId, cardsOwner))
+        dispatch(setPack({cardsPack_id: packId, cardsOwner}))
         history.push(`/learn/${packId}`)
     }, [])
     const setGettingMyPacks = (checkboxValue: boolean) => {

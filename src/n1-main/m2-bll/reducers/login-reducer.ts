@@ -1,59 +1,90 @@
-import {Dispatch} from "redux";
-import {setProfileUserDataAC} from "./profileP-reducer";
-import {authAPI} from "../../m3-dal/auth-api";
-import {setInitAppAC} from "./app-reducer";
-
-export type LoginStateType = typeof initialState
+import {authAPI, UserDataType} from "../../m3-dal/auth-api";
+import {setAppError, setInitApp} from "./app-reducer";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {RootStateType} from "../store";
 
 const initialState = {
+    userData: null as UserDataType | null,
     isLoading: false,
     isLoggedSuccess: false,
     error: ""
 }
 
-export const loginReducer = (state = initialState, action: ActionsType): LoginStateType => {
-    switch (action.type) {
-        case "login/SET-VALUE-IS-LOGGED-SUCCESS":
-            return {...state, isLoggedSuccess: action.isLoggedSuccess}
-        case "login/SET-VALUE-IS-LOADING":
-            return {...state, isLoading: action.isLoading}
-        case "login/SET-ERROR-TEXT":
-            return {...state, error: action.error}
-        default:
-            return state;
+export const logInUserInApp = createAsyncThunk<
+    { userData: UserDataType },
+    { email: string, password: string, rememberMe: boolean },
+    {rejectValue: string, state: RootStateType}
+    >("login/logInUserInApp",
+    async ({email, password, rememberMe}, {rejectWithValue, dispatch}) => {
+        try {
+            const response = await authAPI.logInUserInApp({email, password, rememberMe})
+            dispatch(setInitApp({initApp: "succeeded"}))
+            return {userData: response.data}
+        } catch (e) {
+            setTimeout(dispatch, 5000, setErrorText({error: ""}))
+            const error: { response: { data: { error: string } } } = e
+            return rejectWithValue(error.response ? error.response.data.error : (e.message + ', more details in the console'))
+        } 
+    })
+
+export const logoutUserInApp = createAsyncThunk<
+    undefined,
+    undefined,
+    {rejectValue: string, state: RootStateType}
+    >("login/logoutUserInAppTC",
+    async (arg, {rejectWithValue, dispatch}) => {
+        dispatch(setInitApp({initApp: "loading"}))
+        dispatch(setAppError({error: ""}))
+        try {
+            await authAPI.logoutUserInApp()
+            dispatch(setInitApp({initApp: "succeeded"}))
+        } catch (e) {
+            dispatch(setInitApp({initApp: "failed"}))
+            const error: { response: { data: { error: string } } } = e
+            return rejectWithValue(error.response ? error.response.data.error : "unknown error")
+        }
+    })
+
+export const loginSlice = createSlice({
+    name: "login",
+    initialState,
+    reducers: {
+        setProfileUserData: (state, action: PayloadAction<{userData: UserDataType}>) => {
+            state.userData = action.payload.userData
+        },
+        setValueIsLoggedSuccess: (state, action: PayloadAction<{ isLoggedSuccess: boolean }>) => {
+            state.isLoggedSuccess = action.payload.isLoggedSuccess
+        },
+        setErrorText: (state, action: PayloadAction<{error: string}>) => {
+            state.error = action.payload.error
+        }
+    },
+    extraReducers: builder => {
+        builder
+            .addCase(logInUserInApp.pending, (state, action) => {
+                state.isLoading = true
+                state.error = ""
+            })
+            .addCase(logInUserInApp.fulfilled, (state, action) => {
+                state.userData = action.payload.userData
+                state.isLoggedSuccess = true
+                state.isLoading = false
+            })
+            .addCase(logInUserInApp.rejected, (state, action) => {
+                if (action.payload) {
+                    state.isLoading = false
+                    state.error = action.payload
+                }
+            })
+            .addCase(logoutUserInApp.fulfilled, (state, action) => {
+                state.userData = null
+                state.isLoggedSuccess = false
+            })
+            .addCase(logoutUserInApp.rejected, (state, action) => {
+                if (action.payload) {
+                    state.error = action.payload
+                }
+            })
     }
-};
-
-export const logInUserInAppTC = (email: string, password: string, rememberMe: boolean) => (dispatch: Dispatch) => {
-    dispatch(setValueIsLoading(true))
-    dispatch(setErrorText(""))
-    authAPI.logInUserInApp({email, password, rememberMe})
-        .then(res => {
-            dispatch(setProfileUserDataAC({...res.data}))
-            dispatch(setInitAppAC("succeeded"))
-            dispatch(setValueIsLoggedSuccess(true))
-            dispatch(setValueIsLoading(false))
-
-        })
-        .catch(e => {
-            dispatch(setValueIsLoading(false))
-            const error = e.response ? e.response.data.error : (e.message + ', more details in the console')
-            dispatch(setErrorText(error))
-            setTimeout(dispatch, 5000, setErrorText(""))
-        })
-}
-
-export const setValueIsLoading = (isLoading: boolean) =>
-    ({type: "login/SET-VALUE-IS-LOADING", isLoading} as const)
-
-export const setValueIsLoggedSuccess = (isLoggedSuccess: boolean) =>
-    ({type: "login/SET-VALUE-IS-LOGGED-SUCCESS", isLoggedSuccess} as const)
-
-export const setErrorText = (error: string) =>
-    ({type: "login/SET-ERROR-TEXT", error} as const)
-
-type ActionsType = ReturnType<typeof setValueIsLoading>
-    | ReturnType<typeof setValueIsLoggedSuccess>
-    | ReturnType<typeof setErrorText>
-    | ReturnType<typeof setProfileUserDataAC>
-
+})
+export const {setValueIsLoggedSuccess, setProfileUserData, setErrorText} = loginSlice.actions

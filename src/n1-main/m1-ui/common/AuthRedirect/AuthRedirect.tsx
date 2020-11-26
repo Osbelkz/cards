@@ -3,7 +3,7 @@ import {Preloader} from "../Preloader/Preloader";
 import {Redirect} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {RootStateType} from "../../../m2-bll/store";
-import {authMeTC, StatusType} from "../../../m2-bll/reducers/app-reducer";
+import {authMe, StatusType} from "../../../m2-bll/reducers/app-reducer";
 
 const AuthRedirect: React.FC = (props) => {
 
@@ -14,7 +14,7 @@ const AuthRedirect: React.FC = (props) => {
 
     useEffect(() => {
         if (initApp === "idle" && !isLoggedSuccess) {
-            dispatch(authMeTC())
+            dispatch(authMe())
         }
     }, [initApp, isLoggedSuccess])
 

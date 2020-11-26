@@ -1,20 +1,7 @@
-import {Dispatch} from "redux";
 import {RootStateType} from "../store";
 import { StatusType } from "./app-reducer";
-import {cardsApi, CardType, CreateCardType, GradeType, UpdateCardType} from "../../m3-dal/cards-api";
-import {ThunkDispatch} from "redux-thunk";
-
-enum ACTION_TYPES {
-    CHANGE_PAGE = "cards/CHANGE_PAGE",
-    CHANGE_PAGE_COUNT = "cards/CHANGE_PAGE_COUNT",
-    SET_CARDS = "cards/SET_CARDS",
-    SET_SEARCH_NAME = "cards/SET_SEARCH_NAME",
-    SET_SEARCH_PARAMS = "cards/SET_SEARCH_PARAMS",
-    SET_IS_LOADING = "cards/SET_IS_LOADING",
-    SET_PACK_ID = "cards/SET_PACK_ID",
-    SET_SORT_COLUMN = "cards/SET_SORT_COLUMN",
-}
-
+import {cardsApi, CardType, CreateCardType, UpdateCardType} from "../../m3-dal/cards-api";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 const initialState = {
     cardsPack_id: "" as string,
@@ -32,140 +19,171 @@ const initialState = {
         sortCards: "",
         min: 0,
         max: 0,
-    }
+    },
+    errorText: ""
 }
 
-export const cardsReducer = (state: CardsStateType = initialState, action: ActionsType): CardsStateType => {
-    switch (action.type) {
-        case ACTION_TYPES.CHANGE_PAGE:
-        case ACTION_TYPES.CHANGE_PAGE_COUNT:
-        case ACTION_TYPES.SET_IS_LOADING:
-        case ACTION_TYPES.SET_PACK_ID:
-        case ACTION_TYPES.SET_CARDS:
-            return {
-                ...state, ...action.payload,
+export const getCards = createAsyncThunk<
+    { cards: Array<CardType>, cardsTotalCount: number, minGrade: number, maxGrade: number, pageStatus: StatusType, page: number },
+    { selectedPage?: number },
+    { rejectValue: string, state: RootStateType }
+    >("cards/getCards",
+    async (arg, { rejectWithValue, getState}) => {
+        const {cardsPack_id, page, pageCount, searchParams: {cardQuestion, min, max, sortCards}} = getState().cards
+        try {
+            const response = await cardsApi.getPack({
+                cardsPack_id,
+                page: arg.selectedPage || page,
+                pageCount,
+                cardQuestion,
+                min,
+                max,
+                sortCards
+            })
+            return {cards: response.data.cards,
+                cardsTotalCount: response.data.cardsTotalCount,
+                minGrade: response.data.minGrade,
+                maxGrade: response.data.maxGrade,
+                pageStatus: "succeeded",
+                page: arg.selectedPage || 1
             }
-        case ACTION_TYPES.SET_SEARCH_NAME:
-            return {
-                ...state, searchParams: {...state.searchParams, cardQuestion: action.payload.question}
-            }
-        case ACTION_TYPES.SET_SEARCH_PARAMS:
-        case ACTION_TYPES.SET_SORT_COLUMN:
-            return {
-                ...state, searchParams: {...state.searchParams, ...action.payload}
-            }
-        default:
-            return state
+        } catch (e) {
+            const error: { response: { data: { error: string } } } = e
+            return rejectWithValue(error.response ? error.response.data.error : "unknown error")
+        }
+    })
+
+export const deleteCard = createAsyncThunk<
+    undefined,
+    string,
+    { rejectValue: string, state: RootStateType }
+    >("cards/deleteCardTC",
+    async (cardId, {rejectWithValue, dispatch}) => {
+        try {
+            await cardsApi.deleteCard(cardId)
+            dispatch(getCards({}))
+        } catch (e) {
+            const error: { response: { data: { error: string } } } = e
+            return rejectWithValue(error.response ? error.response.data.error : "unknown error")
+        }
+    })
+
+export const createCard = createAsyncThunk<
+    undefined,
+    CreateCardType,
+    { rejectValue: string, state: RootStateType }
+    >("cards/createCardTC",
+    async (card, {rejectWithValue, getState, dispatch}) => {
+        let {cardsPack_id} = getState().cards
+        try {
+            await cardsApi.createCard({...card, cardsPack_id: cardsPack_id})
+            dispatch(getCards({selectedPage: 1}))
+        } catch (e) {
+            const error: { response: { data: { error: string } } } = e
+            return rejectWithValue(error.response ? error.response.data.error : "unknown error")
+        }
+    })
+
+export const updateCard = createAsyncThunk<
+    undefined,
+    UpdateCardType,
+    { rejectValue: string, state: RootStateType }
+    >("cards/updateCardTC",
+    async (card, {rejectWithValue, dispatch}) => {
+        try {
+            await cardsApi.updateCard(card)
+            dispatch(getCards({selectedPage: 1}))
+        } catch (e) {
+            const error: { response: { data: { error: string } } } = e
+            return rejectWithValue(error.response ? error.response.data.error : "unknown error")
+        }
+    })
+
+export const cardsSlice = createSlice({
+    name: "cards",
+    initialState,
+    reducers: {
+        setPack: (state, action: PayloadAction<{cardsPack_id: string, cardsOwner: string}>) => {
+            const {cardsPack_id, cardsOwner} = action.payload
+            state.cardsPack_id = cardsPack_id
+            state.cardsOwner = cardsOwner
+        },
+        changeCardsPage: (state, action: PayloadAction<{page: number}>) => {
+            state.page = action.payload.page
+        },
+        changeCardsPageCount: (state, action: PayloadAction<{ pageCount: number }>) => {
+            state.pageCount = action.payload.pageCount
+        },
+        setCardsSearchParams: (state, action: PayloadAction<{cardQuestion: string, min: number, max: number}>) => {
+            const {cardQuestion, min, max} = action.payload
+            state.searchParams.cardQuestion = cardQuestion
+            state.searchParams.min = min
+            state.searchParams.max = max
+        },
+        setCardsSortColumnParams: (state, action: PayloadAction<{ sortCards: string }>) => {
+            state.searchParams.sortCards = action.payload.sortCards
+            console.log(state.searchParams.sortCards)
+        }
+    },
+    extraReducers: builder => {
+        builder
+            .addCase(getCards.pending, (state, action) => {
+                state.pageStatus = "loading"
+            })
+            .addCase(getCards.fulfilled, (state, action) => {
+                state.cards = action.payload.cards
+                state.cardsTotalCount = action.payload.cardsTotalCount
+                state.minGrade = action.payload.minGrade
+                state.maxGrade = action.payload.maxGrade
+                state.pageStatus = action.payload.pageStatus
+                state.page = action.payload.page
+            })
+            .addCase(getCards.rejected, (state, action) => {
+                if (action.payload) {
+                    state.pageStatus = "failed"
+                    state.errorText = action.payload
+                }
+            })
+            .addCase(deleteCard.pending, (state, action) => {
+                state.pageStatus = "loading"
+            })
+            .addCase(deleteCard.fulfilled, (state, action) => {
+                state.pageStatus = "succeeded"
+            })
+            .addCase(deleteCard.rejected, (state, action) => {
+                if (action.payload) {
+                    state.pageStatus = "failed"
+                    state.errorText = action.payload
+                }
+            })
+            .addCase(createCard.pending, (state, action) => {
+                state.pageStatus = "loading"
+            })
+            .addCase(createCard.fulfilled, (state, action) => {
+                state.pageStatus = "succeeded"
+            })
+            .addCase(createCard.rejected, (state, action) => {
+                if (action.payload) {
+                    state.pageStatus = "failed"
+                    state.errorText = action.payload
+                }
+            })
+            .addCase(updateCard.pending, (state, action) => {
+                state.pageStatus = "loading"
+            })
+            .addCase(updateCard.fulfilled, (state, action) => {
+                state.pageStatus = "succeeded"
+            })
+            .addCase(updateCard.rejected, (state, action) => {
+                if (action.payload) {
+                    state.pageStatus = "failed"
+                    state.errorText = action.payload
+                }
+            })
     }
-}
+})
 
-
-// actions
-
-export const changeCardsPageAC = (page: number) => {
-    return {type: ACTION_TYPES.CHANGE_PAGE, payload: {page}} as const
-}
-export const changeCardsPageCountAC = (pageCount: number) => {
-    return {type: ACTION_TYPES.CHANGE_PAGE_COUNT, payload: {pageCount}} as const
-}
-const setCardsAC = (cards: Array<CardType>, cardsTotalCount: number, minGrade: number, maxGrade: number, pageStatus: StatusType) => {
-    return {type: ACTION_TYPES.SET_CARDS, payload: {cards, cardsTotalCount, minGrade, maxGrade, pageStatus}} as const
-}
-export const setCardsSearchQuestionAC = (question: string) => {
-    return {type: ACTION_TYPES.SET_SEARCH_NAME, payload: {question}} as const
-}
-export const setCardsSearchParamsAC = (cardQuestion: string, min: number, max: number) => {
-    return {type: ACTION_TYPES.SET_SEARCH_PARAMS, payload: {cardQuestion, min, max}} as const
-}
-export const setCardsPageStatus = (pageStatus: StatusType) => {
-    return {type: ACTION_TYPES.SET_IS_LOADING, payload: {pageStatus}} as const
-}
-export const setPackAC = (cardsPack_id: string, cardsOwner: string) => {
-    return {type: ACTION_TYPES.SET_PACK_ID, payload: {cardsPack_id, cardsOwner}} as const
-}
-export const setCardsSortColumnParamsAC = (sortCards: string) => {
-    return {type: ACTION_TYPES.SET_SORT_COLUMN, payload: {sortCards}} as const
-}
-
-// thunks
-
-export const getCardsTC = (selectedPage?: number) => async (dispatch: Dispatch, getState: () => RootStateType) => {
-    const {cardsPack_id, page, pageCount, searchParams: {cardQuestion, min, max, sortCards}} = getState().cards
-    dispatch(setCardsPageStatus("loading"))
-    try {
-        const response = await cardsApi.getPack({
-            cardsPack_id,
-            page: selectedPage || page,
-            pageCount,
-            cardQuestion,
-            min,
-            max,
-            sortCards
-        })
-        dispatch(setCardsAC(response.data.cards,
-            response.data.cardsTotalCount,
-            response.data.minGrade,
-            response.data.maxGrade,
-            "succeeded"))
-        selectedPage && dispatch(changeCardsPageAC(selectedPage))
-        // console.log(getState().cards)
-    } catch (e) {
-        // console.log("get packs tc")
-        // alert(e.response.data.error)
-        dispatch(setCardsPageStatus("failed"))
-    } finally {
-
-    }
-}
-
-export const deleteCardTC = (cardId: string) =>
-    async (dispatch: ThunkDispatch<RootStateType, {}, ActionsType>) => {
-    dispatch(setCardsPageStatus("loading"))
-    try {
-        const response = await cardsApi.deleteCard(cardId)
-        dispatch(getCardsTC())
-    } catch (e) {
-        // alert(e.response.data.error)
-        dispatch(setCardsPageStatus("failed"))
-    }
-}
-
-export const createCardTC = (card: CreateCardType) =>
-    async (dispatch: ThunkDispatch<RootStateType, {}, ActionsType>, getState: () => RootStateType) => {
-    dispatch(setCardsPageStatus("loading"))
-    let {cardsPack_id} = getState().cards
-    try {
-        const response = await cardsApi.createCard({...card, cardsPack_id})
-        dispatch(getCardsTC(1))
-    } catch (e) {
-        // console.log("create tc")
-        // alert(e.response.data.error)
-        dispatch(setCardsPageStatus("failed"))
-    }
-}
-//under construction
-export const updateCardTC = (card: UpdateCardType) =>
-    async (dispatch: ThunkDispatch<RootStateType, {}, ActionsType>) => {
-    dispatch(setCardsPageStatus("loading"))
-    try {
-        const response = await cardsApi.updateCard(card)
-        dispatch(getCardsTC(1))
-    } catch (e) {
-        // alert(e.response.data.error)
-        dispatch(setCardsPageStatus("failed"))
-    }
-}
-
+export const {setPack, changeCardsPage, changeCardsPageCount, setCardsSearchParams, setCardsSortColumnParams} = cardsSlice.actions
 
 export type CardsStateType = typeof initialState
 export type CardsSearchParamsType = typeof initialState.searchParams
-
-
-type ActionsType = ReturnType<typeof changeCardsPageAC>
-    | ReturnType<typeof changeCardsPageCountAC>
-    | ReturnType<typeof setCardsAC>
-    | ReturnType<typeof setCardsSearchQuestionAC>
-    | ReturnType<typeof setCardsSearchParamsAC>
-    | ReturnType<typeof setCardsPageStatus>
-    | ReturnType<typeof setPackAC>
-    | ReturnType<typeof setCardsSortColumnParamsAC>

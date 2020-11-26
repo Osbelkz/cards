@@ -5,7 +5,7 @@ import {RootStateType} from "../../../n1-main/m2-bll/store";
 import { UserDataType } from '../../../n1-main/m3-dal/auth-api';
 
 const ProfileContainer = () => {
-    const userData = useSelector<RootStateType, UserDataType | null>(state => state.profile.userData)
+    const userData = useSelector<RootStateType, UserDataType | null>(state => state.login.userData)
 
     if(!userData) return <div></div>
 

@@ -1,26 +1,24 @@
 import {combineReducers} from "redux";
 import thunk from "redux-thunk";
-import {loginReducer} from "./reducers/login-reducer";
-import {newPasswordReducer} from "./reducers/newPassword-reducer";
-import {profileReducer} from "./reducers/profileP-reducer";
+import {loginSlice} from "./reducers/login-reducer";
+import {newPasswordSlice} from "./reducers/newPassword-reducer";
 import {registerSlice} from "./reducers/register-reducer";
 import {restorePasswordSlice} from "./reducers/restorePassword-reducer";
-import {appReducer} from "./reducers/app-reducer";
+import {appSlice} from "./reducers/app-reducer";
 import {packsSlice} from "./reducers/packs-reducer";
-import {cardsReducer} from "./reducers/cards-reducer";
+import {cardsSlice} from "./reducers/cards-reducer";
 import {configureStore} from "@reduxjs/toolkit";
 import {practiceSlice} from "./reducers/practice-reducer";
 
 
 export const rootReducer = combineReducers({
-    login: loginReducer,
+    login: loginSlice.reducer,
     register: registerSlice.reducer,
     restorePassword: restorePasswordSlice.reducer,
-    newPassword: newPasswordReducer,
-    profile: profileReducer,
+    newPassword: newPasswordSlice.reducer,
     packs: packsSlice.reducer,
-    cards: cardsReducer,
-    app: appReducer,
+    cards: cardsSlice.reducer,
+    app: appSlice.reducer,
     practice: practiceSlice.reducer
 })
 
