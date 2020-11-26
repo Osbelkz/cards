@@ -24,7 +24,7 @@ const initialState = {
 }
 
 export const getCards = createAsyncThunk<
-    { cards: Array<CardType>, cardsTotalCount: number, minGrade: number, maxGrade: number, pageStatus: StatusType, page: number },
+    { cards: Array<CardType>, cardsTotalCount: number, minGrade: number, maxGrade: number, pageStatus: StatusType, page: number, packUserId: string },
     { selectedPage?: number },
     { rejectValue: string, state: RootStateType }
     >("cards/getCards",
@@ -45,6 +45,7 @@ export const getCards = createAsyncThunk<
                 minGrade: response.data.minGrade,
                 maxGrade: response.data.maxGrade,
                 pageStatus: "succeeded",
+                packUserId: response.data.packUserId,
                 page: arg.selectedPage || 1
             }
         } catch (e) {
@@ -103,10 +104,9 @@ export const cardsSlice = createSlice({
     name: "cards",
     initialState,
     reducers: {
-        setPack: (state, action: PayloadAction<{cardsPack_id: string, cardsOwner: string}>) => {
-            const {cardsPack_id, cardsOwner} = action.payload
+        setPack: (state, action: PayloadAction<{cardsPack_id: string}>) => {
+            const {cardsPack_id} = action.payload
             state.cardsPack_id = cardsPack_id
-            state.cardsOwner = cardsOwner
         },
         changeCardsPage: (state, action: PayloadAction<{page: number}>) => {
             state.page = action.payload.page
@@ -137,6 +137,7 @@ export const cardsSlice = createSlice({
                 state.maxGrade = action.payload.maxGrade
                 state.pageStatus = action.payload.pageStatus
                 state.page = action.payload.page
+                state.cardsOwner = action.payload.packUserId
             })
             .addCase(getCards.rejected, (state, action) => {
                 if (action.payload) {

@@ -57,6 +57,7 @@ type ResponsePacksType = {
     "cardsTotalCount": number,
     "minGrade": number,
     "maxGrade": number,
+    packUserId: string
     page: number // выбранная страница
     pageCount: number // количество элементов на странице
     "token": string,

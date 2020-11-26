@@ -29,7 +29,7 @@ const CardsContainer = React.memo(() => {
 
     let {packId} = useParams<{packId: string}>()
     if (cardsPack_id !== packId) {
-        dispatch(setPack({cardsPack_id: packId, cardsOwner: ""}))
+        dispatch(setPack({cardsPack_id: packId}))
     }
     const deleteCardHandler = useCallback((cardId: string) => {
         dispatch(deleteCard(cardId))
