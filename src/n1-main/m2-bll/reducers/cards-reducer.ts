@@ -2,6 +2,7 @@ import {RootStateType} from "../store";
 import { StatusType } from "./app-reducer";
 import {cardsApi, CardType, CreateCardType, UpdateCardType} from "../../m3-dal/cards-api";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import { ErrorType } from "../commonTypes";
 
 const initialState = {
     cardsPack_id: "" as string,
@@ -49,7 +50,7 @@ export const getCards = createAsyncThunk<
                 page: arg.selectedPage || 1
             }
         } catch (e) {
-            const error: { response: { data: { error: string } } } = e
+            const error: ErrorType = e
             return rejectWithValue(error.response ? error.response.data.error : "unknown error")
         }
     })
@@ -64,7 +65,7 @@ export const deleteCard = createAsyncThunk<
             await cardsApi.deleteCard(cardId)
             dispatch(getCards({}))
         } catch (e) {
-            const error: { response: { data: { error: string } } } = e
+            const error: ErrorType = e
             return rejectWithValue(error.response ? error.response.data.error : "unknown error")
         }
     })
@@ -80,7 +81,7 @@ export const createCard = createAsyncThunk<
             await cardsApi.createCard({...card, cardsPack_id: cardsPack_id})
             dispatch(getCards({selectedPage: 1}))
         } catch (e) {
-            const error: { response: { data: { error: string } } } = e
+            const error: ErrorType = e
             return rejectWithValue(error.response ? error.response.data.error : "unknown error")
         }
     })
@@ -95,7 +96,7 @@ export const updateCard = createAsyncThunk<
             await cardsApi.updateCard(card)
             dispatch(getCards({selectedPage: 1}))
         } catch (e) {
-            const error: { response: { data: { error: string } } } = e
+            const error: ErrorType = e
             return rejectWithValue(error.response ? error.response.data.error : "unknown error")
         }
     })

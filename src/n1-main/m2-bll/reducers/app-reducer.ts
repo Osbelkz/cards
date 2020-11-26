@@ -2,6 +2,7 @@ import {authAPI} from "../../m3-dal/auth-api";
 import {setProfileUserData, setValueIsLoggedSuccess } from "./login-reducer";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {RootStateType} from "../store";
+import { ErrorType } from "../commonTypes";
 
 export const authMe = createAsyncThunk<
     undefined,
@@ -14,7 +15,7 @@ export const authMe = createAsyncThunk<
             dispatch(setProfileUserData({userData: res.data}))
             dispatch(setValueIsLoggedSuccess({isLoggedSuccess: true}))
         } catch (e) {
-            const error: {response: {data: {error: string}}} = e
+            const error: ErrorType = e
             return rejectWithValue(error.response ? error.response.data.error : "unknown error")
         }
     })

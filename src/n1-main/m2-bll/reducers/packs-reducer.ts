@@ -2,6 +2,7 @@ import {CardPackType, packsApi} from "../../m3-dal/packs-api";
 import {RootStateType} from "../store";
 import {StatusType} from "./app-reducer";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import { ErrorType } from "../commonTypes";
 
 
 
@@ -50,7 +51,7 @@ export const getPacks = createAsyncThunk<
             const {cardPacks, maxCardsCount, minCardsCount, cardPacksTotalCount} = response.data
             return {packs: cardPacks, min: minCardsCount, max: maxCardsCount, cardPacksTotalCount, page: selectedPage}
         } catch (e) {
-            const error: { response: { data: { error: string } } } = e
+            const error: ErrorType = e
             return rejectWithValue(error.response ? error.response.data.error : "unknown error")
         }
     })
@@ -65,7 +66,7 @@ export const deletePack = createAsyncThunk<
         await packsApi.deletePack(id)
         await dispatch(getPacks())
     } catch (e) {
-        const error: { response: { data: { error: string } } } = e
+        const error: ErrorType = e
         return rejectWithValue(error.response ? error.response.data.error : "unknown error")
     }
 })
@@ -80,7 +81,7 @@ export const createPack = createAsyncThunk<
         await packsApi.createPack({name})
         await dispatch(getPacks(1))
     } catch (e) {
-        const error: { response: { data: { error: string } } } = e
+        const error: ErrorType = e
         return rejectWithValue(error.response ? error.response.data.error : "unknown error")
     }
 })
@@ -95,7 +96,7 @@ export const updatePack = createAsyncThunk<
         await packsApi.updatePack({name, _id})
         return { name, _id }
     } catch (e) {
-        const error: { response: { data: { error: string } } } = e
+        const error: ErrorType = e
         return rejectWithValue(error.response ? error.response.data.error : "unknown error")
     }
 })

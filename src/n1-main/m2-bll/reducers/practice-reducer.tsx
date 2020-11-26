@@ -2,6 +2,7 @@ import {RootStateType} from "../store";
 import {StatusType} from "./app-reducer";
 import {cardsApi, CardType, GradeType} from "../../m3-dal/cards-api";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import { ErrorType } from "../commonTypes";
 
 export type PracticeStateType = typeof initialState
 
@@ -25,7 +26,7 @@ export const getPracticeCards = createAsyncThunk<
             const response = await cardsApi.getPack({cardsPack_id, pageCount: 200})
             return {cards: response.data.cards, cardsTotalCount: response.data.cardsTotalCount}
         } catch (e) {
-            const error: { response: { data: { error: string } } } = e
+            const error: ErrorType = e
             return rejectWithValue(error.response ? error.response.data.error : "unknown error")
         }
     })
@@ -41,7 +42,7 @@ export const updateGrade = createAsyncThunk<
             let {data: {updatedGrade: {card_id, grade, shots}}} = response
             return {card_id, grade, shots}
         } catch (e) {
-            const error: { response: { data: { error: string } } } = e
+            const error: ErrorType = e
             return rejectWithValue(error.response ? error.response.data.error : "unknown error")
         }
     })

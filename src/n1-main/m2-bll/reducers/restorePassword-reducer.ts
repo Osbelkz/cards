@@ -1,5 +1,6 @@
 import {authAPI} from "../../m3-dal/auth-api";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import { ErrorType } from "../commonTypes";
 
 export type RestorePasswordStateType = typeof initialState
 
@@ -15,7 +16,7 @@ export const restoreTC = createAsyncThunk<string, string, { rejectValue: string 
             const response = await authAPI.getLinkForResetPassword(email)
             return response.data.info
         } catch (e) {
-            const error: { response: { data: { error: string } } } = e
+            const error: ErrorType = e
             return rejectWithValue(error.response.data.error)
         }
     })

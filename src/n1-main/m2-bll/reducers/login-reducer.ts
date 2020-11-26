@@ -2,6 +2,7 @@ import {authAPI, UserDataType} from "../../m3-dal/auth-api";
 import {setAppError, setInitApp} from "./app-reducer";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {RootStateType} from "../store";
+import { ErrorType } from "../commonTypes";
 
 const initialState = {
     userData: null as UserDataType | null,
@@ -22,9 +23,9 @@ export const logInUserInApp = createAsyncThunk<
             return {userData: response.data}
         } catch (e) {
             setTimeout(dispatch, 5000, setErrorText({error: ""}))
-            const error: { response: { data: { error: string } } } = e
+            const error: ErrorType = e
             return rejectWithValue(error.response ? error.response.data.error : (e.message + ', more details in the console'))
-        } 
+        }
     })
 
 export const logoutUserInApp = createAsyncThunk<
@@ -40,7 +41,7 @@ export const logoutUserInApp = createAsyncThunk<
             dispatch(setInitApp({initApp: "succeeded"}))
         } catch (e) {
             dispatch(setInitApp({initApp: "failed"}))
-            const error: { response: { data: { error: string } } } = e
+            const error: ErrorType = e
             return rejectWithValue(error.response ? error.response.data.error : "unknown error")
         }
     })

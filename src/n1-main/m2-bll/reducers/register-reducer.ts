@@ -1,6 +1,7 @@
 import {authAPI, RequestRegisterType} from "../../m3-dal/auth-api";
 import {StatusType} from "./app-reducer";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import { ErrorType } from "../commonTypes";
 
 export type RegisterStateType = typeof initialState
 
@@ -14,7 +15,7 @@ export const addUserTC = createAsyncThunk<undefined, RequestRegisterType, { reje
         try {
             await authAPI.register(data)
         } catch (e) {
-            const error: { response: { data: { error: string } } } = e
+            const error: ErrorType = e
             return rejectWithValue(error.response ? error.response.data.error : "unknown error")
         }
     })

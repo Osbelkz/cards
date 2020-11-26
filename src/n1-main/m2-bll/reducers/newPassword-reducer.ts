@@ -1,6 +1,7 @@
 import {authAPI} from "../../m3-dal/auth-api";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {RootStateType} from "../store";
+import { ErrorType } from "../commonTypes";
 
 
 export type NewPasswordStateType = typeof initialState
@@ -26,7 +27,7 @@ export const setNewPassword = createAsyncThunk<
             return {isOk: response.data.info}
         } catch (e) {
             setTimeout(dispatch, 5000, newPasswordSlice.actions.setErrorText({error: ""}))
-            const error: { response: { data: { error: string } } } = e
+            const error: ErrorType = e
             return rejectWithValue(error.response ? error.response.data.error : "unknown error")
         }
     })
