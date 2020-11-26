@@ -1,5 +1,8 @@
-import {Dispatch} from "redux";
 import {authAPI} from "../../m3-dal/auth-api";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {RootStateType} from "../store";
+import { ErrorType } from "../commonTypes";
+
 
 export type NewPasswordStateType = typeof initialState
 
@@ -10,52 +13,50 @@ const initialState = {
     isLoading: false
 }
 
-export const newPasswordReducer = (state = initialState, action: ActionsType): NewPasswordStateType => {
-    switch (action.type) {
-        case "newPassword/SET-VALUE-IS-SET-NEW-PASSWORD":
-            return {...state, isSetNewPassword: action.value}
-        case "newPassword/SET-ERROR-TEXT":
-            return {...state, error: action.error}
-        case "newPassword/SET-VALUE-IS-OK":
-            return {...state, isOk: action.text}
-        case "restore/SET-VALUE-IS-LOADING":
-            return {...state, isLoading: action.isLoading}
-        default:
-            return state;
-    }
-};
-
-export const setNewPasswordTC = (newPassword: string, token: string) => (dispatch: Dispatch) => {
-    dispatch(setValueIsLoading(true))
-    authAPI.setNewPassword({
-        password: newPassword,
-        resetPasswordToken: token
+export const setNewPassword = createAsyncThunk<
+    { isOk: string },
+    { newPassword: string, token: string },
+    {rejectValue: string, state: RootStateType}
+    >("newPassword/setNewPassword",
+    async ({newPassword, token}, {rejectWithValue, dispatch}) => {
+        try {
+            const response = await authAPI.setNewPassword({
+                password: newPassword,
+                resetPasswordToken: token
+            })
+            return {isOk: response.data.info}
+        } catch (e) {
+            setTimeout(dispatch, 5000, newPasswordSlice.actions.setErrorText({error: ""}))
+            const error: ErrorType = e
+            return rejectWithValue(error.response ? error.response.data.error : "unknown error")
+        }
     })
-        .then(res => {
-            dispatch(setValueIsSetNewPassword(true))
-            dispatch(setValueIsOk(res.data.info))
-            dispatch(setValueIsLoading(false))
-        })
-        .catch(error => {
-            dispatch(setErrorText(error.response.data.error))
-            dispatch(setValueIsLoading(false))
-            setTimeout(dispatch, 5000, setErrorText(""))
-        })
-}
 
-export const setValueIsSetNewPassword = (value: boolean) =>
-    ({type: "newPassword/SET-VALUE-IS-SET-NEW-PASSWORD", value} as const)
+export const newPasswordSlice = createSlice({
+    name: "newPassword",
+    initialState,
+    reducers: {
+        setErrorText: (state, action: PayloadAction<{error: string}>) => {
+            state.error = action.payload.error
+        }
+    },
+    extraReducers: builder => {
+        builder
+            .addCase(setNewPassword.pending, (state, action) => {
+                state.isLoading = true
+            })
+            .addCase(setNewPassword.fulfilled, (state, action) => {
+                state.isSetNewPassword = true
+                state.isLoading = false
+                state.isOk = action.payload.isOk
+            })
+            .addCase(setNewPassword.rejected, (state, action) => {
+                if (action.payload) {
+                    state.isLoading = false
+                    state.error = action.payload
+                }
+            })
+    }
+})
 
-export const setErrorText = (error: string) =>
-    ({type: "newPassword/SET-ERROR-TEXT", error} as const)
-
-export const setValueIsOk = (text: string) =>
-    ({type: "newPassword/SET-VALUE-IS-OK", text} as const)
-
-export const setValueIsLoading = (isLoading: boolean) =>
-    ({type: "restore/SET-VALUE-IS-LOADING", isLoading} as const)
-
-type ActionsType = ReturnType<typeof setValueIsSetNewPassword>
-    | ReturnType<typeof setErrorText>
-    | ReturnType<typeof setValueIsOk>
-    | ReturnType<typeof setValueIsLoading>
+const {} = newPasswordSlice.actions

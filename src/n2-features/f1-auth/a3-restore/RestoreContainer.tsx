@@ -10,8 +10,8 @@ const RestoreContainer = () => {
     const {textAfterRequest, isLoading, isSentSuccess} =
         useSelector<RootStateType, RestorePasswordStateType>(state => state.restorePassword)
 
-    const handleOnSubmit = useCallback((value: string) => {
-        dispatch(restoreTC(value))
+    const handleOnSubmit = useCallback((email: string) => {
+        dispatch(restoreTC(email))
         }, []
     )
 
