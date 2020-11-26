@@ -189,4 +189,4 @@ export const packsSlice = createSlice({
     }
 })
 
-export let {setSearchParams, setPacksSortColumn, changePageCountPacks, changePagePacks, setUserIdAC} = packsSlice.actions
+export const {setSearchParams, setPacksSortColumn, changePageCountPacks, changePagePacks, setUserIdAC} = packsSlice.actions

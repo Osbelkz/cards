@@ -12,10 +12,13 @@ import {
     setPacksSortColumn,
     setSearchParams,
     setUserIdAC,
-    updatePack
+    updatePack,
+    packsSlice
 } from "../../../n1-main/m2-bll/reducers/packs-reducer";
+
 import {Preloader} from "../../../n1-main/m1-ui/common/Preloader/Preloader";
 import {useHistory} from 'react-router-dom';
+import {useActions} from "../../../n1-main/m2-bll/utils";
 
 const PacksContainer = React.memo(() => {
 
@@ -26,6 +29,7 @@ const PacksContainer = React.memo(() => {
         useSelector<RootStateType, PacksStateType>(state => state.packs)
     const userId = useSelector<RootStateType, string | undefined>(state => state.login.userData?._id)
 
+    const {} = useActions(packsSlice.actions)
 
     const deletePackHandler = useCallback((id: string) => {
         dispatch(deletePack(id))
