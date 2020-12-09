@@ -58,5 +58,3 @@ export const newPasswordSlice = createSlice({
             })
     }
 })
-
-const {} = newPasswordSlice.actions

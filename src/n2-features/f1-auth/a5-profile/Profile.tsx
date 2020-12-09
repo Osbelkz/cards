@@ -1,8 +1,6 @@
 import React from 'react';
 import classes from "./Profile.module.css";
 import { UserDataType } from '../../../n1-main/m3-dal/auth-api';
-import NavItem from '../../../n1-main/m1-ui/common/NavItem/NavItem';
-
 
 type PropsType = {
     userData: UserDataType

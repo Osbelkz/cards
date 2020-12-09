@@ -29,8 +29,6 @@ const PacksContainer = React.memo(() => {
         useSelector<RootStateType, PacksStateType>(state => state.packs)
     const userId = useSelector<RootStateType, string | undefined>(state => state.login.userData?._id)
 
-    const {} = useActions(packsSlice.actions)
-
     const deletePackHandler = useCallback((id: string) => {
         dispatch(deletePack(id))
     }, [])

@@ -1,6 +1,5 @@
 import React from "react";
 import classes from "./QuestionModal.module.scss";
-import {Button} from "../../Button/Button";
 import {Modal} from "../Modal";
 import {TableButton} from "../../Table/TableButton/TableButton";
 

@@ -20,7 +20,7 @@ export const CardButtonsBlock: React.FC<CardButtonsBlockPropsType> = React.memo(
                                                                                  }) => {
     const [showDeleteModal, setShowDeleteModal] = useState(false)
     const [showEditModal, setShowEditModal] = useState(false)
-    const {_id, question, answer, comments} = card
+
 
     return <>
         <GeneralBTN btnType={"edit"} onClick={() => setShowEditModal(true)}
@@ -30,15 +30,15 @@ export const CardButtonsBlock: React.FC<CardButtonsBlockPropsType> = React.memo(
         {owner && <><QuestionModalContainer text={"Delete this card?"}
                                     activate={showDeleteModal}
                                     setActivate={setShowDeleteModal}
-                                    setAnswerY={() => deleteCard(_id)}
+                                    setAnswerY={() => deleteCard(card._id)}
                                     setAnswerN={() => {
                                     }}/>
             <ThreeInputModal title={"Edit card"}
-                             handleOnSubmit={(question, answer, comment) => updateCard(_id, question, answer)}
+                             handleOnSubmit={(question, answer, comment) => updateCard(card._id, question, answer)}
                              setActive={setShowEditModal}
-                             firstInputValue={question}
-                             secondInputValue={answer}
-                             thirdInputValue={comments}
+                             firstInputValue={card.question}
+                             secondInputValue={card.answer}
+                             thirdInputValue={card.comments}
                              active={showEditModal}/>
         </>}
     </>
